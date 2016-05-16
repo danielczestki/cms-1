@@ -1,0 +1,19 @@
+{
+  "name": "thinmartiancms",
+  "version": "0.0.1",
+  "description": "Assets for Thin Martian CMS platform built on the Laravel PHP Framework",
+  "author": {
+    "name": "Thin Martian",
+    "email": "hello@thinmartian.com",
+    "url": "https://www.thinmartian.com"
+  },
+  "keywords": [
+    "cms",
+    "laravel",
+    "php"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "laravel-elixir-stylus": "^1.0.1"
+  }
+}

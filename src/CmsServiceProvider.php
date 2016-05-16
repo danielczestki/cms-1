@@ -41,7 +41,8 @@ class CmsServiceProvider extends ServiceProvider
         $this->bootViews();
         //$this->publishViews();
         $this->publishConfig();
-        //$this->publishAssets();
+        $this->publishAssets();
+        $this->publishMigrations();
     }
 
     /**
@@ -53,6 +54,7 @@ class CmsServiceProvider extends ServiceProvider
     {
         $this->mergeConfig();
         $this->bindHtml();
+        $this->updateConfig(); // can go in boot().. try here first!
     }
     
     /**
@@ -106,12 +108,24 @@ class CmsServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    /*private function publishAssets()
+    private function publishAssets()
     {
         $this->publishes([
-            __DIR__."/public/vendor/".self::NAME => public_path("vendor/".self::NAME),
+            __DIR__."/public" => public_path("vendor/".self::NAME),
         ], "assets");
-    }*/
+    }
+    
+    /**
+     * Publish the database migrations
+     * 
+     * @return void
+     */
+    private function publishMigrations()
+    {
+        $this->publishes([
+            __DIR__."/database/migrations" => database_path("migrations"),
+        ], "migrations");
+    }
     
     /**
      * Merge the config files in vendor with the ones published
@@ -137,6 +151,42 @@ class CmsServiceProvider extends ServiceProvider
         $this->loader->alias("Form", "Collective\Html\FormFacade");
         $this->loader->alias("Html", "Collective\Html\HtmlFacade");
         $this->loader->alias("CmsForm", "Thinmartiancms\Cms\App\Facades\CmsFormFacade");
+    }
+    
+    /**
+     * Update config values (including default laravel config)
+     * 
+     * @return void
+     */
+    private function updateConfig()
+    {
+        $this->updateConfigAuth();
+    }
+    
+    /**
+     * Update the default auth config to add the Thin Martian CMS guard
+     * 
+     * @return void
+     */
+    private function updateConfigAuth()
+    {
+        // guard
+        config(["auth.guards.".self::NAME => [
+            "driver" => "session",
+            "provider" => "cms_users",
+        ]]);
+        // provider
+        config(["auth.providers.".self::NAME => [
+            "driver" => "eloquent",
+            "model" => "Thinmartiancms\Cms\App\Cms_user"
+        ]]);
+        // password (reset)
+        config(["auth.passwords.".self::NAME => [
+            "provider" => self::NAME,
+            "email" => "vendor::".self::NAME.".auth.emails.password",
+            "table" => "cms_password_resets",
+            "expire" => 60,
+        ]]);
     }
     
 }
