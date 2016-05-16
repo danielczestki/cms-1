@@ -8,16 +8,3 @@ Thin Martian CMS platform built on the Laravel PHP Framework
 
 
 ----------
-
-## Deployment ##
-
-SSH Private and Public keys are on LastPass under `CMS SSH Private Key` and `CMS SSH Public Key`.
-
-Example config below:
-
-
-    Host thinmartiancms
-        HostName github.com
-        Port 22
-        User git
-        IdentityFile /home/steve/.ssh/keys/thinmartiancms

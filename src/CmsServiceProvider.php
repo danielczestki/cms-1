@@ -2,6 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
+use Collective\Html\HtmlServiceProvider;
+use Thinmartiancms\Cms\App\Providers\HtmlServiceProvider as CmsHtmlServiceProvider;
 
 class CmsServiceProvider extends ServiceProvider
 {   
@@ -17,7 +19,7 @@ class CmsServiceProvider extends ServiceProvider
     protected $loader;
     
     /**
-     * Create the Codegent CMS service provider instance.
+     * Create the Thin Martian CMS service provider instance.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
@@ -37,9 +39,9 @@ class CmsServiceProvider extends ServiceProvider
     {
         $this->bootRoutes();
         $this->bootViews();
-        $this->publishViews();
+        //$this->publishViews();
         $this->publishConfig();
-        $this->publishAssets();
+        //$this->publishAssets();
     }
 
     /**
@@ -50,7 +52,7 @@ class CmsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfig();
-        //$this->bindHtml();
+        $this->bindHtml();
     }
     
     /**
@@ -80,12 +82,12 @@ class CmsServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    private function publishViews()
+    /*private function publishViews()
     {
         $this->publishes([
             __DIR__."/resources/views" => base_path("resources/views/vendor/".self::NAME),
         ], "views");
-    }
+    }*/
     
     /**
      * Publish the configs
@@ -104,12 +106,12 @@ class CmsServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    private function publishAssets()
+    /*private function publishAssets()
     {
         $this->publishes([
             __DIR__."/public/vendor/".self::NAME => public_path("vendor/".self::NAME),
         ], "assets");
-    }
+    }*/
     
     /**
      * Merge the config files in vendor with the ones published
@@ -121,6 +123,20 @@ class CmsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__."/config/".self::NAME."/cms.php", self::NAME.".cms"
         );
+    }
+    
+    /**
+     * Bind the Laravel Collective HTML package (Collective\Html\HtmlServiceProvider) to the IoC
+     * 
+     * @return void
+     */
+    private function bindHtml()
+    {
+        $this->app->register(HtmlServiceProvider::class);
+        $this->app->register(CmsHtmlServiceProvider::class);
+        $this->loader->alias("Form", "Collective\Html\FormFacade");
+        $this->loader->alias("Html", "Collective\Html\HtmlFacade");
+        $this->loader->alias("CmsForm", "Thinmartiancms\Cms\App\Facades\CmsFormFacade");
     }
     
 }
