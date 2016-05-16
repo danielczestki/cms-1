@@ -1,0 +1,17 @@
+{
+    "name": "thinmartiancms/cms",
+    "description": "Thin Martian CMS platform built on the Laravel PHP Framework",
+    "keywords": ["laravel", "cms", "content management"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thin Martian",
+            "email": "hello@thinmartian.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "dev-master"
+    },
+    "minimum-stability": "dev"
+}
