@@ -3,6 +3,7 @@
     "description": "Thin Martian CMS platform built on the Laravel PHP Framework",
     "keywords": ["laravel", "cms", "content management"],
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Thin Martian",
@@ -11,7 +12,11 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "illuminate/support": "dev-master"
+        "illuminate/support": "^5.2"
     },
-    "minimum-stability": "dev"
+    "autoload": {
+        "psr-4": {
+            "Thinmartiancms\\Cms\\": "src/"
+        }
+    }
 }
