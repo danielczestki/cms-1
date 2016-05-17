@@ -1,4 +1,6 @@
-<?php namespace Thinmartiancms\Cms\App\Providers;
+<?php
+
+namespace Thinmartiancms\Cms\App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Thinmartiancms\Cms\App\Html\CmsFormBuilder;

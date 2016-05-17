@@ -1,4 +1,6 @@
-<?php namespace Thinmartiancms\Cms\App\Html;
+<?php
+
+namespace Thinmartiancms\Cms\App\Html;
 
 class CmsFormBuilder {
     

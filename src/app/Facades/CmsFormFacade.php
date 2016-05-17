@@ -1,4 +1,6 @@
-<?php namespace Thinmartiancms\Cms\App\Facades;
+<?php
+
+namespace Thinmartiancms\Cms\App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

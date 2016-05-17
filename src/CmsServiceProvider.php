@@ -1,5 +1,9 @@
-<?php namespace Thinmartiancms\Cms;
+<?php
 
+namespace Thinmartiancms\Cms;
+
+use Auth;
+use Thinmartiancms\Cms\App\CmsUser;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Collective\Html\HtmlServiceProvider;
@@ -173,20 +177,22 @@ class CmsServiceProvider extends ServiceProvider
         // guard
         config(["auth.guards.".self::NAME => [
             "driver" => "session",
-            "provider" => "cms_users",
+            "provider" => "cms",
         ]]);
         // provider
         config(["auth.providers.".self::NAME => [
             "driver" => "eloquent",
-            "model" => "Thinmartiancms\Cms\App\Cms_user"
+            "model" => CmsUser::class
         ]]);
         // password (reset)
         config(["auth.passwords.".self::NAME => [
             "provider" => self::NAME,
-            "email" => "vendor::".self::NAME.".auth.emails.password",
+            "email" => self::NAME."::admin.auth.emails.password",
             "table" => "cms_password_resets",
             "expire" => 60,
         ]]);
-    }
+        // now change the default, we don't use anything but cms guard here
+        config(["auth.defaults.guard" => self::NAME]);
+    }    
     
 }

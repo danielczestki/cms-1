@@ -14,7 +14,8 @@ class CreateCmsUsersTable extends Migration
     {
         Schema::create('cms_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('firstname', 20);
+            $table->string('surname', 20);
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();

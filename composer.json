@@ -18,7 +18,10 @@
     "autoload": {
         "psr-4": {
             "Thinmartiancms\\Cms\\": "src/"
-        }
+        },
+        "files": [
+            "src/app/Support/helpers.php"
+        ]
     },
     "scripts": {
         "post-update-cmd": [

@@ -1,11 +1,10 @@
 <?php
 
 
-Route::group(["prefix" => "admin"], function () {
-    Route::get("/", function () {
-        return view("cms::admin.dashboard.index");
-    });
+Route::group(["prefix" => "admin", "namespace" => "Thinmartiancms\Cms\App\Http\Controllers", "middleware" => ["web"]], function () {
     
-    //Route::auth();
+    Route::get("/", ["uses" => "DashboardController@index", "as" => "cms-dashboard"]);
+    
+    Route::auth();
     
 });
