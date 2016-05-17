@@ -25,6 +25,7 @@ class AuthController extends Controller {
      * @var string
      */
     protected $redirectTo = '/admin';
+    protected $redirectAfterLogout = '/admin/login';
     
     /**
      * Define the custom views for the auth layer in the CMS
@@ -32,6 +33,7 @@ class AuthController extends Controller {
      * @var string
      */
     protected $registerView = "cms::admin.auth.register";
+    protected $loginView = "cms::admin.auth.login";
     
     /**
      * Create a new authentication controller instance.
@@ -40,7 +42,7 @@ class AuthController extends Controller {
      */
     public function __construct()
     {
-        //$this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware("guest.cms", ["except" => "logout"]);
     }
     
     /**

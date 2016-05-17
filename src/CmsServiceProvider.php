@@ -4,10 +4,13 @@ namespace Thinmartiancms\Cms;
 
 use Auth;
 use Thinmartiancms\Cms\App\CmsUser;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Collective\Html\HtmlServiceProvider;
 use Thinmartiancms\Cms\App\Providers\HtmlServiceProvider as CmsHtmlServiceProvider;
+use Thinmartiancms\Cms\App\Http\Middleware\Authenticate;
+use Thinmartiancms\Cms\App\Http\Middleware\RedirectIfAuthenticated;
 
 class CmsServiceProvider extends ServiceProvider
 {   
@@ -39,10 +42,11 @@ class CmsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
         $this->bootRoutes();
         $this->bootViews();
+        $this->registerMiddleware($router);
         //$this->publishViews();
         $this->publishConfig();
         $this->publishAssets();
@@ -58,7 +62,7 @@ class CmsServiceProvider extends ServiceProvider
     {
         $this->mergeConfig();
         $this->bindHtml();
-        $this->updateConfig(); // can go in boot().. try here first!
+        $this->updateConfig();
     }
     
     /**
@@ -81,6 +85,17 @@ class CmsServiceProvider extends ServiceProvider
     private function bootViews()
     {
         $this->loadViewsFrom(__DIR__."/resources/views", self::NAME);
+    }
+    
+    /**
+     * Register middleware with the Kernal
+     * 
+     * @return void
+     */
+    private function registerMiddleware(Router $router)
+    {
+        $router->middleware("auth.cms", Authenticate::class);
+        $router->middleware("guest.cms", RedirectIfAuthenticated::class);
     }
     
     /**
