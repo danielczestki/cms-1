@@ -165,8 +165,8 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function bindHtml()
     {
-        $this->app->register(HtmlServiceProvider::class);
         $this->app->register(CmsHtmlServiceProvider::class);
+        $this->app->register(HtmlServiceProvider::class);
         $this->loader->alias("Form", "Collective\Html\FormFacade");
         $this->loader->alias("Html", "Collective\Html\HtmlFacade");
         $this->loader->alias("CmsForm", "Thinmartiancms\Cms\App\Facades\CmsFormFacade");

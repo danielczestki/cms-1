@@ -4,6 +4,6 @@
 
 @section("content")
     
-    DASHBOARD
+    DASHBOARD!!
     
 @endsection
