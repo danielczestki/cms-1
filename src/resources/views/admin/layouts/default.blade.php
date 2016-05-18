@@ -16,13 +16,15 @@
     <header style="box-sizing:border-box;margin: 0 0 24px;border-bottom: solid 2px #eee;width: 100%;float: left;padding: 12px">
         <div style="float: left">
             <a href="{{ route('cms-dashboard') }}">THIN MARTIAN CMS</a>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <a href="{{ route("admin.users.index") }}">Users</a>
         </div>
         <div style="float: right">
             @if (\Auth::check())
-                Welcome back, {{ Auth::user()->firstname }} <a href="{{ cmsaction("Auth\AuthController@logout") }}">Logout</a>
+                Welcome back, {{ Auth::user()->firstname }} <a href="{{ cmsaction("Core\Auth\AuthController@logout") }}">Logout</a>
             @else
-                <a href="{{ cmsaction("Auth\AuthController@showRegistrationForm") }}">Register</a>
-                <a href="{{ cmsaction("Auth\AuthController@showLoginForm") }}">Login</a>
+                <a href="{{ cmsaction("Core\Auth\AuthController@showRegistrationForm") }}">Register</a>
+                <a href="{{ cmsaction("Core\Auth\AuthController@showLoginForm") }}">Login</a>
             @endif
         </div>
     </header>

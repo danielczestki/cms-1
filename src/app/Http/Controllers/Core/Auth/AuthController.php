@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Http\Controllers\Auth;
+namespace Thinmartiancms\Cms\App\Http\Controllers\Core\Auth;
 
 use Thinmartiancms\Cms\App\CmsUser;
 use App\Http\Controllers\Controller;

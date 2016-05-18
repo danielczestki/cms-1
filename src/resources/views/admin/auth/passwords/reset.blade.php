@@ -10,7 +10,7 @@
         </div>
     @endif
     
-    {{ CmsForm::open(["method" => "POST", "url" => "Auth\PasswordController@reset"]) }}
+    {{ CmsForm::open(["method" => "POST", "url" => "Core\Auth\PasswordController@reset"]) }}
         
         {{ CmsForm::hidden(["name" => "token", "value" => $token]) }}
         

@@ -1,6 +1,11 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Http\Controllers;
+/**
+ * TO BE WORKED ON, JUST HERE FOR NOW TO SHOW A PAGE.
+ * GOD KNOWS WHAT WILL SHOW HERE :)
+ */
+
+namespace Thinmartiancms\Cms\App\Http\Controllers\Custom;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;

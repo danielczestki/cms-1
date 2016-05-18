@@ -10,7 +10,7 @@
         </div>
     @endif
     
-    {{ CmsForm::open(["method" => "POST", "url" => "Auth\PasswordController@sendResetLinkEmail"]) }}
+    {{ CmsForm::open(["method" => "POST", "url" => "Core\Auth\PasswordController@sendResetLinkEmail"]) }}
         
         {{ CmsForm::email(["name" => "email", "label" => "Email"]) }}
         

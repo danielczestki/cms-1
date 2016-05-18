@@ -23,4 +23,10 @@ class CmsUser extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    // temp for testing
+    public function getFullnameAttribute()
+    {
+        return $this->firstname . " " . $this->surname;
+    }
 }

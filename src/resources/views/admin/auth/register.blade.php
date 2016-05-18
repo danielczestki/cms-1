@@ -4,7 +4,7 @@
 
 @section("content")
     
-    {{ CmsForm::open(["method" => "POST", "url" => "Auth\AuthController@register"]) }}
+    {{ CmsForm::open(["method" => "POST", "url" => "Core\Auth\AuthController@register"]) }}
         
         {{ CmsForm::text(["name" => "firstname", "label" => "Firstame"]) }}
         {{ CmsForm::text(["name" => "surname", "label" => "Surname"]) }}
