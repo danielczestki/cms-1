@@ -2,7 +2,7 @@
 
 namespace Thinmartiancms\Cms;
 
-use Auth;
+use Auth, Request;
 use Thinmartiancms\Cms\App\CmsUser;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -207,8 +207,11 @@ class CmsServiceProvider extends ServiceProvider
             "table" => "cms_password_resets",
             "expire" => 60,
         ]]);
-        // now change the default, we don't use anything but cms guard here
-        config(["auth.defaults.guard" => self::NAME]);
+        // if within /admin, force the default guard and passwords to cms
+        if (Request::is("admin*")) {
+            config(["auth.defaults.guard" => self::NAME]);
+            config(["auth.defaults.passwords" => self::NAME]);
+        }
     }    
     
     /**

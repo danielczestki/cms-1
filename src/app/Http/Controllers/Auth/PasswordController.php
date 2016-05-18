@@ -7,19 +7,38 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class PasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
 
     use ResetsPasswords;
+    
+    /**
+     * Ensure ther guard is cms, it should be default within admin/ anyway
+     * 
+     * @var string
+     */
+    protected $guard = "cms";
+    
+    /**
+     * Ensure ther broker is cms, it should be default within admin/ anyway
+     * 
+     * @var string
+     */
+    protected $broker = "cms";
+    
+    /**
+     * Change the views to be admin specific
+     * 
+     * @var string
+     */
+    protected $linkRequestView = "cms::admin.auth.passwords.email";
+    protected $resetView = "cms::admin.auth.passwords.reset";
 
+    /**
+     * Where do we send the user after successfully changing their password?
+     * 
+     * @var string
+     */
+    protected $redirectPath = "/admin"; 
+       
     /**
      * Create a new password controller instance.
      *
@@ -27,6 +46,6 @@ class PasswordController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('guest');
+        $this->middleware("guest.cms");
     }
 }

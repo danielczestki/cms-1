@@ -13,7 +13,7 @@
 
         <div class="form-group">
             {{ CmsForm::submit(["label" => "Login", "icon" => "sign-in"]) }}
-            <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
+            <a class="btn btn-link" href="{{ cmsaction('Auth\PasswordController@reset') }}">Forgot Your Password?</a>
         </div>
         
     {{ CmsForm::close() }}

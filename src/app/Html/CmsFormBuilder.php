@@ -72,6 +72,11 @@ class CmsFormBuilder {
         return $this->input($data);
     }
     
+    public function hidden($data = [])
+    {
+       return $this->render(view("cms::html.form.hidden", $data)); 
+    }
+    
     /**
      * Renders most input[type=$type]
      * 
