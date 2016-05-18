@@ -1,0 +1,1 @@
+{{ Form::open(["method" => $method, "url" => cmsaction($url)]) }}

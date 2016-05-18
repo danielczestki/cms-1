@@ -8,9 +8,10 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Collective\Html\HtmlServiceProvider;
-use Thinmartiancms\Cms\App\Providers\HtmlServiceProvider as CmsHtmlServiceProvider;
 use Thinmartiancms\Cms\App\Http\Middleware\Authenticate;
 use Thinmartiancms\Cms\App\Http\Middleware\RedirectIfAuthenticated;
+use Thinmartiancms\Cms\App\Html\CmsFormBuilder;
+
 
 class CmsServiceProvider extends ServiceProvider
 {   
@@ -63,6 +64,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->mergeConfig();
         $this->bindHtml();
         $this->updateConfig();
+        $this->registerFormBuilder();
     }
     
     /**
@@ -165,7 +167,6 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function bindHtml()
     {
-        $this->app->register(CmsHtmlServiceProvider::class);
         $this->app->register(HtmlServiceProvider::class);
         $this->loader->alias("Form", "Collective\Html\FormFacade");
         $this->loader->alias("Html", "Collective\Html\HtmlFacade");
@@ -209,5 +210,28 @@ class CmsServiceProvider extends ServiceProvider
         // now change the default, we don't use anything but cms guard here
         config(["auth.defaults.guard" => self::NAME]);
     }    
+    
+    /**
+     * Register the CMS form builder
+     * 
+     * @return void
+     */
+    private function registerFormBuilder()
+    {
+        $this->app->singleton('cmsform', function ($app) {
+            return new CmsFormBuilder();
+        });
+        $this->app->alias("cmsform", CmsFormBuilder::class);
+    }
+    
+    /**
+     * Get the services provided by the provider for the form builder.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return ["cmsform", CmsFormBuilder::class];
+    }
     
 }
