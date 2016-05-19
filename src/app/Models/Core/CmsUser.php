@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartiancms\Cms\App;
+namespace Thinmartiancms\Cms\App\Models\Core;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -21,12 +21,7 @@ class CmsUser extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+       'password', 'remember_token',
     ];
     
-    // temp for testing
-    public function getFullnameAttribute()
-    {
-        return $this->firstname . " " . $this->surname;
-    }
 }

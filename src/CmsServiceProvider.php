@@ -3,7 +3,7 @@
 namespace Thinmartiancms\Cms;
 
 use Auth, Request;
-use Thinmartiancms\Cms\App\CmsUser;
+use Thinmartiancms\Cms\App\Models\Core\CmsUser;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
@@ -52,6 +52,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->publishConfig();
         $this->publishAssets();
         $this->publishMigrations();
+        $this->publishModels();
     }
 
     /**
@@ -146,6 +147,18 @@ class CmsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__."/database/migrations" => database_path("migrations"),
         ], "migrations");
+    }
+    
+    /**
+     * Publish the models
+     * 
+     * @return void
+     */
+    private function publishModels()
+    {
+        $this->publishes([
+            __DIR__."/app/Models/Custom" => app_path(),
+        ], "models");
     }
     
     /**
