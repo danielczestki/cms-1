@@ -22,7 +22,7 @@ trait ResourceHelpers
      */
     private function getModel()
     {
-        return $this->model = app()->make("App\\" . $this->modelName);
+        return $this->model = app()->make("App\Cms\\" . $this->modelName);
     }
     
     /**

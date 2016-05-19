@@ -24,4 +24,14 @@ class CmsUser extends Authenticatable
        'password', 'remember_token',
     ];
     
+    /**
+     * Merge the first and surname to make the full name
+     * 
+     * @return string
+     */
+    public function getFullnameAttribute()
+    {
+        return $this->firstname . " " . $this->surname;
+    }
+    
 }
