@@ -1,5 +1,5 @@
 {
-    "name": "thinmartiancms/cms",
+    "name": "thinmartian/cms",
     "description": "Thin Martian CMS platform built on the Laravel PHP Framework",
     "keywords": ["laravel", "cms", "content management"],
     "license": "MIT",
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Thinmartiancms\\Cms\\": "src/"
+            "Thinmartian\\Cms\\": "src/"
         },
         "files": [
             "src/app/Support/helpers.php"

@@ -4,7 +4,7 @@
 Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     
     // Core/uneditable routes (not copied over on publish)
-    Route::group(["namespace" => "Thinmartiancms\Cms\App\Http\Controllers\Core"], function() {
+    Route::group(["namespace" => "Thinmartian\Cms\App\Http\Controllers\Core"], function() {
         Route::auth();
     });
     

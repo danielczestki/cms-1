@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Http\Middleware;
+namespace Thinmartian\Cms\App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;

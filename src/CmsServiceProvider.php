@@ -1,17 +1,17 @@
 <?php
 
-namespace Thinmartiancms\Cms;
+namespace Thinmartian\Cms;
 
 use Auth, Request;
-use Thinmartiancms\Cms\App\Models\Core\CmsUser;
+use Thinmartian\Cms\App\Models\Core\CmsUser;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Collective\Html\HtmlServiceProvider;
-use Thinmartiancms\Cms\App\Http\Middleware\Authenticate;
-use Thinmartiancms\Cms\App\Http\Middleware\RedirectIfAuthenticated;
-use Thinmartiancms\Cms\App\Html\CmsFormBuilder;
-use Thinmartiancms\Cms\App\Services\Definitions\Yaml as CmsYaml;
+use Thinmartian\Cms\App\Http\Middleware\Authenticate;
+use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
+use Thinmartian\Cms\App\Html\CmsFormBuilder;
+use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYaml;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -211,8 +211,8 @@ class CmsServiceProvider extends ServiceProvider
         $this->app->register(HtmlServiceProvider::class);
         $this->loader->alias("Form", "Collective\Html\FormFacade");
         $this->loader->alias("Html", "Collective\Html\HtmlFacade");
-        $this->loader->alias("CmsForm", "Thinmartiancms\Cms\App\Facades\CmsFormFacade");
-        $this->loader->alias("CmsYaml", "Thinmartiancms\Cms\App\Facades\CmsYamlFacade");
+        $this->loader->alias("CmsForm", "Thinmartian\Cms\App\Facades\CmsFormFacade");
+        $this->loader->alias("CmsYaml", "Thinmartian\Cms\App\Facades\CmsYamlFacade");
     }
     
     /**

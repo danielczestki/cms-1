@@ -2,7 +2,7 @@
 
 namespace App\Cms;
 
-use Thinmartiancms\Cms\App\Models\Core\CmsUser as CoreCmsUser;
+use Thinmartian\Cms\App\Models\Core\CmsUser as CoreCmsUser;
 
 class CmsUser extends CoreCmsUser
 {

@@ -2,7 +2,7 @@
 
 namespace App\Cms\Http\Controllers;
 
-use Thinmartiancms\Cms\App\Http\Controllers\Core\UsersController as CoreUsersController;
+use Thinmartian\Cms\App\Http\Controllers\Core\UsersController as CoreUsersController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 

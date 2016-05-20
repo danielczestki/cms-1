@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Html;
+namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
 

@@ -1,6 +1,6 @@
 <?php 
 
-namespace Thinmartiancms\Cms\App\Services\Resource;
+namespace Thinmartian\Cms\App\Services\Resource;
 
 trait Listing
 {

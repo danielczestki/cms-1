@@ -1,8 +1,8 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Http\Controllers\Core\Auth;
+namespace Thinmartian\Cms\App\Http\Controllers\Core\Auth;
 
-use Thinmartiancms\Cms\App\Models\Core\CmsUser;
+use Thinmartian\Cms\App\Models\Core\CmsUser;
 use App\Http\Controllers\Controller;
 use Validator;
 use Illuminate\Foundation\Auth\ThrottlesLogins;

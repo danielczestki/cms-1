@@ -4,9 +4,9 @@
  * WILL BE GENERATED FROM THE YAML CONFIG FILE!
  */
 
-namespace Thinmartiancms\Cms\App\Http\Controllers\Core;
+namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
-use Thinmartiancms\Cms\App\Http\Controllers\Core\Controller;
+use Thinmartian\Cms\App\Http\Controllers\Core\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 

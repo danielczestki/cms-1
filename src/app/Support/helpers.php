@@ -1,6 +1,6 @@
 <?php
 
-define("CMSNAMESPACE", "\Thinmartiancms\Cms\App\Http\Controllers\\");
+define("CMSNAMESPACE", "\Thinmartian\Cms\App\Http\Controllers\\");
 
 if (! function_exists("cmsaction")) {
     /**

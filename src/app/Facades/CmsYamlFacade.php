@@ -1,11 +1,11 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Facades;
+namespace Thinmartian\Cms\App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Thinmartiancms\Cms\App\Services\Definitions\Yaml
+ * @see \Thinmartian\Cms\App\Services\Definitions\Yaml
  */
 class CmsYamlFacade extends Facade {
 

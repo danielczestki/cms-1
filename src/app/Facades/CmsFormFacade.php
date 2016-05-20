@@ -1,11 +1,11 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Facades;
+namespace Thinmartian\Cms\App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Thinmartiancms\Cms\App\Html\CmsFormBuilder
+ * @see \Thinmartian\Cms\App\Html\CmsFormBuilder
  */
 class CmsFormFacade extends Facade {
 

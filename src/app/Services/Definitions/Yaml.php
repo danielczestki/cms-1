@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Services\Definitions;
+namespace Thinmartian\Cms\App\Services\Definitions;
 
 class Yaml {
     

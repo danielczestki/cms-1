@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Models\Core;
+namespace Thinmartian\Cms\App\Models\Core;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 

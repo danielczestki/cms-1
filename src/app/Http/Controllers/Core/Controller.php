@@ -1,12 +1,12 @@
 <?php
 
-namespace Thinmartiancms\Cms\App\Http\Controllers\Core;
+namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
-use Thinmartiancms\Cms\App\Services\Resource\Listing;
+use Thinmartian\Cms\App\Services\Resource\Listing;
 
 class Controller extends BaseController
 {
