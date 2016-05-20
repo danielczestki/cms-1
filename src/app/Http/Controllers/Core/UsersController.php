@@ -14,23 +14,11 @@ class UsersController extends Controller
 {
     
     /**
-     * Declare the model for this resource
+     * Declare the name of this resource, this will match
+     * it's corrosponding YAML config.
      * 
      * @var string
      */
-    protected $modelName = "CmsUser";
-    
-    /**
-     * Declare the columns that get returned on the listing
-     * 
-     * @var array
-     */
-    protected $listColumns = [
-        "id" => "ID",
-        "fullname" => "Full name",
-        "email" => "Email",
-        "created_at" => "Date added",
-        "updated_at" => "Date updated"
-    ];
+    protected $name = "Users";
     
 }

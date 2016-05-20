@@ -28,7 +28,7 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        $this->getModel();
+        $this->setModel();        
     }
     
     /**
@@ -39,7 +39,7 @@ class Controller extends BaseController
     public function index()
     {
         $listing = $this->grid();
-        $columns = $this->listColumns;
+        $columns = $this->getListColumns();
         $perpage = $this->getRecordsPerPage();
         return view("cms::admin.resource.index", compact("listing", "columns", "perpage"));
     }

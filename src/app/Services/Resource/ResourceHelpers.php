@@ -2,6 +2,8 @@
 
 namespace Thinmartiancms\Cms\App\Services\Resource;
 
+use CmsYaml;
+
 trait ResourceHelpers
 {
     
@@ -18,15 +20,16 @@ trait ResourceHelpers
     /**
      * Return the resolved model and also set the property
      * 
-     * @return Illuminate\Database\Eloquent\Model
+     * @return void
      */
-    private function getModel()
+    private function setModel()
     {
-        return $this->model = app()->make("App\Cms\\" . $this->modelName);
+        // YAML: GET MODEL NAME FROM YAML
+        $this->model = app()->make("App\Cms\\" . "CmsUser");
     }
     
     /**
-     * Get the record por page value
+     * Get the record for page value
      * 
      * @return integer
      */

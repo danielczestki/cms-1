@@ -11,6 +11,7 @@ use Collective\Html\HtmlServiceProvider;
 use Thinmartiancms\Cms\App\Http\Middleware\Authenticate;
 use Thinmartiancms\Cms\App\Http\Middleware\RedirectIfAuthenticated;
 use Thinmartiancms\Cms\App\Html\CmsFormBuilder;
+use Thinmartiancms\Cms\App\Services\Definitions\Yaml as CmsYaml;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -49,6 +50,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->bootViews();
         $this->registerMiddleware($router);
         //$this->publishViews();
+        $this->publishDefinitions();
         $this->publishConfig();
         $this->publishAssets();
         $this->publishMigrations();
@@ -67,6 +69,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->bindHtml();
         $this->updateConfig();
         $this->registerFormBuilder();
+        $this->registerYaml();
     }
     
     /**
@@ -100,6 +103,18 @@ class CmsServiceProvider extends ServiceProvider
     {
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
+    }
+    
+    /**
+     * Publish the stock definitions
+     * 
+     * @return void
+     */
+    private function publishDefinitions()
+    {
+        $this->publishes([
+            __DIR__."/app/Definitions" => app_path("Cms/Definitions")
+        ], "definitions");
     }
     
     /**
@@ -197,6 +212,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->loader->alias("Form", "Collective\Html\FormFacade");
         $this->loader->alias("Html", "Collective\Html\HtmlFacade");
         $this->loader->alias("CmsForm", "Thinmartiancms\Cms\App\Facades\CmsFormFacade");
+        $this->loader->alias("CmsYaml", "Thinmartiancms\Cms\App\Facades\CmsYamlFacade");
     }
     
     /**
@@ -254,13 +270,26 @@ class CmsServiceProvider extends ServiceProvider
     }
     
     /**
+     * Register the CMS Yaml
+     * 
+     * @return void
+     */
+    private function registerYaml()
+    {
+        $this->app->singleton('cmsyaml', function ($app) {
+            return new CmsYaml();
+        });
+        $this->app->alias("cmsyaml", CmsYaml::class);
+    }
+    
+    /**
      * Get the services provided by the provider for the form builder.
      *
      * @return array
      */
     public function provides()
     {
-        return ["cmsform", CmsFormBuilder::class];
+        return ["cmsform", "cmsyaml", CmsFormBuilder::class, CmsYaml::class];
     }
     
 }
