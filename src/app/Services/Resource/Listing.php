@@ -2,21 +2,23 @@
 
 namespace Thinmartian\Cms\App\Services\Resource;
 
+use CmsYaml;
+
+/*
+|--------------------------------------------------------------------------
+| Read/List Trait
+|--------------------------------------------------------------------------
+|
+| This trait controls all aspect of Reading data from the persistence layer.
+| This includes (but not limited to) listing out the resources on the index
+| page to showing the record(s) on edit/show
+|
+*/
+
 trait Listing
 {
     
     use ResourceHelpers;
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Read/List Trait
-    |--------------------------------------------------------------------------
-    |
-    | This trait controls all aspect of Reading data from the persistence layer.
-    | This includes (but not limited to) listing out the resources on the index
-    | page to showing the record(s) on edit/show
-    |
-    */
     
     /**
      * Get the listing columns used on the grid
@@ -25,14 +27,7 @@ trait Listing
      */
     public function getListColumns()
     {
-        // YAML: GET THIS FROM YAML
-        return [
-            "id" => "ID",
-            "fullname" => "Full name",
-            "email" => "Email",
-            "created_at" => "Date added",
-            "updated_at" => "Date updated"
-        ];
+        return CmsYaml::getListing();
     }
     
     /**

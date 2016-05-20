@@ -12,7 +12,7 @@ return [
     |
     */
    
-    "records_per_page" => 20,
+    "records_per_page" => 50,
     
     /*
     |--------------------------------------------------------------------------
@@ -24,6 +24,6 @@ return [
     |
     */
    
-    "records_per_page_options" => range(1, 20),
+    "records_per_page_options" => range(10, 200, 10)
    
 ];

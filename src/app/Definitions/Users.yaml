@@ -1,2 +1,24 @@
+# General meta data for the section
 meta:
-  title: "Users"
+  title: "Users" # title of section
+  records_per_page: 10 # optional
+  show_in_nav: true
+  icon: "users" # optional (but STRONGLY advised if show_in_nav true) / fontawesome icon
+  
+# Field defs for the create/edit form
+fields:
+  firstname:
+    type: "text"
+    label: "First name"
+    value: "default value" # optional
+    validation: "required|max:30" # optional / standard laravel validation piped string
+    placeholder: "First name" # optional
+    info: "Small tip of info for this field" # optional
+ 
+# Listing columns for the listing/index page (can use model accessors here, don't have to be db columns)   
+listing:
+  id: "ID"
+  fullname: "Full name"
+  email: "Email"
+  created_at: "Date added"
+  updated_at: "Date updated"

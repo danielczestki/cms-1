@@ -119,6 +119,22 @@ class CmsFormBuilder {
     }
     
     //
+    // TITLES AND STRINGS
+    // 
+    
+    /**
+     * Return the subtitle for the page
+     * 
+     * @param  string $type create or edit
+     * @param  string $name the name of the resource or record
+     * @return string
+     */
+    public function subtitle($type, $name)
+    {
+        return $type == "create" ? "Create a new " . strtolower(str_singular($name)) : "Edit $name";
+    }
+    
+    //
     // UTILS AND PRIVATE
     // 
     

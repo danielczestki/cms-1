@@ -4,6 +4,8 @@
 
 @section("content")
     
+    <h1>{{ $title }}</h1>
+    
     Showing results {{$listing->firstItem()}} to {{ $listing->lastItem() }} of {{ $listing->total() }} | <a href="{{ url()->current() }}">Reset</a>
     
     <div style="float: right">
@@ -14,28 +16,32 @@
     </div>
     
     <hr>
-    
-    {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy"]) }}
-        <aside>{{ Form::button("delete selected", ["type" => "submit"]) }}</aside>
-        <table width="100%">
-            <tr>
-                <td></td>
-                @foreach($columns as $column)
-                    <th align="left">{{ $column }}</th>
-                @endforeach
-                    <td colspan="2"></td>
-            </tr>
-            @foreach($listing as $record)
+        
+    @if ($listing->total())
+        {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy"]) }}
+            <aside>{{ Form::button("delete selected", ["type" => "submit"]) }}</aside>
+            <table width="100%">
                 <tr>
-                    <td>{{ Form::checkbox("ids[]", $record->id) }}</td>
-                    @foreach($columns as $idx => $column)
-                        <td>{{ $record->$idx }}</td>
+                    <td></td>
+                    @foreach($columns as $column)
+                        <th align="left">{{ $column }}</th>
                     @endforeach
-                    <td><a href="{{ url()->current() }}/{{ $record->id }}/edit">Edit</a></td>
+                        <td colspan="2"></td>
                 </tr>
-            @endforeach
-        </table>
-    {{ Form::close() }}
+                @foreach($listing as $record)
+                    <tr>
+                        <td>{{ Form::checkbox("ids[]", $record->id) }}</td>
+                        @foreach($columns as $idx => $column)
+                            <td>{{ $record->$idx }}</td>
+                        @endforeach
+                        <td><a href="{{ url()->current() }}/{{ $record->id }}/edit">Edit</a></td>
+                    </tr>
+                @endforeach
+            </table>
+        {{ Form::close() }}
+    @else
+        <p>No records to show you</p>
+    @endif
     
     {!! $listing->appends(["records_per_page" => $perpage])->links() !!}
     

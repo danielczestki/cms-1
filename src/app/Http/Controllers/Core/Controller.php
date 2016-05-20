@@ -2,6 +2,7 @@
 
 namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
+use CmsYaml, CmsForm;
 use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -28,7 +29,9 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        $this->setModel();        
+        CmsYaml::setFile($this->name);
+        $this->sharedVars();
+        $this->setModel();
     }
     
     /**
@@ -41,7 +44,7 @@ class Controller extends BaseController
         $listing = $this->grid();
         $columns = $this->getListColumns();
         $perpage = $this->getRecordsPerPage();
-        return view("cms::admin.resource.index", compact("listing", "columns", "perpage"));
+        return view("cms::admin.resource.index", compact("title", "listing", "columns", "perpage"));
     }
 
     /**
@@ -51,7 +54,9 @@ class Controller extends BaseController
      */
     public function create()
     {
-        dd("PARENT CREATE METHOD");
+        $type = "create";
+        $subtitle = CmsForm::subtitle($type, $this->name);
+        return view("cms::admin.resource.form", compact("type", "subtitle"));
     }
 
     /**
@@ -97,6 +102,22 @@ class Controller extends BaseController
     public function destroy($id)
     {
         dd("DESTROY IDs: ". implode(",", request()->get("ids")) ." METHOD");
+    }
+    
+    
+    //
+    // Private
+    // 
+    
+    
+    /**
+     * Set any shared variables that should exist across all views
+     * 
+     * @return void
+     */
+    private function sharedVars()
+    {
+        return view()->share("title", $this->getMeta()->title);
     }
     
     

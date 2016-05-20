@@ -11,7 +11,7 @@ use Collective\Html\HtmlServiceProvider;
 use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
 use Thinmartian\Cms\App\Html\CmsFormBuilder;
-use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYaml;
+use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYamlService;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -49,8 +49,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootViews();
         $this->registerMiddleware($router);
-        //$this->publishViews();
-        $this->publishDefinitions();
+        //$this->publishDefinitions(); // BRING THIS BACK, HIDDEN SO I DON'T OVERWRITE
         $this->publishConfig();
         $this->publishAssets();
         $this->publishMigrations();
@@ -66,10 +65,9 @@ class CmsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfig();
-        $this->bindHtml();
         $this->updateConfig();
-        $this->registerFormBuilder();
         $this->registerYaml();
+        $this->registerFormBuilder();
     }
     
     /**
@@ -116,18 +114,6 @@ class CmsServiceProvider extends ServiceProvider
             __DIR__."/app/Definitions" => app_path("Cms/Definitions")
         ], "definitions");
     }
-    
-    /**
-     * Publish the views
-     * 
-     * @return void
-     */
-    /*private function publishViews()
-    {
-        $this->publishes([
-            __DIR__."/resources/views" => base_path("resources/views/vendor/".self::NAME),
-        ], "views");
-    }*/
     
     /**
      * Publish the configs
@@ -202,20 +188,6 @@ class CmsServiceProvider extends ServiceProvider
     }
     
     /**
-     * Bind the Laravel Collective HTML package (Collective\Html\HtmlServiceProvider) to the IoC
-     * 
-     * @return void
-     */
-    private function bindHtml()
-    {
-        $this->app->register(HtmlServiceProvider::class);
-        $this->loader->alias("Form", "Collective\Html\FormFacade");
-        $this->loader->alias("Html", "Collective\Html\HtmlFacade");
-        $this->loader->alias("CmsForm", "Thinmartian\Cms\App\Facades\CmsFormFacade");
-        $this->loader->alias("CmsYaml", "Thinmartian\Cms\App\Facades\CmsYamlFacade");
-    }
-    
-    /**
      * Update config values (including default laravel config)
      * 
      * @return void
@@ -263,10 +235,13 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function registerFormBuilder()
     {
+        $this->app->register(HtmlServiceProvider::class);
         $this->app->singleton('cmsform', function ($app) {
-            return new CmsFormBuilder();
+            return new CmsFormBuilder;
         });
         $this->app->alias("cmsform", CmsFormBuilder::class);
+        $this->loader->alias("Form", "Collective\Html\FormFacade");
+        $this->loader->alias("CmsForm", "Thinmartian\Cms\App\Facades\CmsFormFacade");
     }
     
     /**
@@ -277,19 +252,10 @@ class CmsServiceProvider extends ServiceProvider
     private function registerYaml()
     {
         $this->app->singleton('cmsyaml', function ($app) {
-            return new CmsYaml();
+            return new CmsYamlService;
         });
-        $this->app->alias("cmsyaml", CmsYaml::class);
-    }
-    
-    /**
-     * Get the services provided by the provider for the form builder.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ["cmsform", "cmsyaml", CmsFormBuilder::class, CmsYaml::class];
+        $this->app->alias("cmsyaml", CmsYamlService::class);
+        $this->loader->alias("CmsYaml", "Thinmartian\Cms\App\Facades\CmsYamlFacade");
     }
     
 }
