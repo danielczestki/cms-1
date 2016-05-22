@@ -70,9 +70,6 @@ class Yaml {
         if (file_exists($this->file)) {
             $yaml = new Parser();
             $this->yaml = $yaml->parse(file_get_contents($this->file), false, false, true);
-            
-            //de($this->yaml);
-            
         } else {
             throw new ParseException("{$this->file} doesn't exist");
         }

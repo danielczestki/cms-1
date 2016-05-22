@@ -23,9 +23,12 @@
             "src/app/Support/helpers.php"
         ]
     },
-    "scripts": {
-        "post-update-cmd": [
-            "php artisan vendor:publish --tag=assets --force"
-        ]
+    "autoload-dev": {
+        "classmap": ["tests/TestCase.php"]   
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3",
+        "illuminate/database": "^5.2",
+        "illuminate/cache": "^5.2"
     }
 }
