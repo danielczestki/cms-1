@@ -21,33 +21,33 @@ class YamlTest extends TestCase
     }
     
     /** @test */
-    public function meta_is_instance_of_stdclass()
+    public function meta_is_array()
     {
         $meta = $this->yaml->getMeta();
-        $this->assertInstanceOf("stdClass", $meta);
+        $this->assertTrue(is_array($meta));
     }
     
     /** @test */
     public function meta_has_title_attribute()
     {
         $meta = $this->yaml->getMeta();
-        $this->assertTrue(property_exists($meta, "title"));
+        $this->assertArrayHasKey("title", $meta);
     }
     
     // Listing
     
     /** @test */
-    public function listing_is_instance_of_stdclass()
+    public function listing_is_array()
     {
         $listing = $this->yaml->getListing();
-        $this->assertInstanceOf("stdClass", $listing);
+        $this->assertTrue(is_array($listing));
     }
     
     /** @test */
     public function listing_has_id_attribute()
     {
         $listing = $this->yaml->getListing();
-        $this->assertTrue(property_exists($listing, "id"));
+        $this->assertArrayHasKey("id", $listing);
     }
     
 }
