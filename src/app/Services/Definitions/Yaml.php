@@ -47,13 +47,29 @@ class Yaml {
      */
     public function getMeta()
     {
-        return property_exists($this->yaml, "meta") ? $this->yaml->meta : null;
+        return array_key_exists("meta", $this->yaml) ? $this->yaml["meta"] : null;
     }
     
+    /**
+     * Get the listing for the index grid listing page for a resource
+     * 
+     * @return array
+     */
     public function getListing()
     {
-        return property_exists($this->yaml, "listing") ? $this->yaml->listing : [];
+        return array_key_exists("listing", $this->yaml) ? $this->yaml["listing"] : null;
     }
+    
+    /**
+     * Get the form fields for the resource
+     * 
+     * @return array
+     */
+    public function getFields()
+    {
+        return array_key_exists("fields", $this->yaml) ? $this->yaml["fields"] : null;
+    }
+    
     
     /**
      * Setters
@@ -69,7 +85,7 @@ class Yaml {
         $this->file = $this->path . $name . ".yaml";
         if (file_exists($this->file)) {
             $yaml = new Parser();
-            $this->yaml = $yaml->parse(file_get_contents($this->file), false, false, true);
+            $this->yaml = $yaml->parse(file_get_contents($this->file));
         } else {
             throw new ParseException("{$this->file} doesn't exist");
         }

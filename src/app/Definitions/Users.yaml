@@ -1,6 +1,6 @@
 # General meta data for the section
 meta:
-  title: "Users" # title of section
+  title: "CMS Users" # title of section
   records_per_page: 10 # optional
   show_in_nav: true
   icon: "users" # optional (but STRONGLY advised if show_in_nav true) / fontawesome icon
@@ -10,10 +10,28 @@ fields:
   firstname:
     type: "text"
     label: "First name"
-    value: "default value" # optional
-    validation: "required|max:30" # optional / standard laravel validation piped string
+    value: null # optional
+    validation: "required|max:20" # optional / standard laravel validation piped string
     placeholder: "First name" # optional
     info: "Small tip of info for this field" # optional
+  surname:
+    type: "text"
+    label: "Surname"
+    validation: "required|max:20" # optional / standard laravel validation piped string
+  email:
+    type: "email"
+    label: "Email address"
+    validation: "required|email|max:255|unique:cms_users|confirmed"
+  email_confirmation:
+    type: "email"
+    label: "Confirm Email address"
+  password:
+    type: "password"
+    label: "Password"
+    validation: "required|min:6|confirmed"
+  password_confirmation:
+    type: "password"
+    label: "Confirm Password"
  
 # Listing columns for the listing/index page (can use model accessors here, don't have to be db columns)   
 listing:

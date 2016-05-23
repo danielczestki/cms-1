@@ -9,6 +9,10 @@
     
     <hr>
     
-    FORM GOES HERE
+    @foreach($fields as $name => $data)
+        
+        {{ CmsForm::$data["type"]($data) }}
+        
+    @endforeach
     
 @endsection

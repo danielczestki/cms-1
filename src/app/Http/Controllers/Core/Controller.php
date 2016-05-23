@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
+use Thinmartian\Cms\App\Services\Resource\ResourceHelpers;
 use Thinmartian\Cms\App\Services\Resource\Listing;
+use Thinmartian\Cms\App\Services\Resource\Form;
 
 class Controller extends BaseController
 {
@@ -15,7 +17,7 @@ class Controller extends BaseController
     /**
      * Include the resource traits
      */
-    use Listing;
+    use ResourceHelpers, Listing, Form;
     
     /**
      * Model class
@@ -56,7 +58,8 @@ class Controller extends BaseController
     {
         $type = "create";
         $subtitle = CmsForm::subtitle($type, $this->name);
-        return view("cms::admin.resource.form", compact("type", "subtitle"));
+        $fields = $this->getFields();
+        return view("cms::admin.resource.form", compact("type", "subtitle", "fields"));
     }
 
     /**
@@ -117,7 +120,7 @@ class Controller extends BaseController
      */
     private function sharedVars()
     {
-        return view()->share("title", $this->getMeta()->title);
+        return view()->share("title", $this->getMeta()["title"]);
     }
     
     

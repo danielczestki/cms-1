@@ -35,7 +35,7 @@ trait ResourceHelpers
      */
     public function getRecordsPerPage()
     {
-        $default = property_exists($this->getMeta(), "records_per_page") ? $this->getMeta()->records_per_page : config("cms.cms.records_per_page");
+        $default = array_key_exists("records_per_page", $this->getMeta()) ? $this->getMeta()["records_per_page"] : config("cms.cms.records_per_page");
         return intval(request()->input("records_per_page", $default));
     }
     

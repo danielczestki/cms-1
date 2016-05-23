@@ -6,6 +6,14 @@ use Illuminate\Support\HtmlString;
 
 class CmsFormBuilder {
     
+    /**
+     * The $data keys we want REMOVED from the FormBuilder attributes array.
+     * This will allow for custom data-* for example
+     * 
+     * @var array
+     */
+    protected $attributeSchema = ["name", "type", "label", "value", "validation", "info"];
+    
     //
     // FORM
     // 
@@ -44,7 +52,6 @@ class CmsFormBuilder {
      */
     public function text($data = [])
     {
-        $data["type"] = "text";
         return $this->input($data);
     }
     
@@ -56,7 +63,6 @@ class CmsFormBuilder {
      */
     public function email($data = [])
     {
-        $data["type"] = "email";
         return $this->input($data);
     }
     
@@ -68,10 +74,15 @@ class CmsFormBuilder {
      */
     public function password($data = [])
     {
-        $data["type"] = "password";
         return $this->input($data);
     }
     
+    /**
+     * Render a input[type=hidden]
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
     public function hidden($data = [])
     {
        return $this->render(view("cms::html.form.hidden", $data)); 
@@ -85,7 +96,7 @@ class CmsFormBuilder {
      */
     private function input($data)
     {
-       return $this->render(view("cms::html.form.input", $data)); 
+        return $this->render(view("cms::html.form.input", $this->buildData($data))); 
     }
     
     //
@@ -137,6 +148,18 @@ class CmsFormBuilder {
     //
     // UTILS AND PRIVATE
     // 
+    
+    /**
+     * Build the data array so they can add custom attrs (e.g. data-*)
+     * 
+     * @param  array  $data The element attributes
+     * @return array
+     */
+    private function buildData($data = [])
+    {
+        $data["additional"] = array_except($data, $this->attributeSchema);
+        return $data;
+    }
     
     /**
      * Render the HTML back to the view, this allows for {{}} or {!!!!}

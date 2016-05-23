@@ -6,24 +6,22 @@ use CmsYaml;
 
 /*
 |--------------------------------------------------------------------------
-| Read/List Trait
+| Listing Trait
 |--------------------------------------------------------------------------
 |
-| This trait controls all aspect of Reading data from the persistence layer.
+| This trait controls all aspect of listing data from the persistence layer.
 | This includes (but not limited to) listing out the resources on the index
-| page to showing the record(s) on edit/show
+| page
 |
 */
 
 trait Listing
 {
     
-    use ResourceHelpers;
-    
     /**
      * Get the listing columns used on the grid
      * 
-     * @return  Array
+     * @return  array
      */
     public function getListColumns()
     {
