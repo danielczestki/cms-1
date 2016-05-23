@@ -178,7 +178,52 @@ class CmsFormBuilder {
     private function buildData($data = [])
     {
         $data["additional"] = array_except($data, $this->attributeSchema);
+        $data["additional"]["maxlength"] = $this->getMaxLength($data);
+        $data["required"] = $this->isRequired($data);
         return $data;
+    }
+    
+    /**
+     * Traverse the validation rules and determine if this field is required or not
+     * 
+     * @param  array   $data Array of form data
+     * @return boolean
+     */
+    private function isRequired($data = [])
+    {
+        $rules = $this->getRulesKey();
+        if (! array_key_exists($rules, $data)) return false;
+        return in_array("required", explode("|", $data[$rules]));
+    }
+    
+    
+    /**
+     * Traverse the validation rules and determine if this field has a
+     * maxlength and if so, return it so we can add to the field
+     * 
+     * @param  array   $data Array of form data
+     * @return mixed
+     */
+    private function getMaxLength($data = [])
+    {
+        $rules = $this->getRulesKey();
+        if (! array_key_exists($rules, $data)) return null;
+        foreach (explode("|", $data[$rules]) as $rule) {
+            if (starts_with($rule, "max")) {
+                return intval(str_ireplace("max:", "", $rule));
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Get the rules key based on the method
+     * 
+     * @return string
+     */
+    private function getRulesKey()
+    {
+        return in_array(request()->method(), ["PUT", "PATCH"]) ? "validationOnUpdate" : "validationOnCreate";
     }
     
     /**

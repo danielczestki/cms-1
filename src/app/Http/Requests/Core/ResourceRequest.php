@@ -43,6 +43,16 @@ class ResourceRequest extends FormRequest
     }
     
     /**
+     * Set custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->buildAttributes();
+    }
+    
+    /**
      * Build the validation
      * 
      * @return array
@@ -76,6 +86,20 @@ class ResourceRequest extends FormRequest
                 return "validationOnUpdate";
             break;
         }
+    }
+    
+    /**
+     * Build the attributes
+     * 
+     * @return array
+     */
+    private function buildAttributes()
+    {
+        $arr = [];
+        foreach (CmsYaml::getFields() as $key => $data) {
+            $arr[$key] = strtolower($data["label"]);
+        }
+        return $arr;
     }
     
 }
