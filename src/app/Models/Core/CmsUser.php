@@ -34,4 +34,19 @@ class CmsUser extends Authenticatable
         return $this->firstname . " " . $this->surname;
     }
     
+    /**
+     * Boot methods
+     * 
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($record) {
+            $record->password = bcrypt($record->password);
+        });
+
+    }
+    
 }

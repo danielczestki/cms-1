@@ -17,6 +17,8 @@ use CmsYaml;
 trait ResourceHelpers
 {
     
+    use Redirects;
+    
     /**
      * Fetch the meta from the Yaml file
      * 
@@ -27,6 +29,15 @@ trait ResourceHelpers
         return CmsYaml::getMeta();
     }
     
+    /**
+     * Return the array of filters for numerous links/redirects across the resource
+     * 
+     * @return array
+     */
+    public function getFilters()
+    {
+        return request()->only($this->filters);
+    }
     
     /**
      * Get the record for page value
@@ -36,7 +47,7 @@ trait ResourceHelpers
     public function getRecordsPerPage()
     {
         $default = array_key_exists("records_per_page", $this->getMeta()) ? $this->getMeta()["records_per_page"] : config("cms.cms.records_per_page");
-        return intval(request()->input("records_per_page", $default));
+        return intval(request()->get("records_per_page", $default));
     }
     
     /**

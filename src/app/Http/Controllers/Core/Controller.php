@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Thinmartian\Cms\App\Http\Requests\Core\ResourceRequest;
+use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 
 use Thinmartian\Cms\App\Services\Resource\ResourceHelpers;
 use Thinmartian\Cms\App\Services\Resource\Listing;
@@ -20,6 +21,8 @@ class Controller extends BaseController
      */
     use ResourceHelpers, Listing, Form;
     
+    protected $filters = ["records_per_page", "sort", "search"];
+    
     /**
      * Model class
      * 
@@ -28,13 +31,25 @@ class Controller extends BaseController
     protected $model;
     
     /**
+     * @var Thinmartian\Cms\App\Services\Resource\ResourceInput
+     */
+    protected $input;
+    
+    /**
+     * @var string
+     */
+    protected $controller;
+    
+    /**
      * constructor
      */
-    public function __construct()
+    public function __construct(ResourceInput $input)
     {
+        $this->controller = $this->name . "Controller";
         CmsYaml::setFile($this->name);
-        $this->sharedVars();
         $this->setModel();
+        $this->input = $input;
+        $this->sharedVars();
     }
     
     /**
@@ -59,9 +74,8 @@ class Controller extends BaseController
     {
         $type = "create";
         $subtitle = CmsForm::subtitle($type, $this->name);
-        $submitlabel = CmsForm::submitlabel($type, $this->name);
         $fields = $this->getFields();
-        return view("cms::admin.resource.form", compact("type", "subtitle", "submitlabel", "fields"));
+        return view("cms::admin.resource.form", compact("type", "subtitle", "fields"));
     }
 
     /**
@@ -72,7 +86,14 @@ class Controller extends BaseController
      */
     public function store(ResourceRequest $request)
     {
-        dd("good");
+        if (method_exists($this, "beforeCreate")) {
+            $this->beforeCreate($this->input);
+        }
+        $resource = $this->createResource($this->input);
+        if (method_exists($this, "afterCreate")) {
+            $this->afterCreate($resource);
+        }
+        return $this->redirect("store", $resource);
     }
 
     /**
@@ -124,11 +145,8 @@ class Controller extends BaseController
     {
         view()->share("title", $this->getMeta()["title"]);
         view()->share("_name", $this->name);
-        view()->share("controller", $this->name . "Controller");
-        
-        
-        /*$action = class_basename(request()->route()->getAction()["controller"]);
-        de(list($controller, $action) = explode('@', $action));*/
+        view()->share("controller", $this->controller);
+        view()->share("filters", $this->getFilters());
     }
     
     

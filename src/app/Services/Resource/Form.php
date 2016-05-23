@@ -18,6 +18,19 @@ trait Form
 {
     
     /**
+     * Create the resource from the create form
+     * 
+     * @param  ResourceInput $input The form field
+     * @return void
+     */
+    public function createResource(ResourceInput $input)
+    {
+        $form = $input->getInput();
+        $resource = $this->model->create($form);
+        return $resource;
+    }
+    
+    /**
      * Get the form fields for the resource
      * 
      * @return array

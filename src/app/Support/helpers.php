@@ -11,9 +11,9 @@ if (! function_exists("cmsaction")) {
      * @param  boolean $app     App namespace?
      * @return string
      */
-    function cmsaction($action, $app = false)
+    function cmsaction($action, $app = false, $params = [])
     {
-        return action(($app ? APPNAMESPACE : CMSNAMESPACE) . $action);
+        return action(($app ? APPNAMESPACE : CMSNAMESPACE) . $action, $params);
     }
 }
 

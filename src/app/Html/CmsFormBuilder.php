@@ -132,6 +132,17 @@ class CmsFormBuilder {
        return $this->render(view("cms::html.form.submit", $data)); 
     }
     
+    /**
+     * Render a cancel button
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function cancel($data = [])
+    {
+        return $this->render(view("cms::html.form.cancel", $data)); 
+    }
+    
     //
     // TITLES AND STRINGS
     // 
@@ -148,18 +159,11 @@ class CmsFormBuilder {
         return $type == "create" ? "Create a new " . strtolower(str_singular($name)) : "Edit $name";
     }
     
-    /**
-     * Return the label for the submit button
-     * 
-     * @param  string $type create or edit
-     * @param  string $name the name of the resource or record
-     * @return string
-     */
-    public function submitlabel($type, $name)
+    public function success()
     {
-        return ($type == "create" ? "Create " : "Edit ") . strtolower(str_singular($name));
+        return $this->render(view("cms::html.form.success")); 
     }
-    
+     
     
     //
     // UTILS AND PRIVATE

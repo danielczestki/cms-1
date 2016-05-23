@@ -9,14 +9,18 @@
     
     <hr>
     
-    {{ CmsForm::open(["url" => cmsaction($controller . "@store", true)]) }}
+    {{ CmsForm::success() }}
+    
+    {{ CmsForm::open(["url" => cmsaction($controller . "@store", true, $filters)]) }}
         @foreach($fields as $name => $data)
             
             {{ CmsForm::$data["type"]($data) }}
             
         @endforeach
         
-        {{ CmsForm::submit(["label" => $submitlabel]) }}
+        {{ CmsForm::submit(["label" => "Save", "icon" => "check", "name" => "save"]) }}
+        {{ CmsForm::submit(["label" => "Save and exit", "icon" => "bars", "name" => "saveexit"]) }}
+        {{ CmsForm::cancel(["url" => cmsaction($controller . '@index', true, $filters)]) }}
     {{ CmsForm::close() }}
     
 @endsection

@@ -12,11 +12,13 @@
         {{ Form::open(["method" => "GET", "url" => url()->current(), "style" => "display: inline", "id" => "listing-form"]) }}
             Per page: {{ Form::select("records_per_page", array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")), $perpage, ["onchange" => "document.getElementById('listing-form').submit()"]) }}
         {{ Form::close() }}
-        &nbsp; <a href="{{ url()->current() }}/create">Create New</a>
+        &nbsp; <a href="{{ cmsaction($controller . "@create", true, $filters) }}">Create New</a>
     </div>
     
     <hr>
         
+    {{ CmsForm::success() }}
+    
     @if ($listing->total())
         {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy"]) }}
             <aside>{{ Form::button("delete selected", ["type" => "submit"]) }}</aside>
