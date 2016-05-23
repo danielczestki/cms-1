@@ -12,7 +12,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "value", "validation", "info"];
+    protected $attributeSchema = ["name", "type", "label", "value", "validationOnCreate", "validationOnUpdate", "validationOnDelete", "info"];
     
     //
     // FORM
@@ -52,6 +52,7 @@ class CmsFormBuilder {
      */
     public function text($data = [])
     {
+        $data["type"] = "text";
         return $this->input($data);
     }
     
@@ -63,6 +64,7 @@ class CmsFormBuilder {
      */
     public function email($data = [])
     {
+        $data["type"] = "email";
         return $this->input($data);
     }
     
@@ -74,6 +76,7 @@ class CmsFormBuilder {
      */
     public function password($data = [])
     {
+        $data["type"] = "password";
         return $this->input($data);
     }
     
@@ -111,7 +114,7 @@ class CmsFormBuilder {
      */
     public function checkbox($data = [])
     {
-       return $this->render(view("cms::html.form.checkbox", $data)); 
+       return $this->render(view("cms::html.form.checkbox", $this->buildData($data))); 
     }
     
     //
@@ -144,6 +147,19 @@ class CmsFormBuilder {
     {
         return $type == "create" ? "Create a new " . strtolower(str_singular($name)) : "Edit $name";
     }
+    
+    /**
+     * Return the label for the submit button
+     * 
+     * @param  string $type create or edit
+     * @param  string $name the name of the resource or record
+     * @return string
+     */
+    public function submitlabel($type, $name)
+    {
+        return ($type == "create" ? "Create " : "Edit ") . strtolower(str_singular($name));
+    }
+    
     
     //
     // UTILS AND PRIVATE

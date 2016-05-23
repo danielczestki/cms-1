@@ -6,6 +6,7 @@ use CmsYaml, CmsForm;
 use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Thinmartian\Cms\App\Http\Requests\Core\ResourceRequest;
 
 use Thinmartian\Cms\App\Services\Resource\ResourceHelpers;
 use Thinmartian\Cms\App\Services\Resource\Listing;
@@ -58,19 +59,20 @@ class Controller extends BaseController
     {
         $type = "create";
         $subtitle = CmsForm::subtitle($type, $this->name);
+        $submitlabel = CmsForm::submitlabel($type, $this->name);
         $fields = $this->getFields();
-        return view("cms::admin.resource.form", compact("type", "subtitle", "fields"));
+        return view("cms::admin.resource.form", compact("type", "subtitle", "submitlabel", "fields"));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Thinmartian\Cms\App\Http\Requests\Core\ResourceRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ResourceRequest $request)
     {
-        //
+        dd("good");
     }
 
     /**
@@ -120,7 +122,13 @@ class Controller extends BaseController
      */
     private function sharedVars()
     {
-        return view()->share("title", $this->getMeta()["title"]);
+        view()->share("title", $this->getMeta()["title"]);
+        view()->share("_name", $this->name);
+        view()->share("controller", $this->name . "Controller");
+        
+        
+        /*$action = class_basename(request()->route()->getAction()["controller"]);
+        de(list($controller, $action) = explode('@', $action));*/
     }
     
     

@@ -4,6 +4,8 @@
 
 @section("content")
     
+    You cannot register on the CMS. Please use the <a href="{{ route('admin.users.create') }}">CMS User area</a>.
+    {{--
     {{ CmsForm::open(["method" => "POST", "url" => "Core\Auth\AuthController@register"]) }}
         
         {{ CmsForm::text(["name" => "firstname", "label" => "Firstame"]) }}
@@ -20,5 +22,6 @@
         </div>
         
     {{ CmsForm::close() }}
+    --}}
     
 @endsection

@@ -1,17 +1,19 @@
 <?php
 
 define("CMSNAMESPACE", "\Thinmartian\Cms\App\Http\Controllers\\");
+define("APPNAMESPACE", "\App\Cms\Http\Controllers\\");
 
 if (! function_exists("cmsaction")) {
     /**
      * Return a path based on the CMS action
      *
      * @param  string  $action  The action within the CMS namespace
+     * @param  boolean $app     App namespace?
      * @return string
      */
-    function cmsaction($action)
+    function cmsaction($action, $app = false)
     {
-        return action(CMSNAMESPACE . $action);
+        return action(($app ? APPNAMESPACE : CMSNAMESPACE) . $action);
     }
 }
 

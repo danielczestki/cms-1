@@ -5,7 +5,7 @@
 @section("content")
     
     
-    {{ CmsForm::open(["method" => "POST", "url" => "Core\Auth\AuthController@login"]) }}
+    {{ CmsForm::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login")]) }}
 
         {{ CmsForm::email(["name" => "email", "label" => "Email"]) }}
         {{ CmsForm::password(["name" => "password", "label" => "Password"]) }}

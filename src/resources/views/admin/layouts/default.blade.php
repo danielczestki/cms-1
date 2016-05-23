@@ -23,7 +23,7 @@
             @if (\Auth::check())
                 Welcome back, {{ Auth::user()->firstname }} <a href="{{ cmsaction("Core\Auth\AuthController@logout") }}">Logout</a>
             @else
-                <a href="{{ cmsaction("Core\Auth\AuthController@showRegistrationForm") }}">Register</a>
+                <!-- <a href="{{ cmsaction("Core\Auth\AuthController@showRegistrationForm") }}">Register</a> -->
                 <a href="{{ cmsaction("Core\Auth\AuthController@showLoginForm") }}">Login</a>
             @endif
         </div>

@@ -9,10 +9,14 @@
     
     <hr>
     
-    @foreach($fields as $name => $data)
+    {{ CmsForm::open(["url" => cmsaction($controller . "@store", true)]) }}
+        @foreach($fields as $name => $data)
+            
+            {{ CmsForm::$data["type"]($data) }}
+            
+        @endforeach
         
-        {{ CmsForm::$data["type"]($data) }}
-        
-    @endforeach
+        {{ CmsForm::submit(["label" => $submitlabel]) }}
+    {{ CmsForm::close() }}
     
 @endsection
