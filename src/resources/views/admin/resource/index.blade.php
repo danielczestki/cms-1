@@ -6,21 +6,28 @@
     
     <h1>{{ $title }}</h1>
     
-    Showing results {{$listing->firstItem()}} to {{ $listing->lastItem() }} of {{ $listing->total() }} | <a href="{{ url()->current() }}">Reset</a>
-    
-    <div style="float: right">
-        {{ Form::open(["method" => "GET", "url" => url()->current(), "style" => "display: inline", "id" => "listing-form"]) }}
-            Per page: {{ Form::select("records_per_page", array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")), $perpage, ["onchange" => "document.getElementById('listing-form').submit()"]) }}
-        {{ Form::close() }}
-        &nbsp; <a href="{{ cmsaction($controller . "@create", true, $filters) }}">Create New</a>
-    </div>
+    @if ($listing->total())
+        Showing results {{intval($listing->firstItem())}} to {{ intval($listing->lastItem()) }} of {{ $listing->total() }} | 
+    @endif
+     
+    @unless (! $listing->total() and ! request()->has("search"))
+        <a href="{{ cmsaction($controller . "@index", true) }}">Reset</a>
+        <div style="float: right">
+            {{ Form::open(["method" => "GET", "url" => url()->current(), "style" => "display: inline", "id" => "listing-form"]) }}
+                Filter {{ Form::text("search", request()->get("search")) }}
+                Per page: {{ Form::select("records_per_page", array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")), $perpage, ["onchange" => "document.getElementById('listing-form').submit()"]) }}
+                <button type="submit">GO</button>
+            {{ Form::close() }}
+            &nbsp; <a href="{{ cmsaction($controller . "@create", true, $filters) }}">Create New</a>
+        </div>
+    @endunless
     
     <hr>
         
     {{ CmsForm::success() }}
     
     @if ($listing->total())
-        {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy"]) }}
+        {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy?" . http_build_query($filters)]) }}
             <aside>{{ Form::button("delete selected", ["type" => "submit"]) }}</aside>
             <table width="100%">
                 <tr>
@@ -36,13 +43,16 @@
                         @foreach($columns as $idx => $column)
                             <td>{{ $record->$idx }}</td>
                         @endforeach
-                        <td><a href="{{ url()->current() }}/{{ $record->id }}/edit">Edit</a></td>
+                        <td><a href="{{ cmsaction($controller . '@edit', true, array_merge(['id' => $record->id], $filters))}} ">Edit</a></td>
                     </tr>
                 @endforeach
             </table>
         {{ Form::close() }}
     @else
         <p>No records to show you</p>
+        @if (request()->has("search"))
+            <p><a href="{{ cmsaction($controller . "@index", true) }}">Show all results</a></p>
+        @endif
     @endif
     
     {!! $listing->appends(["records_per_page" => $perpage])->links() !!}

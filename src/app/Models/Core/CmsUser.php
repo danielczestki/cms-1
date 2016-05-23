@@ -46,7 +46,6 @@ class CmsUser extends Authenticatable
         self::creating(function($record) {
             $record->password = bcrypt($record->password);
         });
-
     }
     
 }

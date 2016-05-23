@@ -70,6 +70,16 @@ class Yaml {
         return array_key_exists("fields", $this->yaml) ? $this->yaml["fields"] : null;
     }
     
+    /**
+     * Get the searchable fields for the resource
+     * 
+     * @return array
+     */
+    public function getSearchable()
+    {
+        return array_key_exists("searchable", $this->yaml) ? $this->yaml["searchable"] : [];;
+    }
+    
     
     /**
      * Setters

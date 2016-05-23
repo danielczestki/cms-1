@@ -40,7 +40,7 @@ trait ResourceHelpers
     }
     
     /**
-     * Get the record for page value
+     * Get the record per page value
      * 
      * @return integer
      */
@@ -51,13 +51,33 @@ trait ResourceHelpers
     }
     
     /**
+     * Get the search query (if any)
+     * 
+     * @return string
+     */
+    public function getSearch()
+    {
+        return request()->get("search");
+    }
+    
+    /**
+     * Get the model name
+     * 
+     * @return string
+     */
+    private function getModel()
+    {
+        return "Cms" . trim(ucfirst(str_singular($this->name)));
+    }
+    
+    /**
      * Return the resolved model and also set the property
      * 
      * @return void
      */
     private function setModel()
     {
-        $model = "Cms" . trim(ucfirst(str_singular($this->name)));
+        $model = $this->getModel();
         $this->model = app()->make("App\Cms\\$model");
     }
 }

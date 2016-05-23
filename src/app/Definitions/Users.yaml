@@ -11,27 +11,33 @@ fields:
     type: "text"
     label: "First name"
     value: null # optional
-    validation: "required|max:20" # optional / standard laravel validation piped string
-    placeholder: "First name" # optional
-    info: "Small tip of info for this field" # optional
+    validationOnCreate: "required|max:20" # optional / standard laravel validation piped string on creation
+    validationOnUpdate: "required|max:20" # optional / standard laravel validation piped string on update
+    validationOnDelete: null # optional / standard laravel validation piped string on delete
+    placeholder: "First name" # optional / placeholder for the field
+    info: "Small tip of info for this field" # optional / small tooltip to appear alongside form
+    class: "Myclass" # optional / css classes
+    style: null # optional / css styles
+    data-custom: "My Custom Attribute" # optional / (of course), add as many as you wish
   surname:
     type: "text"
     label: "Surname"
-    validation: "required|max:20" # optional / standard laravel validation piped string
+    validationOnCreate: "required|max:20"
   email:
     type: "email"
     label: "Email address"
-    validation: "required|email|max:255|unique:cms_users|confirmed"
-  email_confirmation:
-    type: "email"
-    label: "Confirm Email address"
+    validationOnCreate: "required|email|max:255|unique:cms_users"
+    validationOnUpdate: "required|email|max:255|unique:cms_users,email,1"
   password:
     type: "password"
     label: "Password"
-    validation: "required|min:6|confirmed"
+    validationOnCreate: "required|min:6|confirmed"
+    validationOnUpdate: "required|min:6|confirmed"
   password_confirmation:
     type: "password"
-    label: "Confirm Password"
+    label: "Confirm password"
+    validationOnCreate: "required"
+    validationOnUpdate: "required"
  
 # Listing columns for the listing/index page (can use model accessors here, don't have to be db columns)   
 listing:

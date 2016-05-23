@@ -2,6 +2,7 @@
 
 namespace Thinmartian\Cms\App\Services\Resource;
 
+use DB;
 use CmsYaml;
 
 /*
@@ -35,8 +36,29 @@ trait Listing
      */
     public function grid()
     {
-        return $this->model->paginate($this->getRecordsPerPage());
+        $result = $this->model;
+        $result = $this->gridSearch($result);
+        return $result->paginate($this->getRecordsPerPage());        
     }
+    
+    /**
+     * Build the search query for the grid
+     * 
+     * @param  Illuminate\Database\Collection $result
+     * @return Illuminate\Database\Collection
+     */
+    private function gridSearch($result)
+    {
+        if (! $search = $this->getSearch()) return $result;
+        
+        $searchable = CmsYaml::getSearchable();
+        return $result->where(function($q) use ($searchable, $search) {
+            foreach ($searchable as $column) {
+                $q->orWhere(DB::raw($column), "like", "%". $search ."%");
+            }
+        });
+    }
+   
    
    
     

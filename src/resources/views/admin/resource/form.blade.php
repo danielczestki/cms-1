@@ -7,6 +7,8 @@
     <h1>{{ $title }}</h1>
     <h2>{{ $subtitle }}</h2>
     
+    <a href="{{ cmsaction($controller . '@index', true, $filters) }}">Back to listing</a>
+    
     <hr>
     
     {{ CmsForm::success() }}
