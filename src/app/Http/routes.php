@@ -2,14 +2,6 @@
 
 use Symfony\Component\Finder\Finder;
 
-
-
-\Artisan::call("cms:migrations");
-
-
-
-
-
 Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     
     // Core/uneditable routes (not copied over on publish)

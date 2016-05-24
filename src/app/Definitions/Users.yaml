@@ -8,9 +8,10 @@ meta:
 # Field defs for the create/edit form
 fields:
   firstname:
-    type: "text"
-    label: "First name"
-    value: null # optional
+    type: "text" # required
+    label: "First name" # required 
+    persist: true # required / should this be stored in the DB? E.g. confirmation fields are for the form only, we don't persist those
+    value: null # optional / do we want a default value
     validationOnCreate: "required|max:20" # optional / standard laravel validation piped string on creation
     validationOnUpdate: "required|max:20" # optional / standard laravel validation piped string on update
     validationOnDelete: null # optional / standard laravel validation piped string on delete
@@ -22,20 +23,24 @@ fields:
   surname:
     type: "text"
     label: "Surname"
+    persist: true
     validationOnCreate: "required|max:20"
   email:
     type: "email"
     label: "Email address"
+    persist: true
     validationOnCreate: "required|email|max:255|unique:cms_users"
     validationOnUpdate: "required|email|max:255|unique:cms_users,email,1"
   password:
     type: "password"
     label: "Password"
+    persist: true
     validationOnCreate: "required|min:6|confirmed"
     validationOnUpdate: "required|min:6|confirmed"
   password_confirmation:
     type: "password"
     label: "Confirm password"
+    persist: false
     validationOnCreate: "required"
     validationOnUpdate: "required"
  
@@ -46,3 +51,8 @@ listing:
   email: "Email"
   created_at: "Date added"
   updated_at: "Date updated"
+  
+# Searchable columns in the cMS listing (must be database columns, no accessors allowed)
+searchable:
+  - email
+  - concat(firstname, ' ', surname)

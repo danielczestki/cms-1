@@ -19,7 +19,7 @@ class Migrations extends Command
      *
      * @var string
      */
-    protected $description = 'Build migrations from installed YAML config files';
+    protected $description = 'Build migrations from installed YAML config files <comment>(does not migrate database)</comment>';
     
     /**
      * Simple flag to know if a migration was generated for the console response
@@ -192,6 +192,9 @@ class Migrations extends Command
             case "number" :
                 $str .= $this->buildNumber($column, $data);
             break;
+            default :
+                $str .= $this->buildText($column, $data);
+            break;                
         }
         return "            " . $str . $this->buildNullable($data) . ";\n";
     }
@@ -453,68 +456,5 @@ class Migrations extends Command
         }
         return $arr;
     }
-    
-    
-    
-    
-    /**
-     * Get all the valid .yaml files from the config path
-     * @return array
-     */
-    // private function yamls()
-    // {
-    //     $arr = [];
-    //     foreach (scandir($this->path) as $filename) {
-    //         if (ends_with($filename, ".yaml")) $arr[] = $filename;
-    //     }
-    //     return $arr;
-    // }
-    
-    // private function exists($filename)
-    // {
-    //     $table = $this->filenameTable(pathinfo($this->fullpath($filename))["filename"]);
-    //     $searchable = "{$prefix}_{$tableprefix}_{$table}_{$suffix}";
-    //     dd($searchable);
-    //     return false;
-    // }
-    
-    /**
-     * Generate the migration filename
-     * 
-     * @param  string $name The name of the YAML config file (this is used for the table name)
-     * @return string
-     */
-    // private function filename($name)
-    // {
-    //     $date = date(self::MIGRATIONDATE);
-    //     $number = self::MIGRATIONNUMBER;
-    //     $prefix = self::MIGRATIONPREFIX;
-    //     $tableprefix = self::TABLEPREFIX;
-    //     $table = $this->filenameTable();
-    //     $suffix = self::MIGRATIONSUFFIX;
-    //     return "{$date}_{$number}_{$prefix}_{$tableprefix}_{$table}_{$suffix}";
-    // }
-    
-    /**
-     * Return the parse table name for the file
-     * 
-     * @param  string $name The name of the YAML config file
-     * @return string
-     */
-    // private function filenameTable($name)
-    // {
-    //     return trim(strtolower(str_plural($name)));
-    // }
-    
-    /**
-     * Return the full path to the file
-     * 
-     * @param  string $filename The file name
-     * @return string
-     */
-    // private function fullpath($filename)
-    // {
-    //     return $this->path . $filename;
-    // }
     
 }
