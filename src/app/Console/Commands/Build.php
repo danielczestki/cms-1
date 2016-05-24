@@ -44,7 +44,20 @@ class Build extends Command
      */
     public function handle()
     {
-        $this->info("sdsd");
+        $this->comment("Generating database migrations from YAML definitions...");
+        $this->artisan->call("cms:migrations");
+        $this->info("Database migrations generated successfully!");
+        
+        $this->comment("Publishing core files...");
+        $this->artisan->call("vendor:publish", [
+            "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
+        ]);
+        $this->artisan->call("vendor:publish", [
+            "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
+            "--tag" => ["assets"],
+            "--force" => true
+        ]);
+        $this->info("Core files published successfully!");
         //$this->artisan->call("cms:migrations");      
     }
     

@@ -63,6 +63,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->publishMigrations();
         $this->publishModels();
         $this->publishControllers();
+        $this->browserActions();
     }
 
     /**
@@ -111,6 +112,19 @@ class CmsServiceProvider extends ServiceProvider
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
     }
+    
+    /**
+     * Run stuff when in a browser only, and NOT in console/artisan
+     * 
+     * @return void
+     */
+    private function browserActions()
+    {if (! app()->runningInConsole()) {
+        if (! file_exists(app_path("Cms"))) {
+            echo "Please run php artisan cms:build";
+            exit;
+        }
+    }}
     
     /**
      * Publish the stock definitions
@@ -184,28 +198,15 @@ class CmsServiceProvider extends ServiceProvider
         ], "controllers");
     }
     
-    
-    
-    
+    /**
+     * Register artisan commands
+     * 
+     * @return void
+     */
     private function registerCommands()
-    {
+    {        
         $this->commands($this->commands);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     /**
      * Merge the config files in vendor with the ones published

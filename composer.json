@@ -17,7 +17,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Thinmartian\\Cms\\": "src/"
+            "Thinmartian\\Cms\\App\\": "packages/thinmartian/cms/src/app",
+            "Thinmartian\\Cms\\": "packages/thinmartian/cms/src"
         },
         "files": [
             "src/app/Support/helpers.php"
@@ -30,5 +31,13 @@
         "phpunit/phpunit": "^5.3",
         "illuminate/database": "^5.2",
         "illuminate/cache": "^5.2"
-    }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php artisan vendor:publish --provider='Thinmartian\\Cms\\CmsServiceProvider'"            
+        ],
+        "post-update-cmd": [
+            "php artisan vendor:publish --provider='Thinmartian\\Cms\\CmsServiceProvider' --tag=assets --force"
+        ]
+    },
 }
