@@ -22,6 +22,13 @@ class Migrations extends Command
     protected $description = 'Build migrations from installed YAML config files';
     
     /**
+     * Simple flag to know if a migration was generated for the console response
+     * 
+     * @var boolean
+     */
+    protected $created = false;
+    
+    /**
      * @var Symfony\Component\Yaml\Parser
      */
     protected $yaml;
@@ -41,23 +48,16 @@ class Migrations extends Command
     protected $migrationsPath;
     
     /**
-     * Path to the stubs
+     * Path to the stub file
      * 
      * @var string
      */
-    protected $stubsPath;
+    protected $stubPath;
     
     /**
      * Date format for the cms migrations file
      */
     const MIGRATIONDATE = "Y_m_d";
-    
-    /**
-     * Number step for the migration file (sits after the date)
-     * 
-     * @example 2016_12_25_100000
-     */
-    const MIGRATIONNUMBER = 100000;
     
     /**
      * Prefix for the cms migrations file
@@ -85,7 +85,7 @@ class Migrations extends Command
         $this->yaml = $yaml;
         $this->yamlPath = app_path("Cms/Definitions/");
         $this->migrationsPath = realpath(__DIR__ . "/../../../database/migrations/");
-        $this->stubsPath = realpath(__DIR__ . "/stubs/");
+        $this->stubPath = realpath(__DIR__ . "/stubs/migration.stub");
     }
 
     /**
@@ -95,14 +95,21 @@ class Migrations extends Command
      */
     public function handle()
     {
+        $number = 0;
         foreach ($this->getYamlFiles() as $filename) {
             // move on if the file exists, we don't want to overwrite
-            if ($this->migrationExists($filename)) continue;
-            // it's not there, so we need to build it
-            $migration = $this->buildMigration($filename);
-            
-            dd($migration);
+            if (! $this->migrationExists($filename)) {
+                // it's not there, so we need to build it
+                $migration = $this->buildMigration($filename, $number);
+                $number++;
+            }
         }
+        if ($this->created) {
+            $this->info("Migrations generated from YAML definitions successfully!");
+        } else {
+            $this->comment("No migrations to generate");            
+        }
+        
     }
     
     
@@ -110,19 +117,28 @@ class Migrations extends Command
     // MIGRATION
     // 
     
-    private function buildMigration($filename)
+    /**
+     * Build the migration file
+     * 
+     * @param  string  $filename
+     * @param  integer $number
+     * @return void
+     */
+    private function buildMigration($filename, $number)
     {
         // setup
         $fullpath = $this->getFullYamlPath($filename);
         $yaml = $this->yaml->parse(file_get_contents($fullpath));
         // build
+        $stub = file_get_contents($this->stubPath);
         $classname = $this->buildClassname($filename);
         $tablename = $this->getFileTablename($this->getFilename($filename));
         $schema = $this->buildSchema($yaml);
-        
-        dd($schema);
-        
-        
+        $migration = str_ireplace(["{classname}", "{tablename}", "{schema}"], [$classname, $tablename, $schema], $stub);
+        // save the file
+        $migrationname = "{$this->getFileDate()}_{$this->getFileNumber($number)}_{$this->getFilePrefix()}{$tablename}{$this->getFileSuffix()}";
+        file_put_contents($this->migrationsPath . "/" . $migrationname, $migration);
+        $this->created = true;
     }
     
     /**
@@ -133,9 +149,188 @@ class Migrations extends Command
      */
     private function buildSchema($yaml)
     {
+        $result = "";
         $fields = $yaml["fields"];
-        dd($fields);
+        foreach ($fields as $column => $data) {
+            $result .= $this->buildColumn($column, $data);
+        }
+        return $result;
     }
+    
+    /**
+     * Determine the column type and return the string
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildColumn($column, $data)
+    {
+        $str = '$table->';
+        switch ($data["type"]) {
+            case "text" :
+            case "select" :
+            case "email" :
+            case "password" :
+                $str .= $this->buildText($column, $data);
+            break;
+            case "textarea" :
+                $str .= $this->buildTextarea($column, $data);
+            break;
+            case "wysiwyg" :
+                $str .= $this->buildWysiwyg($column, $data);
+            break;
+            case "checkbox" :
+            case "radio" :
+                $str .= $this->buildCheckbox($column, $data, "options");
+            break;
+            case "datetime" :
+                $str .= $this->buildDatetime($column, $data);
+            break;
+            case "date" :
+                $str .= $this->buildDate($column, $data);
+            break;
+            case "number" :
+                $str .= $this->buildNumber($column, $data);
+            break;
+        }
+        return "            " . $str . $this->buildNullable($data) . ";\n";
+    }
+    
+    /**
+     * Return a "text" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildText($column, $data)
+    {
+        return 'string("'. $column .'", '. $this->buildLength($data) .')';
+    }
+    
+    /**
+     * Return a "textarea" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildTextarea($column, $data)
+    {
+        return 'string("'. $column .'", '. $this->buildLength($data, 4000) .')';
+    }
+    
+    /**
+     * Return a "wysiwyg" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildWysiwyg($column, $data)
+    {
+        return 'text("'. $column .'")';
+    }
+    
+    /**
+     * Return a "checkbox" migration
+     * 
+     * @param  string  $column      The column name
+     * @param  array   $data        The data from the yaml
+     * @param  string  $checkfor    Check for this key to determine if we are boo or string
+     * @return string
+     */
+    private function buildCheckbox($column, $data, $checkfor = "value")
+    {
+        if (array_key_exists($checkfor, $data)) {
+            // assume it's not boolean
+            return $this->buildText($column, $data);
+        } else {
+            // it should be boolean
+            return $this->buildBoolean($column, $data);
+        }
+    }
+    
+    /**
+     * Return a "boolean" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildBoolean($column, $data)
+    {
+        return 'boolean("'. $column .'")';
+    }
+    
+    /**
+     * Return a "datetime" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildDatetime($column, $data)
+    {
+        return 'dateTime("'. $column .'")';
+    }
+    
+    /**
+     * Return a "date" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildDate($column, $data)
+    {
+        return 'date("'. $column .'")';
+    }
+    
+    /**
+     * Return a "number" migration
+     * 
+     * @param  string $column The column name
+     * @param  array  $data   The data from the yaml
+     * @return string
+     */
+    private function buildNumber($column, $data)
+    {
+        return 'integer("'. $column .'")->unsigned()';
+    }
+    
+    /**
+     * Is this field required or not?
+     * 
+     * @param  array $data The data from the yaml
+     * @return string
+     */
+    private function buildNullable($data)
+    {
+        if (! array_key_exists("validationOnCreate", $data)) return '->nullable()';
+        return in_array("required", explode("|", $data["validationOnCreate"])) ? null : '->nullable()';
+    }
+    
+    /**
+     * Return a max length based on the validation rules
+     * 
+     * @param  array $data      The data from the yaml
+     * @param  integer $default The default length if one don't exist
+     * @return integer
+     */
+    private function buildLength($data, $default = 255)
+    {
+        if (! array_key_exists("validationOnCreate", $data)) return $default;
+        $rules = $data["validationOnCreate"];
+        
+        foreach (explode("|", $rules) as $rule) {
+            if (starts_with($rule, "max")) {
+                return intval(str_ireplace("max:", "", $rule));
+            }
+        }
+        return $default;
+    }
+    
     
     /**
      * Return the class name for the migration file
@@ -147,8 +342,6 @@ class Migrations extends Command
     {
         return ucfirst(self::TABLEPREFIX) . ucfirst(str_plural($this->getFilename($filename)));
     }
-    
-    
     
     //
     // GETTERS
@@ -189,11 +382,12 @@ class Migrations extends Command
     /**
      * Get the number part for the migration file
      * 
+     * @param integer $number
      * @return integer
      */
-    private function getFileNumber()
+    private function getFileNumber($number)
     {
-        return self::MIGRATIONNUMBER;
+        return intval(date("U")) + $number;
     }
     
     /**

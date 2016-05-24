@@ -14,8 +14,7 @@ class Create{classname}Table extends Migration
     {
         Schema::create('{tablename}', function (Blueprint $table) {
             $table->increments('id');
-            {schema}
-            $table->timestamps();
+{schema}            $table->timestamps();
         });
     }
 
