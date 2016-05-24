@@ -23,6 +23,13 @@ class CmsServiceProvider extends ServiceProvider
     const NAME = "cms";
     
     /**
+     * @var array
+     */
+    protected $commands = [
+        \Thinmartian\Cms\App\Console\Commands\Migrations::class
+    ];
+    
+    /**
      * @var Illuminate\Foundation\AliasLoader
      */
     protected $loader;
@@ -48,7 +55,7 @@ class CmsServiceProvider extends ServiceProvider
     {
         $this->bootRoutes();
         $this->bootViews();
-        $this->registerMiddleware($router);
+        $this->bootMiddleware($router);
         //$this->publishDefinitions(); // BRING THIS BACK, HIDDEN SO I DON'T OVERWRITE
         $this->publishConfig();
         $this->publishAssets();
@@ -64,6 +71,7 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerCommands();
         $this->mergeConfig();
         $this->updateConfig();
         $this->registerYaml();
@@ -97,7 +105,7 @@ class CmsServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    private function registerMiddleware(Router $router)
+    private function bootMiddleware(Router $router)
     {
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
@@ -174,6 +182,29 @@ class CmsServiceProvider extends ServiceProvider
             __DIR__."/app/Http/Controllers/Custom" => app_path("Cms/Http/Controllers"),
         ], "controllers");
     }
+    
+    
+    
+    
+    private function registerCommands()
+    {
+        $this->commands($this->commands);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     /**
      * Merge the config files in vendor with the ones published

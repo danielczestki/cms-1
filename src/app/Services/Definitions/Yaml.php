@@ -35,7 +35,6 @@ class Yaml {
         $this->path = app_path("Cms/Definitions/");
     }
     
-    
     /**
      * Getters
      */
