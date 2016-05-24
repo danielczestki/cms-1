@@ -44,7 +44,8 @@ class Build extends Command
      */
     public function handle()
     {
-        $this->artisan->call("cms:migrations");      
+        $this->info("sdsd");
+        //$this->artisan->call("cms:migrations");      
     }
     
 }

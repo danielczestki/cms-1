@@ -16,11 +16,14 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
             return view("cms::admin.dashboard.index");
         }]);
         
+        
         // build routes from the Yaml
-        $finder = new Finder();
-        foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
-            $filename = $file->getBasename('.' . $file->getExtension());
-            Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show"]);
+        if (file_exists(app_path("Cms/Definitions/"))) {
+            $finder = new Finder();
+            foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
+                $filename = $file->getBasename('.' . $file->getExtension());
+                Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show"]);
+            }
         }
         
     });

@@ -57,7 +57,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootViews();
         $this->bootMiddleware($router);
-        //$this->publishDefinitions(); // BRING THIS BACK, HIDDEN SO I DON'T OVERWRITE
+        $this->publishDefinitions();
         $this->publishConfig();
         $this->publishAssets();
         $this->publishMigrations();
@@ -72,11 +72,11 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerCommands();
         $this->mergeConfig();
         $this->updateConfig();
         $this->registerYaml();
         $this->registerFormBuilder();
+        $this->registerCommands();
     }
     
     /**
