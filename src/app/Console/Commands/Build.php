@@ -38,13 +38,22 @@ class Build extends Command
     }
 
     /**
-     * Execute the console command.
+     * Execute the console command. We add little sleeps inbetweeen tasks here to
+     * let the user see what's happening, it's unreadable otherwise
      *
      * @return mixed
      */
     public function handle()
     {
         $bar = $this->setupBar();
+        
+        $bar->setMessage("<comment>Copying YAML definitions to app...</comment>");
+        $bar->advance();
+        $this->artisan->call("vendor:publish", [
+            "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
+            "--tag" => ["definitions"]
+        ]);
+        usleep(400000);
         
         $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
         $bar->advance();
@@ -67,6 +76,11 @@ class Build extends Command
         ]);
         usleep(400000);
         
+        $bar->setMessage("<comment>Migrating database...</comment>");
+        $bar->advance();
+        $this->artisan->call("migrate");
+        usleep(100000);
+        
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
     }
@@ -76,7 +90,7 @@ class Build extends Command
      * 
      * @return Symfony\Component\Console\Helper\ProgressBar
      */
-    private function setupBar($count = 3)
+    private function setupBar($count = 5)
     {
         $bar = $this->output->createProgressBar($count);
         $bar->setFormat("%message% (%current%/%max%)\n%bar% %percent:3s%%\n");
