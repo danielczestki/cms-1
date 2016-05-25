@@ -5,7 +5,7 @@ namespace Thinmartian\Cms\App\Console\Commands;
 use Illuminate\Console\Command;
 use Symfony\Component\Yaml\Parser;
 
-class Migrations extends Command
+class Migrations extends Commands
 {
     /**
      * The name and signature of the console command.
@@ -19,26 +19,7 @@ class Migrations extends Command
      *
      * @var string
      */
-    protected $description = 'Build migrations from installed YAML config files <comment>(does not migrate database)</comment>';
-    
-    /**
-     * Simple flag to know if a migration was generated for the console response
-     * 
-     * @var boolean
-     */
-    protected $created = false;
-    
-    /**
-     * @var Symfony\Component\Yaml\Parser
-     */
-    protected $yaml;
-        
-    /**
-     * Path to the YAML config files
-     * 
-     * @var string
-     */
-    protected $yamlPath;
+    protected $description = 'Build migrations from installed YAML config files. <comment>(does not migrate database)</comment>';
     
     /**
      * Path to the migrations files
@@ -79,11 +60,9 @@ class Migrations extends Command
      *
      * @return void
      */
-    public function __construct(Parser $yaml)
+    public function __construct()
     {
         parent::__construct();
-        $this->yaml = $yaml;
-        $this->yamlPath = app_path("Cms/Definitions/");
         $this->migrationsPath = realpath(__DIR__ . "/../../../database/migrations/");
         $this->stubPath = realpath(__DIR__ . "/stubs/migration.stub");
     }
@@ -364,17 +343,6 @@ class Migrations extends Command
     //
     // GETTERS
     // 
-       
-    /**
-     * Get the full path to the yaml file
-     * 
-     * @param  string $filename
-     * @return string
-     */
-    private function getFullYamlPath($filename)
-    {
-        return $this->yamlPath . $filename;
-    }
      
     /**
      * Get the filename from the yaml config to be used for the table
@@ -384,7 +352,7 @@ class Migrations extends Command
      */
     private function getFilename($filename)
     {
-        return pathinfo($filename)["filename"];
+        return pathinfo($filename, PATHINFO_FILENAME);
     }
     
     /**
@@ -456,20 +424,6 @@ class Migrations extends Command
             if (str_contains($filename, $file)) return true;
         }
         return false;
-    }
-    
-    /**
-     * Return all yhe yaml config files in the definitions directory
-     * 
-     * @return array
-     */
-    private function getYamlFiles()
-    {
-        $arr = [];
-        foreach (scandir($this->yamlPath) as $filename) {
-            if (ends_with($filename, ".yaml")) $arr[] = $filename;
-        }
-        return $arr;
     }
     
 }

@@ -20,7 +20,7 @@ class Build extends Command
      *
      * @var string
      */
-    protected $description = 'Compile all YAML definitions and build the CMS';
+    protected $description = 'Compile all YAML definitions and build the CMS.';
     
     /**
      * @var Illuminate\Contracts\Console\Kernel
@@ -67,6 +67,13 @@ class Build extends Command
         $this->artisan->call("cms:migrations");
         usleep(400000);
         
+        $bar->setMessage("<comment>Generating models from YAML definitions...</comment>");
+        $bar->advance();
+        $this->artisan->call("cms:models");
+        usleep(400000);
+        
+        // DROP IN CONTROLLER BUILDER HERE...
+        
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
@@ -103,6 +110,9 @@ class Build extends Command
         
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
+        
+        $this->comment("Dumping composer...");
+        exec('composer dump -o');
     }
     
     /**
@@ -160,7 +170,7 @@ class Build extends Command
      * 
      * @return Symfony\Component\Console\Helper\ProgressBar
      */
-    private function setupBar($count = 7)
+    private function setupBar($count = 8)
     {
         $bar = $this->output->createProgressBar($count);
         $bar->setFormat("%message% (%current%/%max%)\n%bar% %percent:3s%%\n");

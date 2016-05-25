@@ -27,7 +27,8 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected $commands = [
         \Thinmartian\Cms\App\Console\Commands\Build::class,
-        \Thinmartian\Cms\App\Console\Commands\Migrations::class
+        \Thinmartian\Cms\App\Console\Commands\Migrations::class,
+        \Thinmartian\Cms\App\Console\Commands\Models::class
     ];
     
     /**
