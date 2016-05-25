@@ -37,9 +37,42 @@ trait Listing
     public function grid()
     {
         $result = $this->model;
-        $result = $this->gridSearch($result);
-        return $result->paginate($this->getRecordsPerPage());        
+        $result = $this->gridSelect($result);
+        $result = $this->gridSearch($result);        
+        return $result->orderBy($this->getSort(), request()->get("sort_dir", config("cms.cms.default_sort_direction")))->paginate($this->getRecordsPerPage());        
     }
+    
+    /**
+     * Return the sort value and ensure its valid
+     * 
+     * @return string
+     */
+    private function getSort()
+    {
+        $sortValue = request()->get("sort") ?: config("cms.cms.default_sort_column");
+        if (array_key_exists($sortValue, CmsYaml::getListing())) {
+            return $sortValue;
+        } else {
+            request()->replace(["sort", config("cms.cms.default_sort_column")]); // replace the request so the user knows we are sorting by id
+            return config("cms.cms.default_sort_column");
+        }
+    }
+    
+    /**
+     * Return the select list
+     * 
+     * @param  Illuminate\Database\Collection $result
+     * @return Illuminate\Database\Collection
+     */
+    private function gridSelect($result)
+    {
+        $listing = CmsYaml::getListing();
+        foreach ($listing as $idx => $data) {
+            $selects[] = isset($data["column"]) ? \DB::raw($data["column"] . " as $idx") : $idx;
+        }
+        return $result->select(...$selects);
+    }
+    
     
     /**
      * Build the search query for the grid

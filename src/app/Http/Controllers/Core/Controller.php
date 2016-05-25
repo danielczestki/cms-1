@@ -21,7 +21,7 @@ class Controller extends BaseController
      */
     use ResourceHelpers, Listing, Form;
     
-    protected $filters = ["records_per_page", "sort", "search"];
+    protected $filters = ["records_per_page", "sort", "sort_dir", "search"];
     
     /**
      * Model class

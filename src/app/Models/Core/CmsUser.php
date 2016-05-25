@@ -25,16 +25,6 @@ class CmsUser extends Authenticatable
     ];
     
     /**
-     * Merge the first and surname to make the full name
-     * 
-     * @return string
-     */
-    public function getFullnameAttribute()
-    {
-        return $this->firstname . " " . $this->surname;
-    }
-    
-    /**
      * Boot methods
      * 
      * @return void

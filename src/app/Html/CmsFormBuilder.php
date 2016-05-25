@@ -159,9 +159,34 @@ class CmsFormBuilder {
         return $type == "create" ? "Create a new " . strtolower(str_singular($name)) : "Edit $name";
     }
     
+    /**
+     * Return the success message
+     * 
+     * @return string
+     */
     public function success()
     {
         return $this->render(view("cms::html.form.success")); 
+    }
+    
+    /**
+     * Return the array to build the sort query string
+     * 
+     * @param  string $idx The column we want to sort
+     * @return array
+     */
+    public function sortString($idx)
+    {
+        $direction = (request()->get("sort") == $idx and request()->get("sort_dir") == "asc") ? "desc" : "asc";
+        return ["sort" => $idx, "sort_dir" => $direction];
+    }
+    
+    public function sorted($idx)
+    {
+        if ($this->getSort() == $idx) {
+            return $this->getSortDirection() == "desc" ? new HtmlString('<i class="fa fa-caret-up"></i>') : new HtmlString('<i class="fa fa-caret-down"></i>');
+        }
+        return null;
     }
      
     
@@ -214,6 +239,26 @@ class CmsFormBuilder {
             }
         }
         return null;
+    }
+    
+    /**
+     * Get the sorted value
+     * 
+     * @return string
+     */
+    private function getSort()
+    {
+        return request()->get("sort") ?: config("cms.cms.default_sort_column");
+    }
+    
+    /**
+     * Get the sorted direction value
+     * 
+     * @return string
+     */
+    private function getSortDirection()
+    {
+        return request()->get("sort_dir") ?: config("cms.cms.default_sort_direction");
     }
     
     /**

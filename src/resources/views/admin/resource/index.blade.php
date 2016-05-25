@@ -14,6 +14,7 @@
         <a href="{{ cmsaction($controller . "@index", true) }}">Reset</a>
         <div style="float: right">
             {{ Form::open(["method" => "GET", "url" => url()->current(), "style" => "display: inline", "id" => "listing-form"]) }}
+                {{ Form::hidden("sort", request()->get("sort")) }}
                 Filter {{ Form::text("search", request()->get("search")) }}
                 Per page: {{ Form::select("records_per_page", array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")), $perpage, ["onchange" => "document.getElementById('listing-form').submit()"]) }}
                 <button type="submit">GO</button>
@@ -32,8 +33,17 @@
             <table width="100%">
                 <tr>
                     <td></td>
-                    @foreach($columns as $column)
-                        <th align="left">{{ $column }}</th>
+                    @foreach($columns as $idx => $column)
+                        <th align="left">
+                            @if (isset($column["sortable"]) and $column["sortable"])
+                                <a href="{{ cmsaction($controller . "@index", true, array_merge($filters, CmsForm::sortString($idx))) }}">
+                            @endif
+                            {{ $column["label"] }}
+                            {{ CmsForm::sorted($idx) }}
+                            @if (isset($column["sortable"]) and $column["sortable"])
+                                </a>
+                            @endif
+                        </th>
                     @endforeach
                         <td colspan="2"></td>
                 </tr>
@@ -55,6 +65,6 @@
         @endif
     @endif
     
-    {!! $listing->appends(["records_per_page" => $perpage])->links() !!}
+    {!! $listing->appends($filters)->links() !!}
     
 @endsection

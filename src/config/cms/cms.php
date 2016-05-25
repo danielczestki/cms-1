@@ -24,6 +24,18 @@ return [
     |
     */
    
-    "records_per_page_options" => range(10, 200, 10)
+    "records_per_page_options" => range(10, 200, 10),
+   
+    /*
+    |--------------------------------------------------------------------------
+    | Default sorting
+    |--------------------------------------------------------------------------
+    |
+    | Set the default sorting order and direction
+    |
+    */
+    
+    "default_sort_column" => "id",
+    "default_sort_direction" => "desc"
    
 ];

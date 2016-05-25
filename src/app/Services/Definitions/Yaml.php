@@ -11,7 +11,7 @@ class Yaml {
      * @var string
      */
     protected $prefix = "Cms";
-    
+        
     /**
      * @var string
      */
@@ -56,7 +56,24 @@ class Yaml {
      */
     public function getListing()
     {
-        return array_key_exists("listing", $this->yaml) ? $this->yaml["listing"] : null;
+        if (! array_key_exists("listing", $this->yaml)) return null;
+        // bind ID and dates to it, as they must always show
+        $listing = array_merge([
+            "id" => [
+                "label" => "ID",
+                "sortable" => true
+            ]
+        ], $this->yaml["listing"], [
+            "created_at" => [
+                "label" => "Date created",
+                "sortable" => true
+            ],
+            "updated_at" => [
+                "label" => "Date updated",
+                "sortable" => true
+            ]
+        ]);
+        return $listing;
     }
     
     /**
