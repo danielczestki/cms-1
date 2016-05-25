@@ -4,6 +4,7 @@ namespace Thinmartian\Cms\App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Database\DatabaseManager;
 
 class Build extends Command
 {
@@ -27,14 +28,20 @@ class Build extends Command
     protected $artisan;
     
     /**
+     * @var Illuminate\Database\DatabaseManager
+     */
+    protected $db;
+    
+    /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(Kernel $artisan)
+    public function __construct(Kernel $artisan, DatabaseManager $db)
     {
         parent::__construct();
         $this->artisan = $artisan;
+        $this->db = $db;
     }
 
     /**
@@ -79,10 +86,73 @@ class Build extends Command
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
         $this->artisan->call("migrate");
-        usleep(100000);
+        usleep(200000);
+        
+        $bar->setMessage("<comment>Checking for an admin user...</comment>");
+        $bar->advance();
+        usleep(700000);
+        if (! $this->db->table("cms_users")->count()) {
+            $this->question("Please enter your CMS admin details");
+            $this->requestAdmin();
+            $bar->setMessage("<comment>Admin user created successfully</comment>");
+        } else {
+            $bar->setMessage("<comment>Admin user already exists</comment>");
+        }
+        $bar->advance();
+        usleep(600000);
         
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
+    }
+    
+    /**
+     * Create the admin account
+     * 
+     * @return void
+     */
+    private function requestAdmin()
+    {
+        $credentials = [];
+        $credentials["firstname"] = $this->ask("What is you first name?");
+        $credentials["surname"] = $this->ask("What is your surname?");
+        $credentials["email"] = $this->ask("What is your email address?");
+        $credentials["password"] = $this->secret("Enter a password");
+        $credentials["password_confirmation"] = $this->secret("Confirm your password");
+        $credentials["password_confirmed"] = false;
+        while ($credentials["password_confirmed"] === false) {
+            $credentials = $this->confirmPassword($credentials);
+        }
+        $credentials["password"] = bcrypt($credentials["password"]);
+        $this->createAdmin($credentials);
+        return $credentials;
+    }
+    
+    private function createAdmin($credentials)
+    {
+        $this->db->table("cms_users")->insert(
+            array_merge(
+                array_except($credentials, ["password_confirmed", "password_confirmation"]),
+                ["created_at" => $this->db->raw("now()"), "updated_at" => $this->db->raw("now()")]
+            )
+        );
+    }
+    
+    /**
+     * Confirm the passwords match
+     * 
+     * @param  array $credentials
+     * @return array
+     */
+    private function confirmPassword($credentials)
+    {
+        if ($credentials["password"] != $credentials["password_confirmation"]) {
+            $this->error("Your passwords didn't match, please try again!");
+            $credentials["password"] = $this->secret("Enter a password");
+            $credentials["password_confirmation"] = $this->secret("Confirm your password");
+        } else {
+            $credentials["password_confirmed"] = true;
+        }
+        return $credentials;
     }
     
     /**
@@ -90,7 +160,7 @@ class Build extends Command
      * 
      * @return Symfony\Component\Console\Helper\ProgressBar
      */
-    private function setupBar($count = 5)
+    private function setupBar($count = 7)
     {
         $bar = $this->output->createProgressBar($count);
         $bar->setFormat("%message% (%current%/%max%)\n%bar% %percent:3s%%\n");
