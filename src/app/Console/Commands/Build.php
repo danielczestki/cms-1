@@ -44,21 +44,44 @@ class Build extends Command
      */
     public function handle()
     {
-        $this->comment("Generating database migrations from YAML definitions...");
-        $this->artisan->call("cms:migrations");
-        $this->info("Database migrations generated successfully!");
+        $bar = $this->setupBar();
         
-        $this->comment("Publishing core files...");
+        $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
+        $bar->advance();
+        $this->artisan->call("cms:migrations");
+        usleep(400000);
+        
+        $bar->setMessage("<comment>Publishing core files...</comment>");
+        $bar->advance();
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
+        usleep(400000);
+        
+        $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
+        $bar->advance();
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
             "--tag" => ["assets"],
             "--force" => true
         ]);
-        $this->info("Core files published successfully!");
-        //$this->artisan->call("cms:migrations");      
+        usleep(400000);
+        
+        $bar->setMessage("<info>CMS build complete</info>");
+        $bar->finish();
+    }
+    
+    /**
+     * Return a progress bar
+     * 
+     * @return Symfony\Component\Console\Helper\ProgressBar
+     */
+    private function setupBar($count = 3)
+    {
+        $bar = $this->output->createProgressBar($count);
+        $bar->setFormat("%message% (%current%/%max%)\n%bar% %percent:3s%%\n");
+        $bar->setBarWidth(50);
+        return $bar;
     }
     
 }

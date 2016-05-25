@@ -152,7 +152,10 @@ class Migrations extends Command
         $result = "";
         $fields = $yaml["fields"];
         foreach ($fields as $column => $data) {
-            $result .= $this->buildColumn($column, $data);
+            if (array_key_exists("persist", $data) and ! $data["persist"]) {} else {
+                // persist either isn't there or is true, add it
+                $result .= $this->buildColumn($column, $data);
+            }
         }
         return $result;
     }
@@ -196,7 +199,7 @@ class Migrations extends Command
                 $str .= $this->buildText($column, $data);
             break;                
         }
-        return "            " . $str . $this->buildNullable($data) . ";\n";
+        return "            " . $str . $this->buildNullable($data) . $this->buildUnique($data) . ";\n";
     }
     
     /**
@@ -312,6 +315,18 @@ class Migrations extends Command
     {
         if (! array_key_exists("validationOnCreate", $data)) return '->nullable()';
         return in_array("required", explode("|", $data["validationOnCreate"])) ? null : '->nullable()';
+    }
+    
+    /**
+     * Is this field unique?
+     * 
+     * @param  array $data The data from the yaml
+     * @return string
+     */
+    private function buildUnique($data)
+    {
+        if (! array_key_exists("validationOnCreate", $data)) return null;
+        return str_contains($data["validationOnCreate"], "unique") ? '->unique()' : null;
     }
     
     /**
