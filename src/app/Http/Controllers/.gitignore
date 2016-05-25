@@ -1,0 +1,8 @@
+*
+!.gitignore
+!Core/Auth/
+!Core/Controller.php
+!Core/UsersController.php
+
+!Custom/readme.md
+!Custom/UsersController.php
