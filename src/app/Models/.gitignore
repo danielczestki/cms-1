@@ -1,6 +1,0 @@
-*
-!.gitignore
-!/Core/CmsUser.php
-
-!/Custom/CmsUser.php
-!/Custom/readme.md
