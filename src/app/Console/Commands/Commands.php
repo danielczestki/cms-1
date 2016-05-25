@@ -28,6 +28,11 @@ class Commands extends Command
     protected $yamlPath;
     
     /**
+     * Prefix for the cms tables
+     */
+    const TABLEPREFIX = "cms";
+    
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -39,6 +44,27 @@ class Commands extends Command
         $this->yamlPath = app_path("Cms/Definitions/");
     }
     
+    /**
+     * Get the filename from the yaml config to be used for the table
+     * 
+     * @param  string $filename
+     * @return string
+     */
+    protected function getFilename($filename)
+    {
+        return pathinfo($filename, PATHINFO_FILENAME);
+    }
+    
+    /**
+     * Get the db table name 
+     * 
+     * @param  string $name The yaml config filename
+     * @return string
+     */
+    protected function getTablename($name)
+    {
+        return self::TABLEPREFIX . "_" . trim(strtolower(str_plural($name)));
+    }
     
     /**
      * Get the full path to the yaml file

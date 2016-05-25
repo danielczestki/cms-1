@@ -51,11 +51,6 @@ class Migrations extends Commands
     const MIGRATIONSUFFIX = "table.php";
     
     /**
-     * Prefix for the cms tables
-     */
-    const TABLEPREFIX = "cms";
-    
-    /**
      * Create a new command instance.
      *
      * @return void
@@ -111,7 +106,7 @@ class Migrations extends Commands
         // build
         $stub = file_get_contents($this->stubPath);
         $classname = $this->buildClassname($filename);
-        $tablename = $this->getFileTablename($this->getFilename($filename));
+        $tablename = $this->getTablename($this->getFilename($filename));
         $schema = $this->buildSchema($yaml);
         $migration = str_ireplace(["{classname}", "{tablename}", "{schema}"], [$classname, $tablename, $schema], $stub);
         // save the file
@@ -343,17 +338,6 @@ class Migrations extends Commands
     //
     // GETTERS
     // 
-     
-    /**
-     * Get the filename from the yaml config to be used for the table
-     * 
-     * @param  string $filename
-     * @return string
-     */
-    private function getFilename($filename)
-    {
-        return pathinfo($filename, PATHINFO_FILENAME);
-    }
     
     /**
      * Get the date part for the migration file
@@ -374,17 +358,6 @@ class Migrations extends Commands
     private function getFileNumber($number)
     {
         return intval(date("U")) + $number;
-    }
-    
-    /**
-     * Get the tablename part for the migration file (create_cms_*)
-     * 
-     * @param  string $name The yaml config filename
-     * @return string
-     */
-    private function getFileTablename($name)
-    {
-        return self::TABLEPREFIX . "_" . trim(strtolower(str_plural($name)));
     }
     
     /**
@@ -419,7 +392,7 @@ class Migrations extends Commands
      */
     private function migrationExists($filename)
     {
-        $file = $this->getFilePrefix() . $this->getFileTablename($this->getFilename($filename)) . $this->getFileSuffix();
+        $file = $this->getFilePrefix() . $this->getTablename($this->getFilename($filename)) . $this->getFileSuffix();
         foreach (scandir($this->migrationsPath) as $filename) {
             if (str_contains($filename, $file)) return true;
         }

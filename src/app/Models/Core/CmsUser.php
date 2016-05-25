@@ -6,6 +6,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class CmsUser extends Authenticatable
 {
+    
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = "cms_users";
+    
     /**
      * The attributes that are mass assignable.
      *

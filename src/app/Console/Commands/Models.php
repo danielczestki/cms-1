@@ -126,7 +126,8 @@ class Models extends Commands
         $classname = $this->getModelName($filename);
         $stub = file_get_contents($stubpath);
         $fillable = $this->buildFillable($filename);
-        $model = str_ireplace(["{classname}", "{fillable}"], [$classname, $fillable], $stub);
+        $tablename = $this->getTablename($this->getFIlename($filename));
+        $model = str_ireplace(["{classname}", "{tablename}", "{fillable}"], [$classname, $tablename, $fillable], $stub);
         // save the file
         $modelname = $classname . ".php";
         file_put_contents($savepath . "/" . $modelname, $model);
@@ -161,7 +162,7 @@ class Models extends Commands
      */
     private function getModelName($filename)
     {
-        return self::MODELPREFIX . trim(ucfirst(str_singular(pathinfo($filename, PATHINFO_FILENAME))));
+        return self::MODELPREFIX . trim(ucfirst(str_singular($this->getFileName($filename))));
     }
     
 }
