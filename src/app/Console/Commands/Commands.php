@@ -33,6 +33,13 @@ class Commands extends Command
     const TABLEPREFIX = "cms";
     
     /**
+     * Ignore these yaml files (e.g. Users as it's special)
+     * 
+     * @var array
+     */
+    protected $ignore = ["Users.yaml"];
+    
+    /**
      * Create a new command instance.
      *
      * @return void

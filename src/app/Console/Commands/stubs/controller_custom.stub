@@ -2,14 +2,14 @@
 
 namespace App\Cms\Http\Controllers;
 
-use Thinmartian\Cms\App\Http\Controllers\Core\UsersController as CoreUsersController;
+use Thinmartian\Cms\App\Http\Controllers\Core\{classname} as Core{classname};
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 
-class UsersController extends CoreUsersController
+class {classname} extends Core{classname}
 {
     
     /**

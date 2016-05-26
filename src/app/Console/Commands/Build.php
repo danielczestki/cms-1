@@ -72,7 +72,10 @@ class Build extends Command
         $this->artisan->call("cms:models");
         usleep(400000);
         
-        // DROP IN CONTROLLER BUILDER HERE...
+        $bar->setMessage("<comment>Generating controllers from YAML definitions...</comment>");
+        $bar->advance();
+        $this->artisan->call("cms:controllers");
+        usleep(400000);
         
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
@@ -170,7 +173,7 @@ class Build extends Command
      * 
      * @return Symfony\Component\Console\Helper\ProgressBar
      */
-    private function setupBar($count = 8)
+    private function setupBar($count = 9)
     {
         $bar = $this->output->createProgressBar($count);
         $bar->setFormat("%message% (%current%/%max%)\n%bar% %percent:3s%%\n");

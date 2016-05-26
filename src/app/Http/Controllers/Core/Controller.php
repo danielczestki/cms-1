@@ -91,7 +91,7 @@ class Controller extends BaseController
         }
         $resource = $this->createResource($this->input);
         if (method_exists($this, "afterCreate")) {
-            $this->afterCreate($resource);
+            $this->afterCreate($resource, $this->input);
         }
         return $this->redirect("store", $resource);
     }

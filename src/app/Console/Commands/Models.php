@@ -50,13 +50,6 @@ class Models extends Commands
     protected $stubCustomPath;
     
     /**
-     * Ignore these yaml files (e.g. Users as it's special)
-     * 
-     * @var array
-     */
-    protected $ignore = ["Users.yaml"];
-    
-    /**
      * Prefix for the models
      */
     const MODELPREFIX = "Cms";
