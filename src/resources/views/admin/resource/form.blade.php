@@ -13,7 +13,7 @@
     
     {{ CmsForm::success() }}
     
-    {{ CmsForm::open(["url" => cmsaction($controller . "@store", true, $filters)]) }}
+    {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)
             
             {{ CmsForm::$data["type"]($data) }}

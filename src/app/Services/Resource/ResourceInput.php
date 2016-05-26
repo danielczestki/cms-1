@@ -10,6 +10,13 @@ class ResourceInput {
     protected $input = [];
     
     /**
+     * Ignore this params in submit of the form
+     * 
+     * @var array
+     */
+    protected $ignore = ["_token", "_name", "_method"];
+    
+    /**
      * constructor
      */
     public function __construct()
@@ -69,6 +76,6 @@ class ResourceInput {
      */
     private function cleanInput()
     {
-        return array_except(request()->all(), ["_token", "_name"]);
+        return array_except(request()->all(), $this->ignore);
     }
 }

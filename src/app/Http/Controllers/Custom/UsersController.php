@@ -31,7 +31,7 @@ class UsersController extends CoreUsersController
      * @param  ResourceInput $input
      * @return void
      */
-    protected function beforeCreate(ResourceInput $input)
+    protected function creating(ResourceInput $input)
     {
         // $input->add("field", "value");
         // $input->edit("field", "value");
@@ -45,7 +45,54 @@ class UsersController extends CoreUsersController
      * @param  ResourceInput $input
      * @return void
      */
-    protected function afterCreate(Model $resource, ResourceInput $input)
+    protected function created(Model $resource, ResourceInput $input)
+    {
+        //
+    }
+    
+    /**
+     * Before creating and updating a resource
+     * 
+     * @param  ResourceInput $input
+     * @return void
+     */
+    protected function saving(ResourceInput $input)
+    {
+        // 
+    }
+    
+    /**
+     * After creating and updating a resource
+     * 
+     * @param  Model         $resource
+     * @param  ResourceInput $input
+     * @return void
+     */
+    protected function saved(Model $resource, ResourceInput $input)
+    {
+        //
+    }
+    
+    /**
+     * Before  updating a resource
+     * 
+     * @param  Model         $resource
+     * @param  ResourceInput $input
+     * @return void
+     */
+    protected function updating(Model $resource, ResourceInput $input)
+    {
+        // 
+    }
+    
+    /**
+     * After updating a resource
+     * 
+     * @param  Model         $resource
+     * @param  ResourceInput $input
+     * @return void
+     */
+    protected function updated(Model $resource, ResourceInput $input)
     {
         //
     }

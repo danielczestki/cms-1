@@ -31,6 +31,47 @@ trait Form
     }
     
     /**
+     * Update the resource from the edit form
+     * 
+     * @param  ResourceInput $input The form field
+     * @return void
+     */
+    public function updateResource($resource, ResourceInput $input)
+    {
+        $form = $input->getInput();
+        foreach ($resource->getFillable() as $column) {
+            if (array_key_exists($column, $form)) $resource->$column = $form[$column];
+        }
+        $resource->save();
+        return $resource;
+    }
+    
+    /**
+     * Delete the resource(s)
+     * 
+     * @param  array $ids List of ids to delete (could be 1, could 10000000)
+     * @return void
+     */
+    public function deleteResources($ids = [])
+    {
+        if (! $ids) return false;
+        return $this->model->destroy($ids);
+    }
+    
+    /**
+     * Return the resource
+     * 
+     * @param  integer $id
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    public function getResource($id = null)
+    {
+        if (! $id) return app()->abort(400, "Invalid ID");
+        if (! $model = $this->model->find($id))  return app()->abort(404, "Resource not found");
+        return $model;
+    }
+    
+    /**
      * Get the form fields for the resource
      * 
      * @return array

@@ -3,6 +3,7 @@
 namespace Thinmartian\Cms\App\Http\Requests\Core;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Router;
 use CmsYaml;
 
 class ResourceRequest extends FormRequest
@@ -14,10 +15,16 @@ class ResourceRequest extends FormRequest
     protected $name;
     
     /**
+     * @var Illuminate\Routing\Router
+     */
+    protected $route;
+    
+    /**
      * constructor, set the name using the request, we KNOW it's there!
      */
-    public function __construct()
+    public function __construct(Router $route)
     {
+        $this->route = $route;
         $this->name = request()->get("_name");
         CmsYaml::setFile($this->name);
     }
@@ -62,7 +69,13 @@ class ResourceRequest extends FormRequest
         $arr = [];
         $type = $this->getRuleType();
         foreach (CmsYaml::getFields() as $key => $data) {
-            if (array_key_exists($type, $data)) $arr[$key] = $data[$type];
+            if (array_key_exists($type, $data)) {
+                $string = $data[$type];
+                foreach ($this->route->current()->parameters() as $idx => $value){
+                    $string = str_replace('{'.$idx.'}', $value, $string);
+                }
+                $arr[$key] = $string;
+            }
         }
         return $arr;
     }
@@ -75,9 +88,6 @@ class ResourceRequest extends FormRequest
     private function getRuleType()
     {
         switch ($this->method) {
-            case "DELETE":
-                return "validationOnDelete";
-            break;
             case "POST":
                 return "validationOnCreate";
             break;

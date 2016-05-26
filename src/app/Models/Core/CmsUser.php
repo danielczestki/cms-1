@@ -41,8 +41,14 @@ class CmsUser extends Authenticatable
     {
         parent::boot();
 
-        self::creating(function($record) {
-            $record->password = bcrypt($record->password);
+        self::saving(function($record) {
+            // look for password in request, not $record as logout sends this and works differently
+            // from out update/edit form and we end up hashing null when logging out :)
+            if (request()->get("password") and request()->get("password")) {
+                $record->password = bcrypt(request()->get("password"));
+            } else {
+                unset($record->password);
+            }
         });
     }
     

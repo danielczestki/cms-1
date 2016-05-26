@@ -26,20 +26,27 @@ trait Redirects
     {
         switch ($type) {
             case "store":
-                return $this->redirectStore($resource);
+                return $this->redirectSave($resource, " created successfully");
+            break;
+            case "update":
+                return $this->redirectSave($resource, " updated successfully");
+            break;
+            case "destroy":
+                return $this->redirectDestroy();
             break;
         }
     }
     
     /**
-     * Redirect after a store/create
+     * Redirect after a store/create/edit/update
      * 
      * @param  Illuminate\Database\Eloquent $resource The saved resource
+     * @param  string                       $success  Success mesage
      * @return Illuminate\Routing\Redirector
      */
-    protected function redirectStore($resource)
+    protected function redirectSave($resource, $success)
     {
-        $flash = str_singular($this->name) . " created successfully";
+        $flash = str_singular($this->name) . $success;
         if ($this->exiting()) {
             // save and exit
             return redirect(cmsaction($this->controller . "@index", true, $this->getFilters()))->with("success", $flash);
@@ -47,6 +54,16 @@ trait Redirects
             // save
             return redirect(cmsaction($this->controller . "@edit", true, array_merge(["id" => $resource->id], $this->getFilters())))->with("success", $flash);
         }
+    }
+    
+    /**
+     * Redirect after a delete
+     * 
+     * @return Illuminate\Routing\Redirector
+     */
+    protected function redirectDestroy()
+    {
+        return redirect(cmsaction($this->controller . "@index", true, $this->getFilters()))->with("success", str_plural(str_singular($this->name), count(request()->get("ids"))) . " deleted successfully");
     }
     
     /**

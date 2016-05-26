@@ -21,6 +21,9 @@ class Controller extends BaseController
      */
     use ResourceHelpers, Listing, Form;
     
+    /**
+     * @var string
+     */
     protected $filters = ["records_per_page", "sort", "sort_dir", "search"];
     
     /**
@@ -86,12 +89,18 @@ class Controller extends BaseController
      */
     public function store(ResourceRequest $request)
     {
-        if (method_exists($this, "beforeCreate")) {
-            $this->beforeCreate($this->input);
+        if (method_exists($this, "creating")) {
+            $this->creating($this->input);
+        }
+        if (method_exists($this, "saving")) {
+            $this->saving($this->input);
         }
         $resource = $this->createResource($this->input);
-        if (method_exists($this, "afterCreate")) {
-            $this->afterCreate($resource, $this->input);
+        if (method_exists($this, "created")) {
+            $this->created($resource, $this->input);
+        }
+        if (method_exists($this, "saved")) {
+            $this->saved($resource, $this->input);
         }
         return $this->redirect("store", $resource);
     }
@@ -104,19 +113,37 @@ class Controller extends BaseController
      */
     public function edit($id)
     {
-        dd("EDIT ID: $id METHOD");
+        $type = "edit";
+        $subtitle = CmsForm::subtitle($type, $this->name);
+        $fields = $this->getFields();
+        $resource = $this->getResource($id);
+        return view("cms::admin.resource.form", compact("type", "subtitle", "fields", "resource"));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Thinmartian\Cms\App\Http\Requests\Core\ResourceRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ResourceRequest $request, $id)
     {
-        //
+        $resource = $this->getResource($id);
+        if (method_exists($this, "updating")) {
+            $this->updating($resource, $this->input);
+        }
+        if (method_exists($this, "saving")) {
+            $this->saving($this->input);
+        }
+        $resource = $this->updateResource($resource, $this->input);
+        if (method_exists($this, "updated")) {
+            $this->updated($resource, $this->input);
+        }
+        if (method_exists($this, "saved")) {
+            $this->saved($resource, $this->input);
+        }
+        return $this->redirect("update", $resource);
     }
 
     /**
@@ -127,7 +154,15 @@ class Controller extends BaseController
      */
     public function destroy($id)
     {
-        dd("DESTROY IDs: ". implode(",", request()->get("ids")) ." METHOD");
+        $subtitle = "Delete " . str_singular($this->name);
+        // no ids? then go back
+        if (! request()->get("ids")) return redirect()->back()->withError("Please select the ". strtolower(str_plural($this->name)) ." you want to delete");
+        // this page is two step, if they havent confirmed, show them confirmation
+        if (! request()->has("_confirmed")) return view("cms::admin.resource.destroy", compact("subtitle"));
+        // they have confirmed, it's time to destroy!
+        $this->deleteResources(request()->get("ids"));
+        return $this->redirect("destroy");
+        
     }
     
     

@@ -1,3 +1,1 @@
-<div style="display: none">
-    {{ Form::hidden($name, $value) }}
-</div>
+{{ Form::hidden($name, $value) }}

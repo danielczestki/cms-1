@@ -12,7 +12,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "validationOnDelete", "info"];
+    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info"];
     
     //
     // FORM
@@ -27,6 +27,20 @@ class CmsFormBuilder {
     public function open($data = [])
     {
        return $this->render(view("cms::html.form.open", $data));         
+    }
+    
+    /**
+     * Render a model form
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function model($data)
+    {
+        $filters = $data["type"] == "edit" ? array_merge(["id" => $data["model"]->id], $data["filters"]) : $data["filters"];
+        $data["url"] = cmsaction($data["controller"] . ($data["type"] == "edit" ? "@update" : "@store"), true, $filters);
+        $data["method"] = $data["type"] == "edit" ? "PUT" : "POST";
+        return $this->render(view("cms::html.form.model", $data)); 
     }
     
     /**
@@ -77,6 +91,7 @@ class CmsFormBuilder {
     public function password($data = [])
     {
         $data["type"] = "password";
+        $data["autocomplete"] = "off";
         return $this->input($data);
     }
     
@@ -156,7 +171,8 @@ class CmsFormBuilder {
      */
     public function subtitle($type, $name)
     {
-        return $type == "create" ? "Create a new " . strtolower(str_singular($name)) : "Edit $name";
+        $title = strtolower(str_singular($name));
+        return $type == "create" ? "Create a new " . $title : "Edit $title";
     }
     
     /**
@@ -167,6 +183,16 @@ class CmsFormBuilder {
     public function success()
     {
         return $this->render(view("cms::html.form.success")); 
+    }
+    
+    /**
+     * Return the global error message
+     * 
+     * @return string
+     */
+    public function error()
+    {
+        return $this->render(view("cms::html.form.error")); 
     }
     
     /**
@@ -181,6 +207,12 @@ class CmsFormBuilder {
         return ["sort" => $idx, "sort_dir" => $direction];
     }
     
+    /**
+     * Show the correct icon on listing to declare if this field is sorted by or not
+     * 
+     * @param  string $idx
+     * @return string
+     */
     public function sorted($idx)
     {
         if ($this->getSort() == $idx) {
@@ -268,7 +300,7 @@ class CmsFormBuilder {
      */
     private function getRulesKey()
     {
-        return in_array(request()->method(), ["PUT", "PATCH"]) ? "validationOnUpdate" : "validationOnCreate";
+        return str_contains(request()->route()->getAction()["controller"], "@edit") ? "validationOnUpdate" : "validationOnCreate";
     }
     
     /**

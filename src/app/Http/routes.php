@@ -22,7 +22,7 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
             $finder = new Finder();
             foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
                 $filename = $file->getBasename('.' . $file->getExtension());
-                Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show"]);
+                Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
             }
         }
         

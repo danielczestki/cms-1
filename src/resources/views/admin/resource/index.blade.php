@@ -25,6 +25,7 @@
     
     <hr>
         
+    {{ CmsForm::error() }}
     {{ CmsForm::success() }}
     
     @if ($listing->total())
