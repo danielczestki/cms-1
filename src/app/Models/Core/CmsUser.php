@@ -8,21 +8,19 @@ class CmsUser extends Authenticatable
 {
     
     /**
+     * Set the YAML config filename
+     * 
+     * @var string
+     */
+    protected $yaml = "Users";
+    
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = "cms_users";
     
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'firstname', 'surname', 'email', 'password',
-    ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -31,6 +29,18 @@ class CmsUser extends Authenticatable
     protected $hidden = [
        'password', 'remember_token',
     ];
+    
+    /**
+     * Construct the CMS model
+     *
+     * @param  array  $attributes
+     * @return void
+     */   
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->fillable(cmsfillable($this->yaml));        
+    }
     
     /**
      * Boot methods
@@ -43,7 +53,7 @@ class CmsUser extends Authenticatable
 
         self::saving(function($record) {
             // look for password in request, not $record as logout sends this and works differently
-            // from out update/edit form and we end up hashing null when logging out :)
+            // from our update/edit form and we end up hashing null when logging out :)
             if (request()->get("password") and request()->get("password")) {
                 $record->password = bcrypt(request()->get("password"));
             } else {

@@ -25,24 +25,24 @@ fields:
     label: "Surname"
     persist: true
     validationOnCreate: "required|max:20"
+    validationOnUpdate: "required|max:20"
   email:
     type: "email"
     label: "Email address"
     persist: true
     validationOnCreate: "required|email|max:255|unique:cms_users"
-    validationOnUpdate: "required|email|max:255|unique:cms_users,email,1"
+    validationOnUpdate: "required|email|max:255|unique:cms_users,email,{id}"
   password:
     type: "password"
     label: "Password"
     persist: true
     validationOnCreate: "required|min:6|confirmed"
-    validationOnUpdate: "required|min:6|confirmed"
+    validationOnUpdate: "confirmed"
   password_confirmation:
     type: "password"
     label: "Confirm password"
     persist: false
     validationOnCreate: "required"
-    validationOnUpdate: "required"
  
 # Listing columns for the listing/index page (ID, Date created and Date updated are automatically added)
 listing:

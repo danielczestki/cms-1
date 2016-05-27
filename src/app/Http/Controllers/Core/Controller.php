@@ -13,7 +13,7 @@ use Thinmartian\Cms\App\Services\Resource\ResourceHelpers;
 use Thinmartian\Cms\App\Services\Resource\Listing;
 use Thinmartian\Cms\App\Services\Resource\Form;
 
-class Controller extends BaseController
+abstract class Controller extends BaseController
 {
     
     /**

@@ -118,33 +118,12 @@ class Models extends Commands
     {
         $classname = $this->getModelName($filename);
         $stub = file_get_contents($stubpath);
-        $fillable = $this->buildFillable($filename);
-        $tablename = $this->getTablename($this->getFIlename($filename));
-        $model = str_ireplace(["{classname}", "{tablename}", "{fillable}"], [$classname, $tablename, $fillable], $stub);
+        $yaml = $this->getFilename($filename);
+        $tablename = $this->getTablename($yaml);
+        $model = str_ireplace(["{classname}", "{yaml}", "{tablename}"], [$classname, $yaml, $tablename], $stub);
         // save the file
         $modelname = $classname . ".php";
         file_put_contents($savepath . "/" . $modelname, $model);
-    }
-    
-    /**
-     * Build the fillable fields
-     * 
-     * @param  string $filename
-     * @return string
-     */
-    private function buildFillable($filename)
-    {
-        $arr = [];
-        $yaml = $this->yaml->parse(file_get_contents($this->getFullYamlPath($filename)));
-        $fields = $yaml["fields"];
-        foreach ($fields as $idx => $data) {
-            if (array_key_exists("persist", $data) and ! $data["persist"]) {} else {
-                $arr[] = $idx;
-            }
-        }
-        if (! $arr) return null;
-        $string = '"' . implode("\", \"", $arr) . '"';
-        return $string;
     }
     
     /**

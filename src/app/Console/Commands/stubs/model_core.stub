@@ -2,10 +2,15 @@
 
 namespace Thinmartian\Cms\App\Models\Core;
 
-use Illuminate\Database\Eloquent\Model;
-
 class {classname} extends Model
 {
+    
+    /**
+     * Set the YAML config filename
+     * 
+     * @var string
+     */
+    protected $yaml = "{yaml}";
     
     /**
      * The table associated with the model.
@@ -13,19 +18,5 @@ class {classname} extends Model
      * @var string
      */
     protected $table = "{tablename}";
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [{fillable}];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
     
 }

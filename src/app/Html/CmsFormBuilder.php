@@ -311,7 +311,7 @@ class CmsFormBuilder {
      */
     private function render($view)
     {
-        return new HtmlString($view->render());
+        return new HtmlString($view);
     }
     
 }

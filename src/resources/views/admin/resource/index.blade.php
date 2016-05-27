@@ -12,16 +12,18 @@
      
     @unless (! $listing->total() and ! request()->has("search"))
         <a href="{{ cmsaction($controller . "@index", true) }}">Reset</a>
-        <div style="float: right">
+    @endunless
+    <div style="float: right">
+        @unless (! $listing->total() and ! request()->has("search"))
             {{ Form::open(["method" => "GET", "url" => url()->current(), "style" => "display: inline", "id" => "listing-form"]) }}
                 {{ Form::hidden("sort", request()->get("sort")) }}
                 Filter {{ Form::text("search", request()->get("search")) }}
                 Per page: {{ Form::select("records_per_page", array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")), $perpage, ["onchange" => "document.getElementById('listing-form').submit()"]) }}
                 <button type="submit">GO</button>
             {{ Form::close() }}
-            &nbsp; <a href="{{ cmsaction($controller . "@create", true, $filters) }}">Create New</a>
-        </div>
-    @endunless
+        @endunless
+        &nbsp; <a href="{{ cmsaction($controller . "@create", true, $filters) }}">Create New</a>
+    </div>
     
     <hr>
         
