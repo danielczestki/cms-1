@@ -1,4 +1,4 @@
-@extends("cms::admin.layouts.default")
+@extends("cms::admin.layouts.bare")
 
 @section("title", "Register")
 

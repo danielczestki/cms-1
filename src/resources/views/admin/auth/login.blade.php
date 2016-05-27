@@ -1,21 +1,21 @@
-@extends("cms::admin.layouts.default")
+@extends("cms::admin.layouts.bare")
 
 @section("title", "Login")
 
 @section("content")
+        
+    {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login")]) }}
     
-    
-    {{ CmsForm::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login")]) }}
 
-        {{ CmsForm::email(["name" => "email", "label" => "Email"]) }}
-        {{ CmsForm::password(["name" => "password", "label" => "Password"]) }}
-        {{ CmsForm::checkbox(["name" => "remember", "value" => "1", "label" => "Remember me?"]) }}
+        <p>Email: {{ Form::email("email") }}</p>
+        <p>Password: {{ Form::password("password") }}</p>
+        <p>{{ Form::checkbox("remember", 1) }} Remember me?</p>
 
         <div class="form-group">
-            {{ CmsForm::submit(["label" => "Login", "icon" => "sign-in"]) }}
+            {{ Form::button("Login", ["type" => "submit"]) }}
             <a class="btn btn-link" href="{{ cmsaction('Core\Auth\PasswordController@reset') }}">Forgot Your Password?</a>
         </div>
         
-    {{ CmsForm::close() }}
+    {{ Form::close() }}
     
 @endsection

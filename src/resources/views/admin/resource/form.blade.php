@@ -1,6 +1,6 @@
 @extends("cms::admin.layouts.default")
 
-@section("title", $subtitle)
+@section("title", $subtitle . " - " . $title)
 
 @section("content")
     

@@ -12,7 +12,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info"];
+    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate"];
     
     //
     // FORM

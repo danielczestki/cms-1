@@ -15,18 +15,18 @@
         "laravel/framework": "^5.2",
         "laravelcollective/html": "^5.2"
     },
-    "autoload": {
-        "psr-4": {
-            "Thinmartian\\Cms\\App\\": "packages/thinmartian/cms/src/app",
-            "Thinmartian\\Cms\\": "packages/thinmartian/cms/src"
-        },
-        "files": [
-            "src/app/Support/helpers.php"
-        ]
-    },
     "require-dev": {
         "phpunit/phpunit": "^5.3",
         "illuminate/database": "^5.2",
         "illuminate/cache": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Thinmartian\\Cms\\App\\": "src/app",
+            "Thinmartian\\Cms\\": "src"
+        },
+        "files": [
+            "src/app/Support/helpers.php"
+        ]
     }
 }

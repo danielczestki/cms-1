@@ -17,6 +17,7 @@ fields:
     validationOnDelete: null # optional / standard laravel validation piped string on delete
     placeholder: "First name" # optional / placeholder for the field
     info: "Small tip of info for this field" # optional / small tooltip to appear alongside form
+    infoUpdate: "Will override above on edit form" # optional / small tooltip to appear alongside form only on update (will override above info)
     class: "Myclass" # optional / css classes
     style: null # optional / css styles
     data-custom: "My Custom Attribute" # optional / (of course), add as many as you wish

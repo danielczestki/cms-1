@@ -76,6 +76,7 @@ abstract class Controller extends BaseController
     public function create()
     {
         $type = "create";
+        view()->share("formtype", $type);
         $subtitle = CmsForm::subtitle($type, $this->name);
         $fields = $this->getFields();
         return view("cms::admin.resource.form", compact("type", "subtitle", "fields"));
@@ -114,6 +115,7 @@ abstract class Controller extends BaseController
     public function edit($id)
     {
         $type = "edit";
+        view()->share("formtype", $type);
         $subtitle = CmsForm::subtitle($type, $this->name);
         $fields = $this->getFields();
         $resource = $this->getResource($id);

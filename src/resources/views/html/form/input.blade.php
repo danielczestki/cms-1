@@ -6,7 +6,9 @@
         {{ Form::$type($name, @$value, @$additional) }}    
     @endif
     
-    @if (isset($info) and $info)
+    @if (isset($formtype) and $formtype == "edit" and isset($infoUpdate) and $infoUpdate)
+        <small>{{ $infoUpdate }}</small>
+    @elseif (isset($info) and $info)
         <small>{{ $info }}</small>
     @endif
     

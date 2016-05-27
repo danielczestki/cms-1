@@ -2,31 +2,28 @@
 
 use Thinmartian\Cms\App\Html\CmsFormBuilder;
 
-function view($path) {
-    return "<form>";
-}
-
-class CmsFormBuilderTest extends PHPUnit_Framework_TestCase
+class CmsFormBuilderTest extends TestCase
 {
     
     /**
      * @var Thinmartian\Cms\App\Html\CmsFormBuilder
      */
     protected $form;
-    
+        
     /**
      * setup
      */
     public function setUp()
     {
+        parent::setUp();
         $this->form = new CmsFormBuilder;
     }
     
     /** @test */
-    public function it_opens_a_form()
+    public function it_opens_a_form_with_the_correct_path()
     {
-        $html = $this->form->open(["url" => "/path"])->toHtml();
-        $this->assertContains("form", $html);
+        $html = (string) $this->form->open(["url" => "/path"])->toHtml();
+        $this->assertContains("/path", $html);
     }
     
     

@@ -122,8 +122,14 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function browserActions()
     {if (! app()->runningInConsole()) {
+        // Tell the user to run build cos they haven't done it yet
         if (! file_exists(app_path("Cms"))) {
             echo "Please run php artisan cms:build";
+            exit;
+        }
+        // do they have a admin user? they must have one?
+        if (! \DB::table("cms_users")->count()) {
+            echo "You don't have an admin user to login with. Please run php artisan cms:build again";
             exit;
         }
     }}
