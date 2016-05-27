@@ -1,0 +1,55 @@
+/**
+ * Utility/helper to help setup responsive media sets
+ * width a memorable name opposed to a dimension
+ *
+ * @param   $media  "large-screen": large screen and above (> 1200px)
+ *                  "desktop": tablet-landscape and desktop (> 1024px)
+ *                  "all-devices": tablet portrait and below (< 1023px )
+ *                  "all-phones": phone landscape and below (< 767px )
+ *                  "tablet-landscape": tablet landscape to large (>= 1024px, < 1159px)
+ *                  "tablet-portrait": tablet portrait only (>= 768px, < 1024px)
+ *                  "phone-landscape": phone landscape only (>= 480px, < 768px)
+ *                  "phone-portrait": phone portrait only (< 480px)
+ */
+ 
+ respond($media) 
+    // large screen and above (> 1200px)
+    if $media == large-screen
+        @media (min-width: $Responsive__desktop--min)
+            {block}
+  
+    // tablet-landscape and desktop (> 1024px)
+    else if $media == desktop
+        @media (min-width: $Reponsive__tablet-landscape--min)
+            {block}
+            
+    // tablet portrait and below (< 1023px )
+    else if $media == all-devices
+        @media (max-width: $Reponsive__tablet-portrait--max)
+            {block}
+    
+    // phone landscape and below (< 767px )
+    else if $media == all-phones
+        @media (max-width: $Reponsive__phone-landscape--max)
+            {block}
+    
+    // tablet landscape to large (>= 1024px, < 1159px)
+    else if $media == tablet-landscape 
+        @media (min-width: $Reponsive__tablet-landscape--min) and  (max-width: $Reponsive__tablet-landscape--max)
+            {block}
+    
+    // tablet portrait only (>= 768px, < 1024px)
+    else if $media == tablet-portrait
+        @media (min-width: $Reponsive__tablet-portrait--min) and (max-width: $Reponsive__tablet-portrait--max)
+            {block}
+    
+    // phone landscape only (>= 480px, < 768px)
+    else if $media == phone-landscape
+        @media (min-width: $Reponsive__phone-landscape--min) and (max-width: $Reponsive__phone-landscape--max)
+            {block}
+    
+    // phone portrait only (< 480px)
+    else if $media == phone-portrait 
+        @media (max-width: $Reponsive__phone-portrait--max)
+            {block}
+ 

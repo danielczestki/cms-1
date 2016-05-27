@@ -1,0 +1,21 @@
+/*
+ * Set all responsive variables
+ */
+
+// Desktop
+$Responsive__desktop--min = 1200px // aka wrapper
+
+// Tablet landscape
+$Reponsive__tablet-landscape--min = 1024px
+$Reponsive__tablet-landscape--max = ($Responsive__desktop--min - 1) // $Responsive__desktop--min - 1 (default: 1199px)
+
+// Tablet portrait
+$Reponsive__tablet-portrait--min = 768px
+$Reponsive__tablet-portrait--max = ($Reponsive__tablet-landscape--min - 1) // 1023px
+
+// Phone landscape
+$Reponsive__phone-landscape--min = 480px
+$Reponsive__phone-landscape--max = ($Reponsive__tablet-portrait--min - 1) // 767px
+
+// Phone portrait
+$Reponsive__phone-portrait--max = ($Reponsive__phone-landscape--min - 1) // 479px

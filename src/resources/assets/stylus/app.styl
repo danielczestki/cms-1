@@ -1,1 +1,48 @@
-body {}
+/**
+ * Keogh Stylus
+ * ------------------
+ * Boilerplate BEM methodology Stylus project
+ *
+ * @version 0.1.0
+ * @author Steve McKeogh <steve.mckeogh@gmail.com>
+ * 
+ * @see BEM     https://en.bem.info/ (for BEM information)
+ * @see Stylus  https://learnboost.github.io/stylus/
+ */
+
+@charset "UTF-8"
+
+// Variables
+@import "variables/colors"
+@import "variables/typography"
+@import "variables/spacing"
+@import "variables/responsive"
+
+// Vendor
+@import "vendor/reset"
+
+// Utilities
+@import "utilities/respond"
+@import "utilities/utilities"
+
+// Base
+@import "base/base"
+@import "base/fonts"
+@import "base/typography"
+
+// Layout
+@import "layout/bare"
+@import "layout/header"
+@import "layout/nav"
+@import "layout/main"
+@import "layout/footer"
+@import "layout/grid"
+
+// Components
+@import "components/logo"
+@import "components/buttons"
+@import "components/hyperlinks"
+@import "components/form"
+
+// Pages
+@import "pages/session"

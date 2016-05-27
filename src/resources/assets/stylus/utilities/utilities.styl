@@ -1,0 +1,87 @@
+/*
+ * Bunch of utility classes to be used in the markup
+ * These classes are likely also @extend(ed)
+ *
+ * @note    Most of these util clases are !important[ed] to
+ *          ensure they are respected. Do no use these classes if
+ *          this causes hierarchy issues... but why would you?!?
+ */
+ 
+ // Clearfix
+ .Utility--clearfix
+     lost-utility: clearfix
+
+// Positioning
+.Utility--pull-left
+    float: left !important
+.Utility--pull-right
+    float: right !important
+.Utility--valign-middle
+    &:before
+        content: ''
+        height: 100%
+        vertical-align: middle
+        display: inline-block
+    > *
+        width: 100%
+        vertical-align: middle
+        display: inline-block
+
+// Visibility
+.Utility--hidden
+    display: none !important
+.Utility--block
+    display: block !important
+.Utility--inline-block
+    display: inline-block !important
+
+// Text variations
+.Utility--text-truncate
+    overflow: hidden !important
+    text-overflow: ellipsis !important
+    white-space: nowrap !important
+.Utility--text-untruncate
+    overflow: visible !important
+    text-overflow: clip !important
+    white-space: normal !important
+.Utility--small
+    font-size: 12px !important
+.Utility--muted
+    color: $Color__text--muted !important
+    
+// Font weights
+.Utility--font-weight-light
+    font-weight: 300 !important
+.Utility--font-weight-regular
+    font-weight: 400 !important
+.Utility--font-weight-semibold
+    font-weight: 600 !important
+.Utility--font-weight-bold
+    font-weight: 800 !important
+    
+// Margins, padding and spacing
+.Utility--margin-0, .Utility--no-margin
+    margin-bottom: 0 !important
+.Utility--margin-6
+    margin-bottom: $Spacing__size--6 !important
+.Utility--margin-12
+    margin-bottom: $Spacing__size--12 !important
+.Utility--margin-24
+    margin-bottom: $Spacing__size--24 !important
+.Utility--margin-48
+    margin-bottom: $Spacing__size--48 !important
+.Utility--padding-0, .Utility--no-padding
+    padding: 0 !important
+.Utility--padding-6
+    padding: $Spacing__size--6 !important
+.Utility--padding-12
+    padding: $Spacing__size--12 !important
+.Utility--padding-24
+    padding: $Spacing__size--24 !important
+
+// Image replacement
+.Utility--image-replacement
+    text-indent: 100%
+    font: 0/0 a
+    white-space: nowrap
+    overflow: hidden

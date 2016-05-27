@@ -1,0 +1,46 @@
+/**
+ * Set base styles for the app. Remember we have 
+ * already called vendor/reset.
+ */
+
+// Set all elements to border-box sizing
+*, :before, :after
+    box-sizing: border-box
+
+// Html fixes, mobile mainly
+html 
+    -webkit-tap-highlight-color: transparent
+
+// Body base, font and colours that will be inherited
+body
+    background-color: $Color__body--background
+    color: $Color__body--text
+    font-family: $Font__base--family
+    font-size: $Font__base--size
+    font-weight: $Font__base--weight
+    line-height: $Font__base--line-height
+    -webkit-text-size-adjust: 100%
+    -ms-text-size-adjust: 100%
+    +respond(all-phones)
+        width: 100%
+        min-width: 0
+        -webkit-text-size-adjust: none
+        -ms-text-size-adjust: none
+
+// Enforce webkit to have a transparent bg on print
+input:-webkit-autofill
+    background-color: transparent !important
+
+// Text selection
+::selection 
+    background: $Color__selection--background
+    color: $Color__selection--text
+    text-shadow: none
+
+// Wrapper, this constrains the site to a max-width and centres. It is used multiple times
+.wrapper
+    width: 100%
+    max-width: $Responsive__desktop--min
+    margin: 0 auto
+    +respond(all-devices)
+        padding: 0 12px

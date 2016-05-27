@@ -1,21 +1,41 @@
 @extends("cms::admin.layouts.bare")
 
+@section("body_class", "session")
 @section("title", "Login")
 
 @section("content")
         
-    {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login")]) }}
+    <div class="Background"></div>
     
-
-        <p>Email: {{ Form::email("email") }}</p>
-        <p>Password: {{ Form::password("password") }}</p>
-        <p>{{ Form::checkbox("remember", 1) }} Remember me?</p>
-
-        <div class="form-group">
-            {{ Form::button("Login", ["type" => "submit"]) }}
-            <a class="btn btn-link" href="{{ cmsaction('Core\Auth\PasswordController@reset') }}">Forgot Your Password?</a>
-        </div>
-        
-    {{ Form::close() }}
+    {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login"), "class" => "Session-form Utility--valign-middle"]) }}<div>
+        <i class="Logo Logo--grey Logo--background">Thin Martian CMS</i>
+        <fieldset>
+            <div class="Login-field">
+                {{ Form::email("email", null, ["placeholder" => "Email address"]) }}
+                <small class="Login-error Utility--small">
+                    @if ($errors->has("email"))
+                        {{ $errors->first("email") }}
+                    @endif
+                </small>
+            </div>
+            <div class="Login-field">
+                {{ Form::password("password", ["placeholder" => "Password"]) }}
+                <small class="Login-error Utility--small">
+                    @if ($errors->has("password"))
+                        {{ $errors->first("password") }}
+                    @endif
+                </small>
+            </div>
+            <label for="remember" class="Form__checkbox">
+                {{ Form::checkbox("remember", 1, false, ["id" => "remember"]) }}
+                Remember me
+            </label>
+        </fieldset>
+        {{ Form::button("Login", ["type" => "submit", "class" => "Button Button--medium Button--orange Button--stretch"]) }}
+        <p class="Utility--small Utility--muted">Forgotten you password? No worries, let's <a href="{{ cmsaction('Core\Auth\PasswordController@reset') }}">reset it</a>!</p>
+        <footer class="Session-footer Utility--small Utility--muted">
+            &copy; {{ date("Y") }} <a href="http://www.thinmartian.com" target="_blank">Thin Martian</a> CMS. All Rights Reserved.
+        </footer>
+    </div>{{ Form::close() }}
     
 @endsection

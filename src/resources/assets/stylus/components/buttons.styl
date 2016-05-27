@@ -1,0 +1,44 @@
+/**
+ * Site buttons
+ */
+
+// Standard, globalised button (use on <a>, <button> and input[type=submit])
+.Button
+    transition: background .2s ease-in
+    margin: 0
+    padding: 0
+    border: 0 
+    background: none
+    color: $Color__body--text
+    text-align: center
+    text-decoration: none !important
+    line-height: 100%
+    font-weight: 300
+    white-space: nowrap
+    vertical-align: middle
+    cursor: pointer
+    appearance: none
+    user-select: none
+    display: inline-block
+    
+    // modifiers
+    &--stretch
+        width: 100%
+        
+    // sizes
+    &--medium
+        height: 50px
+        font-size: 18px
+        line-height: 48px
+        
+    // colours
+    &--orange
+        background: $Color__orange--1
+        color: #fff
+        &:hover
+            background: darken($Color__orange--1, 15%)
+    
+// fix Firefox's padding inside certain form elements
+.btn::-moz-focus-inner, button::-moz-focus-inner, input::-moz-focus-inner
+    border: 0
+    padding: 0

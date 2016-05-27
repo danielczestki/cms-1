@@ -1,0 +1,66 @@
+/**
+ * Site form elements and layouts
+ */
+ 
+ // Placeholders
+::-webkit-input-placeholder
+    color: $Color__placeholder
+
+:-moz-placeholder
+    color: $Color__placeholder
+
+::-moz-placeholder
+    color: $Color__placeholder
+
+:-ms-input-placeholder
+    color: $Color__placeholder
+    
+// Remove webkits highlight
+input:focus, select:focus, textarea:focus, button:focus
+    outline: none
+    
+// Hide IE's clear cross
+::-ms-clear
+    display: none
+    
+// Elements
+input, textarea, select
+    transition: border-color .2s ease-in
+    width: 100%
+    margin: 0
+    padding: 14px
+    background: #fff
+    font-family: $Font__base--family
+    font-size: 100%
+    color: $Color__body--text
+    border: solid 1px $Color__grey--2
+    &:focus
+        border-color: $Color__orange--1 !important
+textarea
+    overflow: auto
+input[type=checkbox], input[type=radio]
+    width: auto
+    padding: 0
+label
+    display: inline-block
+.checkbox, .radio
+    padding-left: 20px
+    cursor: pointer
+    display: block
+    &--inline 
+        margin-right: 12px
+        display: inline-block
+    input[type=checkbox], input[type=radio]
+        margin-left: -20px
+        top: 1px
+        position: relative
+        
+.Form 
+    &__checkbox
+        padding: 0 0 0 24px
+        position: relative
+        input[type=checkbox]
+            left: 0
+            top: 4px
+            position: absolute
+        
