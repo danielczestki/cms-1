@@ -4,7 +4,9 @@
 @section("title", "Login")
 
 @section("content")
-        
+    
+    <div class="Login-version Utility--muted">Build {{ CMSVERSION }}</div>
+    
     <div class="Background"></div>
     
     {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login"), "class" => "Session-form Utility--valign-middle"]) }}<div>

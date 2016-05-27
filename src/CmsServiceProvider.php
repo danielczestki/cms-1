@@ -18,6 +18,11 @@ class CmsServiceProvider extends ServiceProvider
 {   
     
     /**
+     * Version of the Thin Martian CMS
+     */
+    const CMSVERSION = "1.0.0";
+    
+    /**
      * Name of the package
      */
     const NAME = "cms";
@@ -30,6 +35,7 @@ class CmsServiceProvider extends ServiceProvider
         \Thinmartian\Cms\App\Console\Commands\Migrations::class,
         \Thinmartian\Cms\App\Console\Commands\Models::class,
         \Thinmartian\Cms\App\Console\Commands\Controllers::class,
+        \Thinmartian\Cms\App\Console\Commands\Version::class,
     ];
     
     /**
@@ -75,6 +81,7 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        define("CMSVERSION", self::CMSVERSION);
         $this->mergeConfig();
         $this->updateConfig();
         $this->registerYaml();
