@@ -643,27 +643,37 @@ body.session .Session-form {
   padding: 0 44px 0;
   background: #efefef;
   float: right;
+  position: relative;
 }
 body.session .Logo {
   margin-bottom: 44px;
   font-size: 24px;
   font-weight: 300;
 }
-body.session .Login-version {
+body.session .Session-version {
   font-size: 12px;
   right: 12px;
   top: 4px;
   position: fixed;
   z-index: 10;
 }
-body.session .Login-field {
+body.session .Session-field {
   width: 100%;
   margin: 0 0 12px;
 }
-body.session .Login-error {
+body.session .Session-error {
   margin: 0 0 4px;
   color: #ff5b57;
   font-weight: 600;
+}
+body.session .Session-status {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  color: #00ac71;
+  left: 0;
+  top: 56px;
+  position: absolute;
 }
 body.session input {
   margin: 0 0 2px;
@@ -681,6 +691,20 @@ body.session .Session-footer {
   padding: 12px 0 0;
   border-top: solid 1px #cdcdcd;
   text-align: center;
+}
+@media (max-width: 1023px) {
+  body.session .Background {
+    display: none;
+  }
+  body.session .Session-form {
+    width: auto;
+    float: none;
+  }
+}
+@media (max-width: 479px) {
+  body.session .Session-form {
+    padding: 0 18px;
+  }
 }
 
 /*# sourceMappingURL=app.css.map */

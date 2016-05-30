@@ -12,25 +12,36 @@ body.session
         padding: 0 44px 0
         background: $Color__grey--1
         float: right
+        position: relative
         
     .Logo
         margin-bottom: 44px
         font-size: 24px
         font-weight: 300
         
-    .Login-version
-        font-size: 12px
-        right: 12px
-        top: 4px
-        position: fixed
-        z-index: 10
-    .Login-field
-        width: 100%
-        margin: 0 0 12px
-    .Login-error
-        margin: 0 0 4px
-        color: $Color__red--1
-        font-weight: 600
+    .Session
+        &-version
+            font-size: 12px
+            right: 12px
+            top: 4px
+            position: fixed
+            z-index: 10
+        &-field
+            width: 100%
+            margin: 0 0 12px
+        &-error
+            margin: 0 0 4px
+            color: $Color__red--1
+            font-weight: 600
+        &-status
+           width: 100%
+           margin: 0
+           text-align: center
+           color: $Color__green--1
+           left: 0
+           top: 56px
+           position: absolute 
+            
     input
         margin: 0 0 2px
     fieldset
@@ -45,3 +56,19 @@ body.session
         padding: 12px 0 0
         border-top: solid 1px $Color__grey--2
         text-align: center
+        
+    //
+    // Responsive
+    //
+    
+    +respond(all-devices)
+        .Background
+            display: none
+        .Session-form
+            width: auto
+            float: none
+            
+    +respond(phone-portrait)
+        .Session-form
+            padding: 0 18px
+        

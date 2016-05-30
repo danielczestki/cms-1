@@ -4,25 +4,21 @@
 @section("title", "Login")
 
 @section("content")
-    
-    <div class="Login-version Utility--muted">Build {{ CMSVERSION }}</div>
-    
-    <div class="Background"></div>
-    
+        
     {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\AuthController@login"), "class" => "Session-form Utility--valign-middle"]) }}<div>
         <i class="Logo Logo--grey Logo--background">Thin Martian CMS</i>
         <fieldset>
-            <div class="Login-field">
+            <div class="Session-field">
                 {{ Form::email("email", null, ["placeholder" => "Email address"]) }}
-                <small class="Login-error Utility--small">
+                <small class="Session-error Utility--small">
                     @if ($errors->has("email"))
                         {{ $errors->first("email") }}
                     @endif
                 </small>
             </div>
-            <div class="Login-field">
+            <div class="Session-field">
                 {{ Form::password("password", ["placeholder" => "Password"]) }}
-                <small class="Login-error Utility--small">
+                <small class="Session-error Utility--small">
                     @if ($errors->has("password"))
                         {{ $errors->first("password") }}
                     @endif
