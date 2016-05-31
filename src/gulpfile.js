@@ -5,10 +5,6 @@ elixir(function(mix) {
    mix.stylus("app.styl");
 });
 
-/*elixir(function(mix) {
-  mix.browserify('app.js');
-});
-
 elixir(function(mix) {
-   mix.version(['css/app.css', 'js/app.js']);
-});*/
+  mix.browserify("app.js");
+});

@@ -1,5 +1,23 @@
-/**
- * Style the site header
- */
- 
- .Header {}
+
+ .Header 
+     width: 100%
+     height: $Dimension__header--height
+     background #fff
+     box-shadow: 0 1px 2px rgba(#000, .1)
+     position: fixed
+     &__logo, &__body, &__tools
+         height: 100%
+     &__logo
+         width: $Dimension__nav--width
+         background-color: $Color__orange--1
+         background-position: 50% 50%
+         background-size: 29px auto !important
+         float: left
+        &__body
+            margin: 0 0 0 $Dimension__nav--width
+        &__tools
+            &--left
+                float: left
+            &--right
+                float: right
+            

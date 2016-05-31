@@ -11,10 +11,10 @@
             <p class="Session-status">{{ session('status') }}</p>
         @endif
         
-        <i class="Logo Logo--grey Logo--background">Thin Martian CMS</i>
+        <i class="Logo Logo--grey Logo--background Logo--flex">Thin Martian CMS</i>
         <fieldset>
             <div class="Session-field">
-                {{ Form::email("email", null, ["placeholder" => "Email address"]) }}
+                {{ Form::email("email", null, ["placeholder" => "Email address", "autofocus" => "autofocus"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("email"))
                         {{ $errors->first("email") }}

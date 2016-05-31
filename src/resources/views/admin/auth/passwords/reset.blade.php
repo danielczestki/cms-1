@@ -5,9 +5,6 @@
 
 @section("content")
     
-    
-    
-    
     {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\PasswordController@reset"), "class" => "Session-form Utility--valign-middle"]) }}<div>
         {{ Form::hidden("token", $token) }}
         
@@ -15,10 +12,10 @@
             <p class="Session-status">{{ session('status') }}</p>
         @endif
         
-        <i class="Logo Logo--grey Logo--background">Thin Martian CMS</i>
+        <i class="Logo Logo--grey Logo--background Logo--flex">Thin Martian CMS</i>
         <fieldset>
             <div class="Session-field">
-                {{ Form::email("email", null, ["placeholder" => "Email address"]) }}
+                {{ Form::email("email", null, ["placeholder" => "Email address", "autofocus" => "autofocus"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("email"))
                         {{ $errors->first("email") }}
@@ -48,34 +45,5 @@
             &copy; {{ date("Y") }} <a href="http://www.thinmartian.com" target="_blank">Thin Martian</a> CMS. All Rights Reserved.
         </footer>
     </div>{{ Form::close() }}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    @if (session('status'))
-        <div>
-            {{ session('status') }}
-        </div>
-    @endif
-    
-    {{ CmsForm::open(["method" => "POST", "url" => "Core\Auth\PasswordController@reset"]) }}
-        
-        {{ CmsForm::hidden(["name" => "token", "value" => $token]) }}
-        
-        {{ CmsForm::email(["name" => "email", "label" => "Email"]) }}
-        {{ CmsForm::password(["name" => "password", "label" => "Password"]) }}
-        {{ CmsForm::password(["name" => "password_confirmation", "label" => "Confirm Password"]) }}
-        
-        <div class="form-group">
-            {{ CmsForm::submit(["label" => "Reset Password", "icon" => "refresh"]) }}
-        </div>
-        
-    {{ CmsForm::close() }}
     
 @endsection
