@@ -5,7 +5,7 @@
      background #fff
      box-shadow: 0 1px 2px rgba(#000, .1)
      position: fixed
-     &__logo, &__body, &__tools
+     &__logo, &__body, &__tools, &__options, &__option
          height: 100%
      &__logo
          width: $Dimension__nav--width
@@ -18,6 +18,34 @@
         &__tools
             &--left
                 float: left
+                .Header__option
+                    border-right: solid 1px $Color__grey--1
             &--right
                 float: right
-            
+                .Header__option
+                    border-left: solid 1px $Color__grey--1
+        &__option 
+            line-height: $Dimension__header--height
+            color: $Color__grey--3
+            position: relative
+            float: left
+            &--no-link
+                padding: 0 18px
+                .Header__link
+                    padding-top: 0 !important
+                    padding-bottom: 0 !important
+        &__link
+            transition: background-color .2s ease-in
+            width: 100%
+            height: 100%
+            padding: 0 18px
+            text-decoration: none !important
+            color: $Color__grey--3 !important
+            display: block
+            &:hover, &--selected
+                background-color: lighten($Color__grey--1, 50%)
+        &__username
+            margin-left: 6px
+        &__dropdown
+            overflow: hidden
+            cursor: pointer
