@@ -1,6 +1,6 @@
-// Shared animations for the visibiliy
-.Header__logo, .Primary, .Primary:after, .Primary__body, .Header__body
-    transition: all .4s ease-in-out
+// Shared animations for the visibility
+.Header__logo, .Primary, .Primary:after, .Primary__body, .Primary__option, .Primary__label, .Header__body, .Main
+    transition: all .3s ease-in-out
 
 // Primary nav (left)
 .Primary
@@ -20,23 +20,59 @@
         padding-top: $Dimension__header--height
     &__overflow
         height: 100%
-        overflow: auto
-        -webkit-overflow-scrolling: touch;
+    &__options
+        {}
+    &__option 
+        width: $Dimension__nav-open--width
+        line-height: 42px
+        position: relative
+        overflow: hidden
+    &__link
+        transition: all .2s
+        width: 100%
+        height: 42px
+        color: #a9adb5 !important
+        border-left: solid 4px $Color__blue--2;
+        text-decoration: none !important
+        display: block
+        &:hover, &--selected
+            color: #fff !important
+            background: $Color__blue--3 !important
+            border-color: $Color__orange--1
+    &__icon
+        width: $Dimension__nav-closed--width
+        margin-left: -4px
+        text-align: center
+        font-size: 16px
+    &__label
+        white-space: nowrap
         
 
-// State of primary visibiliy based on body class
-body.Nav
+// State of primary visibility based on body class
+.Nav
     &--open
         .Header__option--nav .fa-caret-right
             display: none
         .Primary, .Primary:after, .Primary__body, .Header__logo
             width: $Dimension__nav-open--width
+        .Primary__label
+            opacity: 1
         .Header__body
             margin-left: $Dimension__nav-open--width
+        .Main 
+            padding-left: $Dimension__nav-open--width + $Dimension__main--padding
     &--closed
         .Header__option--nav .fa-caret-left
             display: none
         .Primary, .Primary:after, .Primary__body, .Header__logo 
             width: $Dimension__nav-closed--width
+        .Primary__option:hover
+            overflow: visible
+            .Primary__label
+                opacity: 1
+        .Primary__label
+            opacity: 0
         .Header__body
             margin-left: $Dimension__nav-closed--width
+        .Main 
+            padding-left: $Dimension__nav-closed--width + $Dimension__main--padding

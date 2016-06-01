@@ -1,23 +1,20 @@
-import $ from "jquery";
-import slimScroll from "./vendor/jquery-slimscroll.js";
+import Vue from "vue";
+import "./plugins/ui";
 
-$(".Primary__overflow").slimScroll({
-  height: "100%",
-  size: "5px",
-  opacity: 1
-});
+/**
+ * Global components
+ */
+//Vue.component("nav", require("./components/Nav/Nav"));
 
-
-// TEMP
-$(".Nav--toggle").on("click", function(ev) {
-  ev.preventDefault();
-  if ($("body").hasClass("Nav--closed")) {
-    $("body").removeClass("Nav--closed");
-    $("body").addClass("Nav--open");
-  } else {
-    $("body").removeClass("Nav--open");
-    $("body").addClass("Nav--closed");
+/**
+ * Init the app
+ */
+new Vue({
+  
+  el: "#app",
+  
+  data: {
+    nav_open: false
   }
-})
-
-/* TODO: ORGANISE WHEN WE GET IN TO THE JS */
+  
+});

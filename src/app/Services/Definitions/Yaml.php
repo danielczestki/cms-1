@@ -4,6 +4,7 @@ namespace Thinmartian\Cms\App\Services\Definitions;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Finder\Finder;
 
 class Yaml {
     
@@ -23,6 +24,11 @@ class Yaml {
     protected $file;
     
     /**
+     * @var Symfony\Component\Finder\Finder
+     */
+    protected $finder;
+    
+    /**
      * @var object
      */
     protected $yaml;
@@ -33,6 +39,7 @@ class Yaml {
     public function __construct()
     {
         $this->path = app_path("Cms/Definitions/");
+        $this->finder = new Finder;
     }
     
     /**
@@ -96,6 +103,36 @@ class Yaml {
         return array_key_exists("searchable", $this->yaml) ? $this->yaml["searchable"] : [];;
     }
     
+    /**
+     * Go through all the YAML config files and return the nav
+     * based on what we have 
+     * 
+     * @return array
+     */
+    public function getNav()
+    {
+        $arr = [];
+        $parser = new Parser();
+        $files = $this->finder->files()->in($this->path)->name("*.yaml");;
+        foreach($files as $file) {
+            $yaml = $parser->parse(file_get_contents($file->getRealpath()));
+            // do loads of validation to be safe
+            if (! is_array($yaml)) continue;
+            if (! array_key_exists("meta", $yaml)) continue;
+            $meta = $yaml["meta"];
+            if (! array_key_exists("show_in_nav", $meta)) continue;
+            if (! $meta["show_in_nav"]) continue;
+            if (! array_key_exists("title", $meta)) continue;
+            $filename = $file->getBasename('.' . $file->getExtension());
+            $arr[$filename] = [
+                "title" => $meta["title"],
+                "icon" => array_get($meta, "icon") ?: "folder",
+                "url" => @route("admin.". strtolower($filename) .".index"),
+                "controller" => $filename . "Controller"
+            ];
+        }
+        return $arr;
+    }
     
     /**
      * Setters

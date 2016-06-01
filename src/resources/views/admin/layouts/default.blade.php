@@ -13,16 +13,16 @@
     {{-- Output any custom/specific stylesheets --}}
     @yield("css")
 </head>
-<body class="@yield('body_class') Nav--closed">
+<body class="@yield('body_class')"><div id="app" class="Nav--closed" :class="{'Nav--closed': ! nav_open, 'Nav--open': nav_open}">
 
     <!-- Header -->
     <header class="Header">
-        <div class="Header__logo Logo Logo--all-white Utility--image-replacement" title="Thin Martian CMS">Thin Martian CMS</div>
+        <a href="{{ route('cms-dashboard') }}" class="Header__logo Logo Logo--all-white Utility--image-replacement" title="Thin Martian CMS">Thin Martian CMS</a>
         <div class="Header__body">
             <div class="Header__tools Header__tools--left">
                 <ul class="Header__options">
-                    <li class="Header__option Header__option--nav"><a href="#" class="Header__link Nav--toggle"><i class="fa fa-caret-left"></i> <i class="fa fa-bars"></i> <i class="fa fa-caret-right"></i></a></li>
-                    <li class="Header__option"><a href="{{ route('cms-dashboard') }}" class="Header__link" title="Back to dashboard"><i class="fa fa-home"></i></a></li>
+                    <li class="Header__option Header__option--nav"><a href="#" class="Header__link" v-on:click="nav_open = ! nav_open"><i class="fa fa-caret-left"></i> <i class="fa fa-bars"></i> <i class="fa fa-caret-right"></i></a></li>
+                    <li class="Header__option"><a href="{{ route('cms-dashboard') }}" class="Header__link{{ in_nav() ? ' Header__link--selected' : null }}" title="Back to dashboard"><i class="fa fa-home"></i></a></li>
                 </ul>
             </div>
             <div class="Header__tools Header__tools--right">
@@ -41,11 +41,14 @@
     </header>
     
     <!-- Primary nav -->
-    <nav class="Primary">
-        <div class="Primary__body"><div class="Primary__overflow">
-            TEXT
-        </div></div>
-    </nav>
+    @include("cms::admin.partials.layout.primary")
+    
+    <!-- Main content -->
+    <main class="Main">
+        
+        jghjg
+        
+    </main>
     
     <?php /* ?>
     <header style="box-sizing:border-box;margin: 0 0 24px;border-bottom: solid 2px #eee;width: 100%;float: left;padding: 12px">
@@ -70,5 +73,5 @@
     {{-- Output any custom/specific javascripts --}}
     <script src="{{ asset('vendor/cms/js/app.js') }}"></script>
     @yield("js")
-</body>
+</div></body>
 </html>

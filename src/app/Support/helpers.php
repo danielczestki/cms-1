@@ -3,6 +3,30 @@
 define("CMSNAMESPACE", "\Thinmartian\Cms\App\Http\Controllers\\");
 define("APPNAMESPACE", "\App\Cms\Http\Controllers\\");
 
+
+
+if (! function_exists("in_nav")) {
+    
+    function in_nav($controller = null, $action = null)
+    {
+        $route = request()->route()->getAction();
+        if (! array_key_exists("controller", $route) and ! $controller) return true; // no controller and empty controller, so prob homepage, so true
+        if (! array_key_exists("controller", $route)) return false;
+        $_controller = class_basename($route["controller"]);
+        list($_controller, $_action) = explode("@", $_controller);
+        if ($action) {
+            // controller and action
+            return ($_controller == $controller and $_action == $action);
+        } else {
+            // just controller
+            return $_controller == $controller;
+        }
+    }
+}
+
+
+
+
 if (! function_exists("gravatar")) {
     /**
      * Return a users gravatar
