@@ -470,6 +470,7 @@ blockquote:last-child {
 }
 .Primary__overflow {
   height: 100%;
+  overflow: hidden;
 }
 .Primary__option {
   width: 240px;

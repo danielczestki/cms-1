@@ -1,4 +1,4 @@
-<nav class="Primary">
+<nav class="Primary" v-on:mouseenter="primary_hover('over')" v-on:mouseleave="primary_hover('out')">
     <div class="Primary__body"><div class="Primary__overflow">
         <ul class="Primary__options">
             @foreach (CmsYaml::getNav() as $idx => $nav)

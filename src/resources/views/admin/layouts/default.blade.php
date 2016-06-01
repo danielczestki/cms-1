@@ -21,7 +21,7 @@
         <div class="Header__body">
             <div class="Header__tools Header__tools--left">
                 <ul class="Header__options">
-                    <li class="Header__option Header__option--nav"><a href="#" class="Header__link" v-on:click="nav_open = ! nav_open"><i class="fa fa-caret-left"></i> <i class="fa fa-bars"></i> <i class="fa fa-caret-right"></i></a></li>
+                    <li class="Header__option Header__option--nav"><a href="#" class="Header__link" v-on:click.prevent="primary_click"><i class="fa fa-caret-left"></i> <i class="fa fa-bars"></i> <i class="fa fa-caret-right"></i></a></li>
                     <li class="Header__option"><a href="{{ route('cms-dashboard') }}" class="Header__link{{ in_nav() ? ' Header__link--selected' : null }}" title="Back to dashboard"><i class="fa fa-home"></i></a></li>
                 </ul>
             </div>
@@ -45,30 +45,8 @@
     
     <!-- Main content -->
     <main class="Main">
-        
-        jghjg
-        
+        @yield("content")  
     </main>
-    
-    <?php /* ?>
-    <header style="box-sizing:border-box;margin: 0 0 24px;border-bottom: solid 2px #eee;width: 100%;float: left;padding: 12px">
-        <div style="float: left">
-            <a href="{{ route('cms-dashboard') }}">THIN MARTIAN CMS</a>
-            &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href="{{ route("admin.users.index") }}">Users</a>
-        </div>
-        <div style="float: right">
-            @if (\Auth::check())
-                Welcome back, {{ Auth::user()->firstname }} <a href="{{ cmsaction("Core\Auth\AuthController@logout") }}">Logout</a>
-            @else
-                <!-- <a href="{{ cmsaction("Core\Auth\AuthController@showRegistrationForm") }}">Register</a> -->
-                <a href="{{ cmsaction("Core\Auth\AuthController@showLoginForm") }}">Login</a>
-            @endif
-        </div>
-    </header>
-    
-    @yield("content")
-    <?php */ ?>
     
     {{-- Output any custom/specific javascripts --}}
     <script src="{{ asset('vendor/cms/js/app.js') }}"></script>
