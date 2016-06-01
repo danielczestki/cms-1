@@ -9833,6 +9833,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   opacity: 1
 });
 
+// TEMP
+(0, _jquery2.default)(".Nav--toggle").on("click", function (ev) {
+  ev.preventDefault();
+  if ((0, _jquery2.default)("body").hasClass("Nav--closed")) {
+    (0, _jquery2.default)("body").removeClass("Nav--closed");
+    (0, _jquery2.default)("body").addClass("Nav--open");
+  } else {
+    (0, _jquery2.default)("body").removeClass("Nav--open");
+    (0, _jquery2.default)("body").addClass("Nav--closed");
+  }
+});
+
 /* TODO: ORGANISE WHEN WE GET IN TO THE JS */
 
 },{"./vendor/jquery-slimscroll.js":3,"jquery":1}],3:[function(require,module,exports){

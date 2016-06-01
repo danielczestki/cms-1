@@ -8,4 +8,16 @@ $(".Primary__overflow").slimScroll({
 });
 
 
+// TEMP
+$(".Nav--toggle").on("click", function(ev) {
+  ev.preventDefault();
+  if ($("body").hasClass("Nav--closed")) {
+    $("body").removeClass("Nav--closed");
+    $("body").addClass("Nav--open");
+  } else {
+    $("body").removeClass("Nav--open");
+    $("body").addClass("Nav--closed");
+  }
+})
+
 /* TODO: ORGANISE WHEN WE GET IN TO THE JS */

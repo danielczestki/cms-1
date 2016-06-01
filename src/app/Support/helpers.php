@@ -3,6 +3,20 @@
 define("CMSNAMESPACE", "\Thinmartian\Cms\App\Http\Controllers\\");
 define("APPNAMESPACE", "\App\Cms\Http\Controllers\\");
 
+if (! function_exists("gravatar")) {
+    /**
+     * Return a users gravatar
+     *
+     * @param  string  $email
+     * @param  integer $size    Defaults to 120
+     * @return string
+     */
+    function gravatar($email, $size = 120)
+    {
+        return "https://s.gravatar.com/avatar/". md5($email) ."?s={$size}";
+    }
+}
+
 if (! function_exists("cmsaction")) {
     /**
      * Return a path based on the CMS action

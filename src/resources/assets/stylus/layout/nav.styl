@@ -1,22 +1,14 @@
+// Shared animations for the visibiliy
+.Header__logo, .Primary, .Primary:after, .Primary__body, .Header__body
+    transition: all .4s ease-in-out
 
-// Body class for primary visibility
-body.Nav
-    &--open
-        .Header__option--nav .fa-caret-right
-            display: none
-    &--closed
-        .Header__option--nav .fa-caret-left
-            display: none
-
-// Primary nev (left)
+// Primary nav (left)
 .Primary
-    width: $Dimension__nav--width
     height: 100vh
     top: 0
     left: 0
     position: absolute
     &:after, &__body
-        width: $Dimension__nav--width
         left: 0
         top: 0
         bottom: 0
@@ -30,3 +22,21 @@ body.Nav
         height: 100%
         overflow: auto
         -webkit-overflow-scrolling: touch;
+        
+
+// State of primary visibiliy based on body class
+body.Nav
+    &--open
+        .Header__option--nav .fa-caret-right
+            display: none
+        .Primary, .Primary:after, .Primary__body, .Header__logo
+            width: $Dimension__nav-open--width
+        .Header__body
+            margin-left: $Dimension__nav-open--width
+    &--closed
+        .Header__option--nav .fa-caret-left
+            display: none
+        .Primary, .Primary:after, .Primary__body, .Header__logo 
+            width: $Dimension__nav-closed--width
+        .Header__body
+            margin-left: $Dimension__nav-closed--width

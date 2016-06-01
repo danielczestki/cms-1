@@ -13,7 +13,7 @@
     {{-- Output any custom/specific stylesheets --}}
     @yield("css")
 </head>
-<body class="@yield('body_class') Nav--open">
+<body class="@yield('body_class') Nav--closed">
 
     <!-- Header -->
     <header class="Header">
@@ -21,15 +21,19 @@
         <div class="Header__body">
             <div class="Header__tools Header__tools--left">
                 <ul class="Header__options">
-                    <li class="Header__option Header__option--nav"><a href="#" class="Header__link"><i class="fa fa-caret-left"></i> <i class="fa fa-bars"></i> <i class="fa fa-caret-right"></i></a></li>
+                    <li class="Header__option Header__option--nav"><a href="#" class="Header__link Nav--toggle"><i class="fa fa-caret-left"></i> <i class="fa fa-bars"></i> <i class="fa fa-caret-right"></i></a></li>
                     <li class="Header__option"><a href="{{ route('cms-dashboard') }}" class="Header__link" title="Back to dashboard"><i class="fa fa-home"></i></a></li>
                 </ul>
             </div>
             <div class="Header__tools Header__tools--right">
                 <ul class="Header__options">
-                    <li class="Header__option Header__option--no-link Header__dropdown">
-                        <img src="https://s.gravatar.com/avatar/0bf80d28a983f830e1c128836d775c4e?s=120" alt="Steve McKeogh" class="Avatar Avatar--small">
-                        <span class="Header__username">Steve</span>
+                    <li class="Header__option Header__option--no-link Header__dropdowner">
+                        <img src="{{ gravatar(Auth::user()->email) }}" alt="{{ Auth::user()->firstname . " " . Auth::user()->surname }}" class="Avatar Avatar--small">
+                        <span class="Header__username">{{ Auth::user()->firstname }}</span>
+                        <ul class="Header__dropdown">
+                            <li class="Header__dropdown-option"><a href="{{ route('admin.users.edit', Auth::user()->id) }}" class="Header__link">Edit profile</a></li>
+                            <li class="Header__dropdown-option"><a href="{{ cmsaction("Core\Auth\AuthController@logout") }}" class="Header__link">Logout</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>

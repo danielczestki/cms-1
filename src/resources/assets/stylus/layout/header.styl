@@ -1,51 +1,90 @@
 
- .Header 
-     width: 100%
-     height: $Dimension__header--height
-     background #fff
-     box-shadow: 0 1px 2px rgba(#000, .1)
-     position: fixed
-     &__logo, &__body, &__tools, &__options, &__option
-         height: 100%
-     &__logo
-         width: $Dimension__nav--width
-         background-color: $Color__orange--1
-         background-position: 50% 50%
-         background-size: 29px auto !important
-         float: left
-        &__body
-            margin: 0 0 0 $Dimension__nav--width
-        &__tools
-            &--left
-                float: left
-                .Header__option
-                    border-right: solid 1px $Color__grey--1
-            &--right
-                float: right
-                .Header__option
-                    border-left: solid 1px $Color__grey--1
-        &__option 
-            line-height: $Dimension__header--height
-            color: $Color__grey--3
-            position: relative
+.Header 
+    width: 100%
+    height: $Dimension__header--height
+    background #fff
+    box-shadow: 0 1px 2px rgba(#000, .1)
+    position: fixed
+    &__logo, &__body, &__tools, &__options, &__option
+        height: 100%
+    &__logo
+        background-color: $Color__orange--1
+        background-position: 50% 50%
+        background-size: 24px auto !important
+        float: left
+    &__body
+        margin: 0 0 0 $Dimension__nav-open--width
+    &__tools
+        &--left
             float: left
-            &--no-link
-                padding: 0 18px
-                .Header__link
-                    padding-top: 0 !important
-                    padding-bottom: 0 !important
-        &__link
-            transition: background-color .2s ease-in
-            width: 100%
-            height: 100%
+            .Header__option
+                border-right: solid 1px $Color__grey--1
+        &--right
+            float: right
+            .Header__option
+                border-left: solid 1px $Color__grey--1
+    &__option 
+        line-height: $Dimension__header--height
+        color: $Color__grey--3
+        position: relative
+        float: left
+        &--no-link
             padding: 0 18px
-            text-decoration: none !important
-            color: $Color__grey--3 !important
-            display: block
-            &:hover, &--selected
-                background-color: lighten($Color__grey--1, 50%)
-        &__username
-            margin-left: 6px
-        &__dropdown
-            overflow: hidden
-            cursor: pointer
+            .Header__link
+                padding-top: 0 !important
+                padding-bottom: 0 !important
+    &__link
+        transition: background-color .2s ease-in
+        width: 100%
+        height: 100%
+        padding: 0 18px
+        background: #fff
+        text-decoration: none !important
+        color: $Color__grey--3 !important
+        display: block
+        &:hover, &--selected
+            background-color: lighten($Color__grey--1, 50%)
+    &__username
+        margin-left: 6px
+    &__dropdowner
+        min-width: 151px
+        cursor: pointer
+        &:before
+            content: ""
+            width 100%
+            height: 100%
+            background: #fff
+            left: 0
+            top: 0
+            position: absolute
+            z-index: -1
+        &:hover .Header__dropdown
+            transform: translate3d(0, 0, 0)
+            opacity: 1
+    
+    &__dropdown 
+        transition: transform .3s ease-in-out, opacity .3s ease-in-out
+        width: 100%
+        min-width: 150px
+        box-shadow: -2px 2px 4px rgba(#000, .1)
+        transform: translate3d(0, -160px, 0)
+        opacity: 0
+        right: 0
+        top: $Dimension__header--height
+        position: absolute
+        z-index: -2
+        &-option
+            height: $Dimension__header--height
+            border-bottom: solid 1px $Color__grey--1
+            line-height: $Dimension__header--height
+            
+    //
+    // Responsive
+    //
+    
+    +respond(all-phones)
+        .Header__option--nav
+            display: none
+    +respond(phone-portrait)
+        .Header__tools--left .Header__option
+            border-right: 0
