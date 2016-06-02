@@ -1,0 +1,27 @@
+
+.Alert
+    margin: 0 0 24px
+    padding: 12px
+    font-weight: 600
+    font-size: 16px
+    text-align: center
+    color: #fff
+    position: relative
+    &__close
+        text-shadow: 1px 1px 0 rgba(#fff, .3)
+        cursor: pointer
+        right: 8px
+        top: 6px
+        position: absolute
+    &--success
+        background: $Color__green--2
+        border: solid 1px darken($Color__green--2, 25%)
+        text-shadow: 1px 1px 0 darken($Color__green--2, 25%)
+        .Alert__close
+            color: #5ba25b
+    &--error
+        background: $Color__red--2
+        border: solid 1px darken($Color__red--2, 25%)
+        text-shadow: 1px 1px 0 darken($Color__red--2, 25%)
+        .Alert__close
+            color: #c15d51

@@ -1032,6 +1032,38 @@ textarea {
 .List__action--edit {
   color: #00ac71 !important;
 }
+.Alert {
+  margin: 0 0 24px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+.Alert__close {
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+  cursor: pointer;
+  right: 8px;
+  top: 6px;
+  position: absolute;
+}
+.Alert--success {
+  background: #5ebd5e;
+  border: solid 1px #3e973e;
+  text-shadow: 1px 1px 0 #3e973e;
+}
+.Alert--success .Alert__close {
+  color: #5ba25b;
+}
+.Alert--error {
+  background: #e66454;
+  border: solid 1px #cd311e;
+  text-shadow: 1px 1px 0 #cd311e;
+}
+.Alert--error .Alert__close {
+  color: #c15d51;
+}
 body.Session .Background,
 body.Session .Session-form {
   height: 100vh;

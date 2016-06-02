@@ -5,7 +5,6 @@
 
 import $ from "jquery";
 import slimScroll from "../vendor/jquery-slimscroll.js";
-import Popper from "popper.js";
 
 (function(){
   

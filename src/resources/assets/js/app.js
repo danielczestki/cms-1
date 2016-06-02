@@ -13,7 +13,9 @@ new Vue({
     nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
     nav_open: false // is the nav open or not
   },
-  
+  components: {
+    alert: require("./components/Alert/Alert"), // form alert and success messages
+  },
   methods: {
     // Reveal/hide the primary nav on clicking a toggle button
     primary_click() {

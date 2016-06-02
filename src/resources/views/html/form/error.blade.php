@@ -1,5 +1,3 @@
-@if (session('error'))
-    <div class="alert alert-error" style="color: red">
-        {{ session('error') }}
-    </div>
+@if (session("error"))
+    <alert type="error">{{ session("error") }}</alert>
 @endif

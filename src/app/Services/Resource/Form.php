@@ -26,8 +26,12 @@ trait Form
     public function createResource(ResourceInput $input)
     {
         $form = $input->getInput();
-        $resource = $this->model->create($form);
-        return $resource;
+        $fillable = $this->model->getFillable();
+        foreach ($fillable as $column) {
+            if (array_key_exists($column, $form)) $this->model->$column = $form[$column];
+        }
+        $this->model->save();
+        return $this->model;
     }
     
     /**

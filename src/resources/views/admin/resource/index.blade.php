@@ -49,7 +49,7 @@
     
     <!-- Listing -->
     <div class="Box">
-        
+                
         @if ($listing->total())
             {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy?" . http_build_query($filters)]) }}
                 <table class="List">
