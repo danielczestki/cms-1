@@ -292,19 +292,18 @@ input:-webkit-autofill {
     padding: 0 12px;
   }
 }
-h1,
 .h1,
-h2,
 .h2,
-h3,
 .h3,
-h4,
 .h4,
-h5,
 .h5,
-h6,
 .h6 {
   text-rendering: optimizeLegibility;
+}
+.h1 {
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.4em;
 }
 p,
 ol,
@@ -415,7 +414,7 @@ blockquote:last-child {
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   width: 100%;
   min-width: 150px;
-  box-shadow: -2px 2px 4px rgba(0,0,0,0.1);
+  box-shadow: -1px 1px 3px rgba(0,0,0,0.1);
   transform: translate3d(0, -160px, 0);
   opacity: 0;
   right: 0;
@@ -546,6 +545,16 @@ blockquote:last-child {
 }
 .Main {
   padding-top: 60px;
+  padding-right: 12px;
+}
+.Build {
+  padding: 3px;
+  font-family: 'Droid Sans Mono';
+  font-size: 10px;
+  background: rgba(255,255,255,0.7);
+  right: 0;
+  bottom: 0;
+  position: fixed;
 }
 .Grid {
   *zoom: 1;
@@ -734,10 +743,11 @@ blockquote:last-child {
 .Logo--all-white {
   background-image: url("data:image/png;base64,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");
 }
-.Button {
+.Button,
+.Form__button {
   transition: background 0.2s ease-in;
   margin: 0;
-  padding: 0;
+  padding: 0 18px;
   border: 0;
   background: none;
   color: #000;
@@ -757,20 +767,93 @@ blockquote:last-child {
   user-select: none;
   display: inline-block;
 }
-.Button--stretch {
-  width: 100%;
+.Button__icon,
+.Form__button__icon {
+  text-align: center;
+  line-height: inherit;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
 }
-.Button--medium {
+.Button--stretch,
+.Form__button--stretch {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+.Button--icon,
+.Form__button--icon {
+  position: relative;
+}
+.Button--tiny,
+.Form__button--tiny {
+  height: 32px;
+  font-size: 14px;
+  line-height: 30px;
+}
+.Button--tiny.Button--icon,
+.Form__button--tiny.Button--icon {
+  padding-left: 40px;
+}
+.Button--tiny .Button__icon,
+.Form__button--tiny .Button__icon {
+  width: 32px;
+  line-height: 32px;
+}
+.Button--small,
+.Form__button--small {
+  height: 40px;
+  font-size: 16px;
+  line-height: 38px;
+}
+.Button--small.Button--icon,
+.Form__button--small.Button--icon {
+  padding-left: 50px;
+}
+.Button--small .Button__icon,
+.Form__button--small .Button__icon {
+  width: 40px;
+  line-height: 40px;
+}
+.Button--medium,
+.Form__button--medium {
   height: 50px;
   font-size: 18px;
   line-height: 48px;
 }
-.Button--orange {
+.Button--orange,
+.Form__button--orange {
   background: #ff5339;
-  color: #fff;
+  color: #fff !important;
 }
-.Button--orange:hover {
+.Button--orange:hover,
+.Form__button--orange:hover,
+.Button--orange .Button__icon,
+.Form__button--orange .Button__icon {
   background: #ff2a0a;
+}
+.Button--red,
+.Form__button--red {
+  background: #ff5b57;
+  color: #fff !important;
+}
+.Button--red:hover,
+.Form__button--red:hover,
+.Button--red .Button__icon,
+.Form__button--red .Button__icon {
+  background: #ff2924;
+}
+.Button--blue,
+.Form__button--blue {
+  background: #348fe2;
+  color: #fff !important;
+}
+.Button--blue:hover,
+.Form__button--blue:hover,
+.Button--blue .Button__icon,
+.Form__button--blue .Button__icon {
+  background: #1e7acf;
 }
 .btn::-moz-focus-inner,
 button::-moz-focus-inner,
@@ -811,50 +894,41 @@ button:focus {
 input,
 textarea,
 select {
-  transition: border-color 0.2s ease-in;
-  width: 100%;
   margin: 0;
-  padding: 14px;
   background: #fff;
   font-family: 'Open Sans', Helvetica, Arial, 'sans-serif';
   font-size: 100%;
-  color: #000;
-  border: solid 1px #cdcdcd;
-}
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #ff5339 !important;
+  text-align: left;
 }
 textarea {
   overflow: auto;
 }
-input[type=checkbox],
-input[type=radio] {
-  width: auto;
-  padding: 0;
-}
-label {
-  display: inline-block;
-}
 .checkbox,
 .radio {
-  padding-left: 20px;
   cursor: pointer;
-  display: block;
 }
-.checkbox--inline,
-.radio--inline {
-  margin-right: 12px;
-  display: inline-block;
+.Form__input,
+.Form__select {
+  transition: border-color 0.2s ease-in;
+  width: 100%;
+  height: 48px;
+  padding-left: 14px;
+  color: #000;
+  border: solid 1px #cdcdcd;
+  vertical-align: top;
 }
-.checkbox input[type=checkbox],
-.radio input[type=checkbox],
-.checkbox input[type=radio],
-.radio input[type=radio] {
-  margin-left: -20px;
-  top: 1px;
-  position: relative;
+.Form__input:focus,
+.Form__select:focus {
+  border-color: #ff5339 !important;
+}
+.Form__input--small,
+.Form__select--small {
+  height: 34px;
+  padding-left: 10px;
+  font-size: 12px;
+}
+.Form__input {
+  padding-right: 14px;
 }
 .Form__checkbox {
   padding: 0 0 0 24px;
@@ -862,8 +936,18 @@ label {
 }
 .Form__checkbox input[type=checkbox] {
   left: 0;
-  top: 4px;
+  top: 3px;
   position: absolute;
+}
+.Form__button {
+  height: 48px;
+}
+.Form__button--small {
+  height: 34px;
+  line-height: 34px;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .Avatar {
   margin-top: -2px;
@@ -875,44 +959,118 @@ label {
   width: 30px;
   height: 30px;
 }
-body.session .Background,
-body.session .Session-form {
+.Box {
+  margin: 0 0 24px;
+  padding: 18px;
+  background: #fff;
+  border-bottom: solid 3px #dcdcdc;
+}
+.Title {
+  padding: 24px 0 32px;
+}
+.Title .h1 {
+  float: left;
+}
+.Title__buttons {
+  float: right;
+}
+@media (max-width: 479px) {
+  .Title {
+    padding: 8px 0 24px;
+  }
+  .Title .h1,
+  .Title__buttons {
+    text-align: center;
+    float: none;
+  }
+  .Title .h1 {
+    margin: 0 0 12px;
+  }
+}
+.List {
+  width: 100%;
+}
+.List th,
+.List td {
+  width: 1%;
+  padding: 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+  text-align: left;
+}
+.List th {
+  font-weight: 600;
+  border-bottom: solid 2px #cdcdcd;
+}
+.List th a {
+  width: 100%;
+  height: 100%;
+  color: #000 !important;
+  text-decoration: none !important;
+  display: block;
+}
+.List th .fa {
+  color: #ff5339;
+  font-size: 12px;
+}
+.List tbody tr:nth-child(odd) td {
+  background: #f4f4f4;
+}
+.List__buttons {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.List__main {
+  width: auto !important;
+  font-weight: 600;
+  white-space: normal !important;
+}
+.List__action {
+  font-size: 22px;
+}
+.List__action--edit {
+  color: #00ac71 !important;
+}
+body.Session .Background,
+body.Session .Session-form {
   height: 100vh;
 }
-body.session .Background {
+body.Session .Background {
   width: calc(100% - 500px);
   background: url("../img/login.jpg") 50% 50%/cover no-repeat;
   float: left;
 }
-body.session .Session-form {
+body.Session .Session-form {
   width: 500px;
   padding: 0 44px 0;
   background: #efefef;
   float: right;
   position: relative;
 }
-body.session .Logo {
+body.Session .Logo {
   margin-bottom: 44px;
   font-size: 24px;
   font-weight: 300;
 }
-body.session .Session-version {
-  font-size: 12px;
+body.Session .Session-version {
+  font-family: 'Droid Sans Mono';
+  font-size: 11px;
   right: 12px;
   top: 4px;
   position: fixed;
   z-index: 10;
 }
-body.session .Session-field {
+body.Session .Session-field {
   width: 100%;
   margin: 0 0 12px;
 }
-body.session .Session-error {
+body.Session .Session-error {
   margin: 0 0 4px;
   color: #ff5b57;
   font-weight: 600;
 }
-body.session .Session-status {
+body.Session .Session-status {
   width: 100%;
   margin: 0;
   text-align: center;
@@ -921,35 +1079,99 @@ body.session .Session-status {
   top: 56px;
   position: absolute;
 }
-body.session input {
+body.Session input {
   margin: 0 0 2px;
 }
-body.session fieldset {
+body.Session fieldset {
   margin: 0 0 34px;
 }
-body.session button[type=submit] {
+body.Session button[type=submit] {
   margin: 0 0 18px;
 }
-body.session p {
+body.Session p {
   margin: 0 0 44px;
 }
-body.session .Session-footer {
+body.Session .Session-footer {
   padding: 12px 0 0;
   border-top: solid 1px #cdcdcd;
   text-align: center;
 }
 @media (max-width: 1023px) {
-  body.session .Background {
+  body.Session .Background {
     display: none;
   }
-  body.session .Session-form {
+  body.Session .Session-form {
     width: auto;
     float: none;
   }
 }
 @media (max-width: 479px) {
-  body.session .Session-form {
+  body.Session .Session-form {
     padding: 0 18px;
+  }
+}
+body.Listing .Filters__filter--totals {
+  padding-top: 6px;
+  float: left;
+}
+body.Listing .Filters__filter--totals strong {
+  font-weight: bold;
+}
+body.Listing .Filters__filter--form {
+  float: right;
+}
+body.Listing .Filters__search,
+body.Listing .Filters__perpage {
+  margin-right: 8px;
+}
+body.Listing .Filters__search {
+  width: 200px;
+}
+body.Listing .Filters__perpage {
+  width: 70px;
+}
+body.Listing .Filters__label {
+  margin-right: 4px;
+  font-size: 12px;
+}
+body.Listing .Noresults {
+  padding: 64px 0;
+  text-align: center;
+}
+body.Listing .Noresults__title {
+  font-size: 30px;
+  font-weight: 300;
+}
+body.Listing .Noresults__link {
+  margin: 0;
+}
+@media (max-width: 1023px) {
+  body.Listing .Filters__search {
+    width: 170px;
+  }
+}
+@media (max-width: 767px) {
+  body.Listing .Filters__filter--totals,
+  body.Listing .Filters__filter--form {
+    text-align: center;
+    float: none;
+  }
+  body.Listing .Filters__filter--totals {
+    margin: 0 0 18px;
+  }
+}
+@media (max-width: 479px) {
+  body.Listing .Filters__search,
+  body.Listing .Filters__perpage {
+    width: 100%;
+    margin: 0 0 6px;
+  }
+  body.Listing .Filters__label {
+    margin: 0 0 6px;
+    display: inline-block;
+  }
+  body.Listing .Filters .Form__button {
+    width: 100%;
   }
 }
 

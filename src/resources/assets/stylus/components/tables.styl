@@ -1,0 +1,40 @@
+
+// Lisitng grid table
+.List
+    width: 100%
+    
+    th, td
+        width: 1%
+        padding: 10px
+        white-space: nowrap
+        vertical-align: middle
+        text-align: left
+    th
+        font-weight: 600
+        border-bottom: solid 2px $Color__grey--2
+        a 
+            width: 100%
+            height: 100%
+            color: #000 !important
+            text-decoration: none !important
+            display: block
+        .fa
+            color: $Color__orange--1
+            font-size: 12px
+    
+    tbody tr:nth-child(odd) td 
+        background: $Color__grey--5
+    
+    &__buttons
+        padding-top: 0 !important
+        padding-left: 0 !important
+        padding-right: 0 !important
+    &__main
+        width: auto !important
+        font-weight: 600
+        white-space: normal !important
+    &__action
+        font-size: 22px
+        &--edit
+            color: $Color__green--1 !important
+    

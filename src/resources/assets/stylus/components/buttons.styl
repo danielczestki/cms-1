@@ -3,10 +3,10 @@
  */
 
 // Standard, globalised button (use on <a>, <button> and input[type=submit])
-.Button
+.Button, .Form__button
     transition: background .2s ease-in
     margin: 0
-    padding: 0
+    padding: 0 18px
     border: 0 
     background: none
     color: $Color__body--text
@@ -21,11 +21,42 @@
     user-select: none
     display: inline-block
     
+    // elements
+    &__icon
+        text-align: center
+        line-height: inherit
+        left: 0
+        top: 0
+        bottom: 0
+        position: absolute
+    
     // modifiers
     &--stretch
         width: 100%
+        padding-left: 0
+        padding-right: 0
+    &--icon
+        position: relative
         
     // sizes
+    &--tiny
+        height: 32px
+        font-size: 14px
+        line-height: 30px
+        &.Button--icon
+            padding-left: 40px
+        .Button__icon
+            width: 32px
+            line-height: 32px
+    &--small
+        height: 40px
+        font-size: 16px
+        line-height: 38px
+        &.Button--icon
+            padding-left: 50px
+        .Button__icon
+            width: 40px
+            line-height: 40px
     &--medium
         height: 50px
         font-size: 18px
@@ -34,9 +65,19 @@
     // colours
     &--orange
         background: $Color__orange--1
-        color: #fff
-        &:hover
+        color: #fff !important
+        &:hover, .Button__icon
             background: darken($Color__orange--1, 15%)
+    &--red
+        background: $Color__red--1
+        color: #fff !important
+        &:hover, .Button__icon
+            background: darken($Color__red--1, 15%)
+    &--blue
+        background: $Color__blue--4
+        color: #fff !important
+        &:hover, .Button__icon
+            background: darken($Color__blue--4, 15%)
     
 // fix Firefox's padding inside certain form elements
 .btn::-moz-focus-inner, button::-moz-focus-inner, input::-moz-focus-inner

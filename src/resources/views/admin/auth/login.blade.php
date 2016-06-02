@@ -1,6 +1,6 @@
 @extends("cms::admin.layouts.bare")
 
-@section("body_class", "session")
+@section("body_class", "Session")
 @section("title", "Login")
 
 @section("content")
@@ -9,7 +9,7 @@
         <i class="Logo Logo--grey Logo--background Logo--flex">Thin Martian CMS</i>
         <fieldset>
             <div class="Session-field">
-                {{ Form::email("email", null, ["placeholder" => "Email address", "autofocus" => "autofocus"]) }}
+                {{ Form::email("email", null, ["placeholder" => "Email address", "autofocus" => "autofocus", "class" => "Form__input"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("email"))
                         {{ $errors->first("email") }}
@@ -17,7 +17,7 @@
                 </small>
             </div>
             <div class="Session-field">
-                {{ Form::password("password", ["placeholder" => "Password"]) }}
+                {{ Form::password("password", ["placeholder" => "Password", "class" => "Form__input"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("password"))
                         {{ $errors->first("password") }}

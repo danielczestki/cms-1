@@ -1,6 +1,3 @@
-/**
- * Site form elements and layouts
- */
  
  // Placeholders
 ::-webkit-input-placeholder
@@ -23,44 +20,50 @@ input:focus, select:focus, textarea:focus, button:focus
 ::-ms-clear
     display: none
     
-// Elements
+// Global/resets
 input, textarea, select
-    transition: border-color .2s ease-in
-    width: 100%
     margin: 0
-    padding: 14px
     background: #fff
     font-family: $Font__base--family
     font-size: 100%
-    color: $Color__body--text
-    border: solid 1px $Color__grey--2
-    &:focus
-        border-color: $Color__orange--1 !important
+    text-align: left
 textarea
     overflow: auto
-input[type=checkbox], input[type=radio]
-    width: auto
-    padding: 0
-label
-    display: inline-block
 .checkbox, .radio
-    padding-left: 20px
     cursor: pointer
-    display: block
-    &--inline 
-        margin-right: 12px
-        display: inline-block
-    input[type=checkbox], input[type=radio]
-        margin-left: -20px
-        top: 1px
-        position: relative
         
-.Form 
+// Form Elements
+.Form
+    $default-height = 48px
+    $small-height = 34px
+    &__input, &__select
+        transition: border-color .2s ease-in
+        width: 100%
+        height: $default-height
+        padding-left: 14px
+        color: $Color__body--text
+        border: solid 1px $Color__grey--2
+        vertical-align: top
+        &:focus
+            border-color: $Color__orange--1 !important
+        &--small
+            height: $small-height
+            padding-left: 10px
+            font-size: 12px
+    &__input
+        padding-right: 14px
     &__checkbox
         padding: 0 0 0 24px
         position: relative
         input[type=checkbox]
             left: 0
-            top: 4px
+            top: 3px
             position: absolute
-        
+    &__button
+        height: $default-height
+        &--small
+            height: $small-height
+            line-height: $small-height
+            font-size: 14px
+            padding-left: 10px
+            padding-right: 10px

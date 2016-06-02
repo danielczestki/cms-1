@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
     
     <link rel="icon" href="{{ asset('vendor/cms/favicon.png') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Droid+Sans+Mono">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('vendor/cms/css/app.css') }}">
     {{-- Output any custom/specific stylesheets --}}
@@ -47,6 +47,9 @@
     <main class="Main">
         @yield("content")  
     </main>
+    
+    <!-- Build version -->
+    <div class="Build">Build {{ CMSVERSION }}</div>
     
     {{-- Output any custom/specific javascripts --}}
     <script src="{{ asset('vendor/cms/js/app.js') }}"></script>

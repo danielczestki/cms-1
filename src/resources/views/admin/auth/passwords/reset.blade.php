@@ -1,6 +1,6 @@
 @extends("cms::admin.layouts.bare")
 
-@section("body_class", "session")
+@section("body_class", "Session")
 @section("title", "Change your Password")
 
 @section("content")
@@ -15,7 +15,7 @@
         <i class="Logo Logo--grey Logo--background Logo--flex">Thin Martian CMS</i>
         <fieldset>
             <div class="Session-field">
-                {{ Form::email("email", null, ["placeholder" => "Email address", "autofocus" => "autofocus"]) }}
+                {{ Form::email("email", null, ["placeholder" => "Email address", "autofocus" => "autofocus", "class" => "Form__input"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("email"))
                         {{ $errors->first("email") }}
@@ -23,7 +23,7 @@
                 </small>
             </div>
             <div class="Session-field">
-                {{ Form::password("password", ["placeholder" => "New password"]) }}
+                {{ Form::password("password", ["placeholder" => "New password", "class" => "Form__input"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("password"))
                         {{ $errors->first("password") }}
@@ -31,7 +31,7 @@
                 </small>
             </div>
             <div class="Session-field">
-                {{ Form::password("password_confirmation", ["placeholder" => "Confirm new password"]) }}
+                {{ Form::password("password_confirmation", ["placeholder" => "Confirm new password", "class" => "Form__input"]) }}
                 <small class="Session-error Utility--small">
                     @if ($errors->has("password_confirmation"))
                         {{ $errors->first("password_confirmation") }}

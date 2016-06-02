@@ -1,0 +1,58 @@
+
+body.Listing
+    
+    .Filters
+        &__filter
+            &--totals
+                padding-top: 6px
+                float: left
+                strong
+                    font-weight: bold
+            &--form
+                float: right
+        &__search, &__perpage
+            margin-right: 8px
+        &__search
+            width: 200px
+        &__perpage
+            width: 70px
+        &__label
+            margin-right: 4px
+            font-size: 12px
+    
+    .Noresults
+        padding: 64px 0
+        text-align: center
+        &__title
+            font-size: 30px
+            font-weight: 300
+        &__link
+            margin: 0
+        
+            
+    //
+    // Responsive
+    //
+    
+    +respond(all-devices)
+        .Filters
+            &__search
+                width: 170px
+    +respond(all-phones)
+        .Filters
+            &__filter
+                &--totals, &--form
+                    text-align: center
+                    float: none
+                &--totals
+                    margin: 0 0 18px
+    +respond(phone-portrait)
+        .Filters
+            &__search, &__perpage
+                width: 100%
+                margin: 0 0 6px
+            &__label
+                margin: 0 0 6px
+                display: inline-block
+            .Form__button
+                width: 100%

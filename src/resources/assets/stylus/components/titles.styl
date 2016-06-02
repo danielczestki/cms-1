@@ -1,0 +1,19 @@
+
+.Title
+    padding: 24px 0 32px
+    .h1
+        float: left
+    &__buttons
+        float: right
+        
+    //
+    // Responsive
+    //
+    
+    +respond(phone-portrait)
+        padding: 8px 0 24px
+        .h1, &__buttons
+            text-align: center
+            float: none
+        .h1
+            margin: 0 0 12px
