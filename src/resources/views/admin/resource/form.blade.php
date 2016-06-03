@@ -1,28 +1,34 @@
 @extends("cms::admin.layouts.default")
 
+@section("body_class", "Resource")
 @section("title", $subtitle . " - " . $title)
 
 @section("content")
     
-    <h1>{{ $title }}</h1>
-    <h2>{{ $subtitle }}</h2>
+    <!-- Title -->
+    <div class="Title Title--sub Utility--clearfix">
+        <div class="Title__titles">
+            <h1 class="h1">{{ $title }}</h1>
+            <h2 class="h2">{{ $subtitle }}</h2>
+        </div>
+        <div class="Title__buttons">
+            <a href="{{ cmsaction($controller . '@index', true, $filters) }}" class="Button Button--icon Button--small Button--grey">
+                <i class="Button__icon fa fa-chevron-circle-left"></i>
+                Back to listing
+            </a>
+        </div>
+    </div>
     
-    <a href="{{ cmsaction($controller . '@index', true, $filters) }}">Back to listing</a>
-    
-    <hr>
-    
+    <!-- Status messages -->
+    {{ CmsForm::error() }}
     {{ CmsForm::success() }}
     
+    <!-- Form -->
     {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)
-            
             {{ CmsForm::$data["type"]($data) }}
-            
         @endforeach
-        
-        {{ CmsForm::submit(["label" => "Save", "icon" => "check", "name" => "save"]) }}
-        {{ CmsForm::submit(["label" => "Save and exit", "icon" => "bars", "name" => "saveexit"]) }}
-        {{ CmsForm::cancel(["url" => cmsaction($controller . '@index', true, $filters)]) }}
+        {{ CmsForm::buttons() }}
     {{ CmsForm::close() }}
     
 @endsection

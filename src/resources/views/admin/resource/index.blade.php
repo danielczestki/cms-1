@@ -5,9 +5,11 @@
 
 @section("content")
     
-    <!-- Titles -->
+    <!-- Title -->
     <div class="Title Utility--clearfix">
-        <h1 class="h1">{{ $title }}</h1>
+        <div class="Title__titles">
+            <h1 class="h1">{{ $title }}</h1>
+        </div>
         <div class="Title__buttons">
             <a href="{{ cmsaction($controller . "@create", true, $filters) }}" class="Button Button--icon Button--small Button--blue">
                 <i class="Button__icon fa fa-plus-circle"></i>
@@ -55,7 +57,7 @@
                 <table class="List">
                     <thead>
                         <tr>
-                            <td class="List__buttons" colspan="{{ count($columns) + 2 }}">
+                            <td class="List__keep List__buttons" colspan="{{ count($columns) + 2 }}">
                                 <button type="submit" class="Button Button--icon Button--tiny Button--red">
                                     <i class="Button__icon fa fa-trash"></i>
                                     Delete selected
@@ -63,11 +65,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>{{ Form::checkbox("bla", 1) }}</th>
+                            <th class="List__keep">{{ Form::checkbox("bla", 1) }}</th>
                             <?php $i = 0; ?>
                             @foreach($columns as $idx => $column)
                                 <?php $i++; ?>
-                                <th class="{{ $i == 2 ? 'List__main' : null }}">
+                                <th class="{{ $i == 2 ? 'List__keep List__main' : null }}">
                                     @if (isset($column["sortable"]) and $column["sortable"])
                                         <a href="{{ cmsaction($controller . "@index", true, array_merge($filters, CmsForm::sortString($idx))) }}">
                                     @endif
@@ -84,11 +86,11 @@
                     <tbody>
                         @foreach($listing as $idx => $record)
                             <tr>
-                                <td>{{ Form::checkbox("ids[]", $record->id) }}</td>
+                                <td class="List__keep List__check">{{ Form::checkbox("ids[]", $record->id) }}</td>
                                 <?php $i = 0; ?>
                                 @foreach($columns as $idx => $column)
                                     <?php $i++; ?>
-                                    <td class="{{ $i == 2 ? 'List__main' : null }}">
+                                    <td class="{{ $i == 2 ? 'List__keep List__main' : null }}">
                                         @if ($i == 2)
                                             <a href="{{ cmsaction($controller . '@edit', true, array_merge(['id' => $record->id], $filters)) }}">
                                         @endif
@@ -116,56 +118,10 @@
     </div>
     
     <!-- Paging -->
-    {!! $listing->appends($filters)->links() !!}
-    
-    <?php /* ?>
-    
-    
-        
-    {{ CmsForm::error() }}
-    {{ CmsForm::success() }}
-    
-    @if ($listing->total())
-        {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy?" . http_build_query($filters)]) }}
-            <aside>{{ Form::button("delete selected", ["type" => "submit"]) }}</aside>
-            <table width="100%">
-                <tr>
-                    <td></td>
-                    @foreach($columns as $idx => $column)
-                        <th align="left">
-                            @if (isset($column["sortable"]) and $column["sortable"])
-                                <a href="{{ cmsaction($controller . "@index", true, array_merge($filters, CmsForm::sortString($idx))) }}">
-                            @endif
-                            {{ $column["label"] }}
-                            {{ CmsForm::sorted($idx) }}
-                            @if (isset($column["sortable"]) and $column["sortable"])
-                                </a>
-                            @endif
-                        </th>
-                    @endforeach
-                        <td colspan="2"></td>
-                </tr>
-                @foreach($listing as $record)
-                    <tr>
-                        <td>{{ Form::checkbox("ids[]", $record->id) }}</td>
-                        @foreach($columns as $idx => $column)
-                            <td>{{ $record->$idx }}</td>
-                        @endforeach
-                        <td><a href="{{ cmsaction($controller . '@edit', true, array_merge(['id' => $record->id], $filters))}} ">Edit</a></td>
-                    </tr>
-                @endforeach
-            </table>
-        {{ Form::close() }}
-    @else
-        <p>No records to show you</p>
-        @if (request()->has("search"))
-            <p><a href="{{ cmsaction($controller . "@index", true) }}">Show all results</a></p>
-        @endif
+    @if ($listing->hasPages())
+    <div class="Box Paging">
+        {!! $listing->appends($filters)->links() !!}
+    </div>
     @endif
-    
-    {!! $listing->appends($filters)->links() !!}
-    
-    
-    <?php */ ?>
     
 @endsection

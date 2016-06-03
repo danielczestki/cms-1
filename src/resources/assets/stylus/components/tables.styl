@@ -38,3 +38,12 @@
         &--edit
             color: $Color__green--1 !important
     
+    //
+    // Responsive
+    //
+    
+    +respond(all-devices)
+        th, td
+            display: none
+        &__keep
+            display: table-cell !important

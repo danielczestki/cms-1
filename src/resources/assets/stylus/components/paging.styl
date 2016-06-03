@@ -1,0 +1,27 @@
+
+.Paging
+    text-align: center
+    
+    .pagination
+        lost-utility: clearfix
+        li 
+            margin: 0 3px
+            display: inline-block
+            a, span
+                width: 30px
+                height: 30px
+                border: solid 1px $Color__grey--2
+                line-height: 30px
+                text-decoration: none !important
+                text-align: center
+                color: #000 !important
+                font-size: 12px
+                display: block
+            a:hover, &.active span
+                border-color: $Color__orange--1
+            &.active span
+                background: $Color__orange--1
+                color: #fff !important
+            &.disabled
+                opacity: .3
+                cursor: not-allowed

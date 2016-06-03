@@ -1,19 +1,29 @@
 
 .Title
     padding: 24px 0 32px
-    .h1
+    &__titles
         float: left
     &__buttons
         float: right
+        
+    &--sub
+        .Title__titles
+            margin-top: -8px
+        .Title__buttons
+            padding-top: 6px
+        .h2
+            margin-top: -4px
         
     //
     // Responsive
     //
     
-    +respond(phone-portrait)
+    +respond(all-phones)
         padding: 8px 0 24px
-        .h1, &__buttons
+        &__titles, &__buttons
+            margin-top: 0 !important
+            padding-top: 0 !important
             text-align: center
             float: none
-        .h1
+        &__titles
             margin: 0 0 12px

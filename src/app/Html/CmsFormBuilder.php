@@ -114,6 +114,7 @@ class CmsFormBuilder {
      */
     private function input($data)
     {
+        $data["class"] = @$data["class"] . " Form__input";
         return $this->render(view("cms::html.form.input", $this->buildData($data))); 
     }
     
@@ -135,6 +136,17 @@ class CmsFormBuilder {
     //
     // BUTTONS
     // 
+    
+    /**
+     * Render the surround for the generic button collection
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function buttons($data = [])
+    {
+       return $this->render(view("cms::html.form.buttons", $data)); 
+    }
     
     /**
      * Render a button[type=submit]

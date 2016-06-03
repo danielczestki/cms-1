@@ -36,6 +36,27 @@ textarea
 .Form
     $default-height = 48px
     $small-height = 34px
+    width: 100%
+    display: table
+    &__row
+        display: table-row
+        &:first-child
+            .Form__field, .Form__label
+                padding-top: 0
+        &:last-child
+            .Form__field, .Form__label
+                padding-bottom: 0
+                border-bottom: 0
+    &__label, &__field
+        padding: 18px 0
+        border-bottom: solid 1px $Color__grey--1
+        vertical-align: middle
+        display: table-cell
+    &__label
+        width: 25%
+    &__field
+        width: 75%
+        padding-left: 12px
     &__input, &__select
         transition: border-color .2s ease-in
         width: 100%
@@ -67,3 +88,65 @@ textarea
             font-size: 14px
             padding-left: 10px
             padding-right: 10px
+    &__required
+        color: $Color__red--1
+        font-family: "Droid Sans Mono"
+        font-size: 16px
+    &__info, &__error
+        padding: 5px 14px
+        font-size: 11px
+        border: solid 1px $Color__grey--2
+        text-shadow: 1px 1px 0 #fff
+        display: block
+        .fa 
+            margin-right: 4px
+    &__info
+        background: $Color__grey--1
+        border-top: 0
+        border-radius: 0 0 6px 6px
+        color: #888
+        .fa
+            color: $Color__blue--4
+    &__error
+        background: $Color__red--3
+        border-bottom: 0
+        border-radius: 6px 6px 0 0
+        color: $Color__red--2
+        font-weight: 600
+        .fa
+            color: $Color__red--2
+    &__buttons
+        float: left
+        button 
+            margin-right: 8px
+    &__cancel
+        float: right
+    &__destroy
+        padding: 44px 12px !important
+        text-align: center
+        font-size: 20px
+        font-weight: 300
+        p 
+            margin-bottom: 34px
+        
+//
+// Responsive
+//
+    
++respond(all-devices)
+    .Form
+        &__label
+            width: 30%
+        &__field
+            width: 60%
++respond(phone-portrait)
+    .Form, .Form__row, .Form__label, .Form__field
+        width: auto
+        display: block
+    .Form
+        &__label
+            padding-bottom: 8px !important
+            border: 0
+        &__field
+            padding-top: 0
+            padding-left: 0

@@ -77,3 +77,23 @@
             margin-left: $Dimension__nav-closed--width
         .Main 
             padding-left: $Dimension__nav-closed--width + $Dimension__main--padding
+            
+//
+// Responsive
+//
+
++respond(all-phones)
+    .Header__option--nav .fa-caret-left
+        display: none !important
+    .Primary, .Primary:after, .Primary__body, .Header__logo 
+        width: $Dimension__nav-closed--width !important
+    .Primary__option:hover
+        overflow: visible !important
+        .Primary__label
+            opacity: 1 !important
+    .Primary__label
+        opacity: 0 !important
+    .Header__body
+        margin-left: $Dimension__nav-closed--width !important
+    .Main 
+        padding-left: $Dimension__nav-closed--width + $Dimension__main--padding !important
