@@ -131,8 +131,7 @@ class CmsServiceProvider extends ServiceProvider
     {if (! app()->runningInConsole()) {
         // Tell the user to run build cos they haven't done it yet
         if (! file_exists(app_path("Cms"))) {
-            echo "Please run php artisan cms:build";
-            exit;
+            exit("<h1>Thin Martian CMS</h1><p>Please run php artisan cms:build</p>");
         }
         // do they have a admin user? they must have one?
         if (! \DB::table("cms_users")->count()) {

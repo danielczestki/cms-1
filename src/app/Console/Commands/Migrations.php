@@ -158,6 +158,7 @@ class Migrations extends Commands
             break;
             case "checkbox" :
             case "radio" :
+            case "boolean" :
                 $str .= $this->buildCheckbox($column, $data, "options");
             break;
             case "datetime" :

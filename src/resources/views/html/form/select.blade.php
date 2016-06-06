@@ -2,11 +2,7 @@
     @include("cms::html.form.label")
     <div class="Form__field">
         @include("cms::html.form._error")        
-        @if ($type == "password")
-            {{ Form::password($name, @$additional) }}
-        @else
-            {{ Form::$type($name, @$value, @$additional) }}    
-        @endif
+        {{ Form::select($name, $options, @$value, @$additional) }}
         @include("cms::html.form._info")
     </div>
 </div>

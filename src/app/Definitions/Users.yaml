@@ -14,7 +14,6 @@ fields:
     value: null # optional / do we want a default value
     validationOnCreate: "required|max:20" # optional / standard laravel validation piped string on creation
     validationOnUpdate: "required|max:20" # optional / standard laravel validation piped string on update
-    validationOnDelete: null # optional / standard laravel validation piped string on delete
     placeholder: "First name" # optional / placeholder for the field
     info: "Small tip of info for this field" # optional / small tooltip to appear alongside form
     infoUpdate: "Will override above on edit form" # optional / small tooltip to appear alongside form only on update (will override above info)

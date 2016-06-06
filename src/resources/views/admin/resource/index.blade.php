@@ -19,31 +19,33 @@
     </div>
     
     <!-- Filters -->
-    <aside class="Filters Box Utility--clearfix">
-        <div class="Filters__filter Filters__filter--totals">
-            @if ($listing->total())
-                Showing results <strong>{{ intval($listing->firstItem()) }}</strong> to <strong>{{ intval($listing->lastItem()) }}</strong> of <strong>{{ $listing->total() }}</strong> | 
-            @endif
+    @unless (! $listing->total() and ! request()->has("search"))
+        <aside class="Filters Box Utility--clearfix">
+            <div class="Filters__filter Filters__filter--totals">
+                @if ($listing->total())
+                    Showing results <strong>{{ intval($listing->firstItem()) }}</strong> to <strong>{{ intval($listing->lastItem()) }}</strong> of <strong>{{ $listing->total() }}</strong> | 
+                @endif
+                @unless (! $listing->total() and ! request()->has("search"))
+                    <a href="{{ cmsaction($controller . "@index", true) }}">Reset</a>
+                @endunless
+            </div>
             @unless (! $listing->total() and ! request()->has("search"))
-                <a href="{{ cmsaction($controller . "@index", true) }}">Reset</a>
+                {{ Form::open(["method" => "GET", "url" => url()->current(), "class" => "Filters__filter Filters__filter--form"]) }}
+                    {{ Form::hidden("sort", request()->get("sort")) }}
+                    <label for="search" class="Filters__label">Search</label>
+                    {{ Form::text("search", request()->get("search"), ["id" => "search", "placeholder" => "Filter results...", "class" => "Form__input Form__input--small Filters__search"]) }}
+                    <label for="records_per_page" class="Filters__label">Per page</label>
+                    {{ Form::select(
+                        "records_per_page",
+                        array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")),
+                        $perpage,
+                        ["id" => "records_per_page", "class" => "Form__select Form__select--small Filters__perpage"]
+                    )}}
+                    <button type="submit" class="Form__button Form__button--blue Form__button--small">GO</button>
+                {{ Form::close() }}
             @endunless
-        </div>
-        @unless (! $listing->total() and ! request()->has("search"))
-            {{ Form::open(["method" => "GET", "url" => url()->current(), "class" => "Filters__filter Filters__filter--form"]) }}
-                {{ Form::hidden("sort", request()->get("sort")) }}
-                <label for="search" class="Filters__label">Search</label>
-                {{ Form::text("search", request()->get("search"), ["id" => "search", "placeholder" => "Filter results...", "class" => "Form__input Form__input--small Filters__search"]) }}
-                <label for="records_per_page" class="Filters__label">Per page</label>
-                {{ Form::select(
-                    "records_per_page",
-                    array_combine(config("cms.cms.records_per_page_options"), config("cms.cms.records_per_page_options")),
-                    $perpage,
-                    ["id" => "records_per_page", "class" => "Form__select Form__select--small Filters__perpage"]
-                )}}
-                <button type="submit" class="Form__button Form__button--blue Form__button--small">GO</button>
-            {{ Form::close() }}
-        @endunless
-    </aside>
+        </aside>
+    @endunless
     
     <!-- Status messages -->
     {{ CmsForm::error() }}

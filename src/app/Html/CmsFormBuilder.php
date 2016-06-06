@@ -12,7 +12,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate"];
+    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options"];
     
     //
     // FORM
@@ -83,6 +83,19 @@ class CmsFormBuilder {
     }
     
     /**
+     * Render a input[type=number]
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function number($data = [])
+    {
+        $data["type"] = "number";
+        $data["min"] = 0;
+        return $this->input($data, "number");
+    }
+    
+    /**
      * Render a input[type=password]
      * 
      * @param  array  $data The element attributes
@@ -110,17 +123,75 @@ class CmsFormBuilder {
      * Renders most input[type=$type]
      * 
      * @param  array  $data The element attributes
+     * @param  string $type the elemnt type to be sent down (optional)
      * @return string
      */
-    private function input($data)
+    private function input($data, $type = null)
     {
         $data["class"] = @$data["class"] . " Form__input";
-        return $this->render(view("cms::html.form.input", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.input", $this->buildData($data, $type))); 
+    }
+    
+    //
+    // SELECT
+    // 
+    
+    /**
+     * Render a select
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function select($data = [])
+    {
+        $data["class"] = @$data["class"] . " Form__select";
+        $data["options"] = ["" => "Please Select..."] + $data["options"];
+        return $this->render(view("cms::html.form.select", $this->buildData($data))); 
+    }
+    
+    //
+    // TEXTAREA AND WYSIWYG
+    // 
+    
+    /**
+     * Render a textarea
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function textarea($data = [])
+    {
+        $data["class"] = @$data["class"] . " Form__textarea";
+        $data["rows"] = isset($data["rows"]) ? $data["rows"] : 3;
+       return $this->render(view("cms::html.form.textarea", $this->buildData($data))); 
+    }
+    
+    /**
+     * Render a wysiwyg
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function wysiwyg($data = [])
+    {
+       return $this->render(view("cms::html.form.wysiwyg", $this->buildData($data))); 
     }
     
     //
     // CHECKBOX AND RADIOS
     // 
+    
+    /**
+     * Render a boolean (radios)
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function boolean($data = [])
+    {
+        $data["class"] = @$data["class"] . " Form__radio";
+        return $this->render(view("cms::html.form.boolean", $this->buildData($data))); 
+    }
     
     /**
      * Render a input[type=checkbox]
@@ -130,7 +201,46 @@ class CmsFormBuilder {
      */
     public function checkbox($data = [])
     {
-       return $this->render(view("cms::html.form.checkbox", $this->buildData($data))); 
+        $data["class"] = @$data["class"] . " Form__checkbox";
+        return $this->render(view("cms::html.form.checkbox", $this->buildData($data))); 
+    }
+    
+    /**
+     * Render a input[type=radio]
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function radio($data = [])
+    {
+        $data["class"] = @$data["class"] . " Form__radio";
+        return $this->render(view("cms::html.form.radio", $this->buildData($data))); 
+    }
+    
+    //
+    // DATES
+    // 
+    
+    /**
+     * Render a datetime picker
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function datetime($data = [])
+    {
+       return $this->render(view("cms::html.form.datetime", $this->buildData($data))); 
+    }
+    
+    /**
+     * Render a date picker
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function date($data = [])
+    {
+       return $this->render(view("cms::html.form.date", $this->buildData($data))); 
     }
     
     //
@@ -242,13 +352,19 @@ class CmsFormBuilder {
      * Build the data array so they can add custom attrs (e.g. data-*)
      * 
      * @param  array  $data The element attributes
+     * @param  string $type the elemnt type to be sent down (optional)
      * @return array
      */
-    private function buildData($data = [])
+    private function buildData($data = [], $type = null)
     {
         $data["additional"] = array_except($data, $this->attributeSchema);
         $data["additional"]["maxlength"] = $this->getMaxLength($data);
         $data["required"] = $this->isRequired($data);
+        $data["additional"]["id"] = "f-{$data['name']}";
+        if ($type == "number") {
+            unset($data["additional"]["maxlength"]);
+            $data["additional"]["max"] = $this->getMaxLength($data);
+        }
         return $data;
     }
     
