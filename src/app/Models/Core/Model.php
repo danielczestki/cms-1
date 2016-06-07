@@ -3,9 +3,12 @@
 namespace Thinmartian\Cms\App\Models\Core;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Thinmartian\Cms\App\Models\Core\Setter;
 
 class Model extends BaseModel
 {
+    
+    use Setter;
     
     /**
      * Construct the CMS model
@@ -17,14 +20,8 @@ class Model extends BaseModel
     {
         parent::__construct($attributes);
         $this->setCmsFillable();
+        $this->setCmsDates();
     }
     
-    /**
-     * Read the YAML and build the fillable fields
-     */
-    protected function setCmsFillable()
-    {
-        $this->fillable(cmsfillable($this->yaml));
-    }
     
 }

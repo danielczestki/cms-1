@@ -6,7 +6,13 @@ define("APPNAMESPACE", "\App\Cms\Http\Controllers\\");
 
 
 if (! function_exists("in_nav")) {
-    
+    /**
+     * Determine if we are in this nav item and set it to on
+     * 
+     * @param  string $controller The controller name
+     * @param  string $action     The action we are in
+     * @return string
+     */
     function in_nav($controller = null, $action = null)
     {
         $route = request()->route()->getAction();
@@ -23,9 +29,6 @@ if (! function_exists("in_nav")) {
         }
     }
 }
-
-
-
 
 if (! function_exists("gravatar")) {
     /**
@@ -69,29 +72,5 @@ if (! function_exists("de")) {
         }, func_get_args());
 
         die(1);
-    }
-}
-
-if (! function_exists("cmsfillable")) {
-    /**
-     * Builds the fillable array for models, here so it can be shared
-     * with the special/stock CmsUser model which doesn't extend the
-     * core Model like all others
-     * 
-     * @param string $yaml
-     * @return array
-     */
-    function cmsfillable($yaml)
-    {
-        $arr = [];
-        $parser = new \Symfony\Component\Yaml\Parser;
-        $yaml = $parser->parse(file_get_contents(app_path("Cms/Definitions/{$yaml}.yaml")));
-        $fields = $yaml["fields"];
-        foreach ($fields as $idx => $data) {
-            if (array_key_exists("persist", $data) and ! $data["persist"]) {} else {
-                $arr[] = $idx;
-            }
-        }
-        return $arr;
     }
 }

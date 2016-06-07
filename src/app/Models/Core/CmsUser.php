@@ -3,9 +3,12 @@
 namespace Thinmartian\Cms\App\Models\Core;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Thinmartian\Cms\App\Models\Core\Setter;
 
 class CmsUser extends Authenticatable
 {
+    
+    use Setter;
     
     /**
      * Set the YAML config filename
@@ -27,7 +30,7 @@ class CmsUser extends Authenticatable
      * @var array
      */
     protected $hidden = [
-       'password', 'remember_token',
+       "password", "remember_token",
     ];
     
     /**
@@ -39,7 +42,8 @@ class CmsUser extends Authenticatable
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->fillable(cmsfillable($this->yaml));        
+        $this->setCmsFillable();
+        $this->setCmsDates();       
     }
     
     /**

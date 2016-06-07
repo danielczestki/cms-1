@@ -242,7 +242,7 @@ class CmsFormBuilder {
      */
     public function date($data = [])
     {
-       return $this->render(view("cms::html.form.date", $this->buildData($data))); 
+       return $this->render(view("cms::html.form.datetime", $this->buildData($data))); 
     }
     
     //
