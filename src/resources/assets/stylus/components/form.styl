@@ -86,8 +86,13 @@ textarea
             left: 0
             top: 3px
             position: absolute
-    &__radios .Form__input-label:first-child
+    &__radios .Form__input-label
         margin-right: 18px
+    &__checkboxes .Form__input-label
+        width: 33.3333%
+        margin: 0 0 6px
+        padding-right: 8px
+        float: left
     &__button
         height: $default-height
         &--small
@@ -123,12 +128,12 @@ textarea
         font-weight: 600
         .fa
             color: $Color__red--2
-    &__radios .Form__info, &__radios .Form__error
+    &__radios .Form__info, &__radios .Form__error, &__checkboxes .Form__info, &__checkboxes .Form__error
         border: 0
         background: none
-    &__radios .Form__info
+    &__radios .Form__info, &__checkboxes .Form__info
         padding: 8px 0 0
-    &__radios .Form__error
+    &__radios .Form__error, &__checkboxes .Form__error
         padding: 0 0 8px
     &__buttons
         float: left

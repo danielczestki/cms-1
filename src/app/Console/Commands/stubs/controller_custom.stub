@@ -97,4 +97,26 @@ class {classname} extends Core{classname}
         //
     }
     
+    /**
+     * Before  deleting resource(s)
+     * 
+     * @param  array $ids
+     * @return void
+     */
+    protected function destroying($ids = [])
+    {
+        // 
+    }
+    
+    /**
+     * After  deleting resource(s)
+     * 
+     * @param  array $ids
+     * @return void
+     */
+    protected function destroyed($ids = [])
+    {
+        // 
+    }
+    
 }

@@ -161,10 +161,15 @@ abstract class Controller extends BaseController
         if (! request()->get("ids")) return redirect()->back()->withError("Please select the ". strtolower(str_plural($this->name)) ." you want to delete");
         // this page is two step, if they havent confirmed, show them confirmation
         if (! request()->has("_confirmed")) return view("cms::admin.resource.destroy", compact("subtitle"));
+        if (method_exists($this, "destroying")) {
+            $this->destroying(request()->get("ids"));
+        }
         // they have confirmed, it's time to destroy!
         $this->deleteResources(request()->get("ids"));
+        if (method_exists($this, "destroyed")) {
+            $this->destroyed(request()->get("ids"));
+        }
         return $this->redirect("destroy");
-        
     }
     
     
