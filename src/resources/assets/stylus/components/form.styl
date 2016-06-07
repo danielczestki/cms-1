@@ -74,7 +74,7 @@ textarea
             padding-left: 10px
             font-size: 12px
     &__input, &__textarea
-        padding-right: 14px
+        padding-right: 14px            
     &__textarea
         height: auto
         padding-top: 14px
@@ -148,6 +148,27 @@ textarea
         font-weight: 300
         p 
             margin-bottom: 34px
+    &__symbol
+        width: $default-height
+        height: $default-height
+        text-align: center
+        line-height: $default-height
+        border: solid 1px $Color__grey--2
+        background: $Color__grey--1
+        .fa 
+            font-size: 18px
+        &--prefix
+            border-right: 0
+            float: left
+        &--suffix
+            border-left: 0
+            float: right
+    &--prefixed, &--suffixed
+        .Form__control
+            width: "calc(100% - %s)" % $default-height
+.Form--prefixed.Form--suffixed
+    .Form__control
+        width: calc(100% - 48px - 48px)
         
 //
 // Responsive

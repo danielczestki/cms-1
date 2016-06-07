@@ -5,8 +5,20 @@
 
 import $ from "jquery";
 import slimScroll from "../vendor/jquery-slimscroll.js";
+import Pikaday from "pikaday-time";
 
 (function(){
+  
+  /**
+   * Hook up a pikaday time plugin to all the date fields
+   */
+  Array.prototype.forEach.call(document.getElementsByClassName("Form__input--date"), (el) => {
+    new Pikaday({
+      field: el,
+      showTime: Boolean(el.getAttribute("data-time")),
+      incrementMinuteBy: 5
+    });
+  });
   
   /**
    * Hook up the slimScroll jQuery plugin to the primary nav.

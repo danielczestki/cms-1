@@ -5,9 +5,7 @@ import "./plugins/ui";
  * Init the app
  */
 new Vue({
-  
   el: "#app",
-  
   data: {
     nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method
     nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
@@ -35,5 +33,4 @@ new Vue({
       }, 1000)
     }
   }
-  
 });

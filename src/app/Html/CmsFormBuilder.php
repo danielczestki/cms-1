@@ -12,7 +12,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options"];
+    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options", "prefix", "suffix"];
     
     //
     // FORM
@@ -231,7 +231,7 @@ class CmsFormBuilder {
      */
     public function datetime($data = [])
     {
-       return $this->render(view("cms::html.form.datetime", $this->buildData($data))); 
+        return $this->_date($data, true);
     }
     
     /**
@@ -242,7 +242,19 @@ class CmsFormBuilder {
      */
     public function date($data = [])
     {
-       return $this->render(view("cms::html.form.datetime", $this->buildData($data))); 
+        return $this->_date($data, false);
+    }
+    
+    /**
+     * Return the date/time picker
+     */
+    private function _date($data, $time = false)
+    {
+        $data["data-time"] = $time;
+        $data["readonly"] = "readonly";
+        $data["prefix"] = "<i class='fa fa-calendar-o'></i>";
+        $data["class"] = @$data["class"] . " Form__input Form__input--date";
+        return $this->render(view("cms::html.form.datetime", $this->buildData($data))); 
     }
     
     //
@@ -359,6 +371,7 @@ class CmsFormBuilder {
      */
     private function buildData($data = [], $type = null)
     {
+        $data["class"] = @$data["class"] . " Form__control";
         $data["additional"] = array_except($data, $this->attributeSchema);
         $data["additional"]["maxlength"] = $this->getMaxLength($data);
         $data["required"] = $this->isRequired($data);
