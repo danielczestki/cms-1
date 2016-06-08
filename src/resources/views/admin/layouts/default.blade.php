@@ -52,6 +52,7 @@
     <div class="Build">Build {{ CMSVERSION }}</div>
     
     {{-- Output any custom/specific javascripts --}}
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ asset('vendor/cms/js/app.js') }}"></script>
     @yield("js")
 </div></body>

@@ -10,6 +10,23 @@ import Pikaday from "pikaday-time";
 (function(){
   
   /**
+   * Init the tinymce editors. We don't use a Vuejs component here as we
+   * want to utlise the form model binding without any config, this way
+   * this work automatically.
+   */
+  tinymce.init({
+    selector: ".Form__wysiwyg",
+    statusbar: false,
+    menubar: "edit insert table tools",
+    toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat",
+    content_css: "/vendor/cms/css/wysiwyg.css",
+    plugins: "link autolink image code paste searchreplace anchor charmap table",
+    paste_word_valid_elements: "b,strong,i,em,h1,h2,a",
+    paste_webkit_styles: "color font-size",
+    paste_retain_style_properties: "color font-size"
+  });
+  
+  /**
    * Hook up a pikaday time plugin to all the date fields
    */
   Array.prototype.forEach.call(document.getElementsByClassName("Form__input--date"), (el) => {
