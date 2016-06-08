@@ -25359,6 +25359,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     paste_retain_style_properties: "color font-size"
   });
 
+  // Insert contet at the current cursor position ("f-body" is the ID of the textarea)
+  // tinymce.get("f-body").execCommand("mceInsertContent", false, "INSERT ME HERE");
+
   /**
    * Hook up a pikaday time plugin to all the date fields
    */
