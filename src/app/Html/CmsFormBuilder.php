@@ -175,7 +175,7 @@ class CmsFormBuilder {
     public function wysiwyg($data = [])
     {
         $data["class"] = @$data["class"] . " Form__textarea Form__wysiwyg";
-        $data["rows"] = isset($data["rows"]) ? $data["rows"] : 30;
+        $data["rows"] = isset($data["rows"]) ? $data["rows"] : 27;
        return $this->render(view("cms::html.form.wysiwyg", $this->buildData($data))); 
     }
     

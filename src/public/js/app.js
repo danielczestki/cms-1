@@ -25350,13 +25350,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   tinymce.init({
     selector: ".Form__wysiwyg",
     statusbar: false,
-    menubar: "edit insert table tools",
+    menubar: "edit insert table view tools",
     toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat",
     content_css: "/vendor/cms/css/wysiwyg.css",
-    plugins: "link autolink image code paste searchreplace anchor charmap table",
+    plugins: "link autolink image code paste searchreplace anchor charmap table imagetools hr contextmenu visualchars visualblocks",
+    paste_data_images: true,
     paste_word_valid_elements: "b,strong,i,em,h1,h2,a",
     paste_webkit_styles: "color font-size",
-    paste_retain_style_properties: "color font-size"
+    paste_retain_style_properties: "color font-size",
+    contextmenu: "cut copy paste | bold italic | link image inserttable"
   });
 
   // Insert contet at the current cursor position ("f-body" is the ID of the textarea)
