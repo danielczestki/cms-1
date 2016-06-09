@@ -22,6 +22,8 @@ Update your Laravel `config/app.php` file by adding the below to the `providers`
 
     Thinmartian\Cms\CmsServiceProvider::class,
 
+Now update your Laravel database config like normal by editing the `.env` in the root of your application. Ensure you have a successful connection to your database before proceeding.
+
 Finally, open up a terminal and `cd` to the root of your Laravel install and run:
 
     php artisan cms:build
@@ -79,6 +81,12 @@ Make changes to the `autoload` section so it looks like this:
 
 We use two psr-4 loaders, as the CMS tries to conform to the exact same folder structure as Laravel, which means a lowercase `app/` directory. Not having the `Thinmartian\\Cms\\App\\` loader would cause errors on `composer update`'s as `php artisan optmize` would not be able to find a `/App` directory before a `composer dump`, and Laravel runs this command on it's own `post-update-cmd` before any `composer dump`'s.
 
+Now look in the `packages/thinmartian/cms/composer.json` and copy across all the `require` packages that don't already exist in the root `composer.json` file, then:
+
+    composer update
+
+This will pull in the packages. As we haven't "installed" the CMS, composer knows nothing about our `packages/thinmartian/cms` vendor directory, so it won't load our packages from there, so in development we have to pull them in from the main Laravel app instead.
+
 ### Edit your Laravel config
 
 Now we need to tell Laravel about our development version of Thin Martian CMS, open up your `config/app.php` in the root of your Laravel install and add the following to your `providers` array:
@@ -134,3 +142,8 @@ If, for whatever reason you want to reset the entire CMS back to pre-install sta
     php artisan cms:destroy
 
 **IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions.
+
+
+## YAML Definition API
+
+Coming soon!
