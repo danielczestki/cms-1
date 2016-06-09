@@ -16,6 +16,11 @@ class Commands extends Command
     protected $created = false;
     
     /**
+     * @var Thinmartian\Cms\App\Services\Cms
+     */
+    protected $cms;
+    
+    /**
      * @var Symfony\Component\Yaml\Parser
      */
     protected $yaml;
@@ -33,13 +38,6 @@ class Commands extends Command
     const TABLEPREFIX = "cms";
     
     /**
-     * Ignore these yaml files (e.g. Users as it's special)
-     * 
-     * @var array
-     */
-    protected $ignore = ["Users.yaml"];
-    
-    /**
      * Create a new command instance.
      *
      * @return void
@@ -48,6 +46,7 @@ class Commands extends Command
     {
         parent::__construct();
         $this->yaml = new Parser;
+        $this->cms = app()->make("Thinmartian\Cms\App\Services\Cms");
         $this->yamlPath = app_path("Cms/Definitions/");
     }
     

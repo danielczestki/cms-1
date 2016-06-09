@@ -14,12 +14,14 @@ namespace Thinmartian\Cms\App\Services;
 class Cms {
     
     /**
-     * Protected YAML definition files (we do not alter or delete these in code)
+     * Protected files that we never delete/touch
      * 
      * @var array
      */
-    protected $protectedYamls = [
-        "Users"
+    protected $protectedFiles = [
+        ".gitkeep",
+        ".gitignore",
+        "readme.md"
     ];
     
     /**
@@ -29,9 +31,9 @@ class Cms {
      * @var array
      */
     protected $protectedControllers = [
-        "Controller",
-        "Auth/AuthController",
-        "Auth/PasswordController"
+        "Controller.php",
+        "AuthController.php",
+        "PasswordController.php"
     ];
     
     /**
@@ -41,9 +43,64 @@ class Cms {
      * @var array
      */
     protected $protectedModels = [
-       "CmsUser",
-       "Model",
-       "Setter" 
+       "CmsUser.php",
+       "Model.php",
+       "Setter.php" 
     ];
+    
+    /**
+     * Protected migrations (we do not alter or delete these in code)
+     * Only within the Package
+     * 
+     * @var array
+     */
+    protected $protectedMigrations = [
+       "2016_05_16_000000_create_cms_users_table.php",
+       "2016_05_16_100000_create_cms_password_resets_table.php"
+    ];
+    
+    
+    /**
+     * Return the protected files
+     * 
+     * @return array
+     */
+    public function getProtectedFiles()
+    {
+        return $this->protectedFiles;
+    }
+    
+    /**
+     * Return the protected controllers
+     * 
+     * @param  boolean  $includeFiles  prefix with the protectedFiles array
+     * @return array
+     */
+    public function getProtectedControllers($includeFiles = true)
+    {
+        return $includeFiles ? array_merge($this->getProtectedFiles(), $this->protectedControllers) : $this->protectedControllers;
+    }
+    
+    /**
+     * Return the protected models
+     * 
+     * @param  boolean  $includeFiles  prefix with the protectedFiles array
+     * @return array
+     */
+    public function getProtectedModels($includeFiles = true)
+    {
+        return $includeFiles ? array_merge($this->getProtectedFiles(), $this->protectedModels) : $this->protectedModels;
+    }
+    
+    /**
+     * Return the protected migrations
+     * 
+     * @param  boolean  $includeFiles  prefix with the protectedFiles array
+     * @return array
+     */
+    public function getProtectedMigrations($includeFiles = true)
+    {
+        return $includeFiles ? array_merge($this->getProtectedFiles(), $this->protectedMigrations) : $this->protectedMigrations;
+    }
     
 }

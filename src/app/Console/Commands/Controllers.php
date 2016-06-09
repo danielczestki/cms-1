@@ -85,7 +85,7 @@ class Controllers extends Commands
      */
     private function core($filename)
     {
-        $this->buildController($filename, $this->stubCorePath, $this->corePath);
+        $this->buildController("core", $filename, $this->stubCorePath, $this->corePath);
     }
     
     /**
@@ -96,26 +96,30 @@ class Controllers extends Commands
      */
     private function custom($filename)
     {
-        $this->buildController($filename, $this->stubCustomPath, $this->customPath);        
+        $this->buildController("custom", $filename, $this->stubCustomPath, $this->customPath);        
     }
     
     /**
      * Build the controller
      * 
+     * @param  string $type
      * @param  string $filename
      * @param  string $stubpath
      * @param  string $savepath
      * @return void
      */
-    private function buildController($filename, $stubpath, $savepath)
+    private function buildController($type, $filename, $stubpath, $savepath)
     {
         $classname = $this->getControllerName($filename);
+        $controllername = $classname . ".php";
+        // if the controller is protected do not add/edit/overwrite/delete... don't touch it hear me!
+        if ($type == "core" and in_array($controllername, $this->cms->getProtectedControllers(false))) return;
+        // we are good to write
         $name = $this->getFileName($filename);
         $stub = file_get_contents($stubpath);
         $controller = str_ireplace(["{classname}", "{name}"], [$classname, $name], $stub);
         // save the file
-        $modelname = $classname . ".php";
-        file_put_contents($savepath . "/" . $modelname, $controller);
+        file_put_contents($savepath . "/" . $controllername, $controller);
     }
     
     /**

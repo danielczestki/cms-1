@@ -76,10 +76,8 @@ class Models extends Commands
     public function handle()
     {
         foreach ($this->getYamlFiles() as $filename) {
-            if (! in_array($filename, $this->ignore)) {
-                $this->core($filename);
-                $this->custom($filename);
-            }
+            $this->core($filename);
+            $this->custom($filename);
         }
         $this->info("Models generated from YAML definitions successfully!");
     }
@@ -92,7 +90,7 @@ class Models extends Commands
      */
     private function core($filename)
     {
-        $this->buildModel($filename, $this->stubCorePath, $this->corePath);
+        $this->buildModel("core", $filename, $this->stubCorePath, $this->corePath);
     }
     
     /**
@@ -103,26 +101,30 @@ class Models extends Commands
      */
     private function custom($filename)
     {
-        $this->buildModel($filename, $this->stubCustomPath, $this->customPath);
+        $this->buildModel("custom", $filename, $this->stubCustomPath, $this->customPath);
     }
     
     /**
      * Build the model
      * 
+     * @param  string $type
      * @param  string $filename
      * @param  string $stubpath
      * @param  string $savepath
      * @return void
      */
-    private function buildModel($filename, $stubpath, $savepath)
+    private function buildModel($type, $filename, $stubpath, $savepath)
     {
         $classname = $this->getModelName($filename);
+        $modelname = $classname . ".php";
+        // if the model is protected do not add/edit/overwrite/delete... don't touch it hear me!
+        if ($type == "core" and in_array($modelname, $this->cms->getProtectedModels(false))) return;
+        // we are good to write
         $stub = file_get_contents($stubpath);
         $yaml = $this->getFilename($filename);
         $tablename = $this->getTablename($yaml);
         $model = str_ireplace(["{classname}", "{yaml}", "{tablename}"], [$classname, $yaml, $tablename], $stub);
         // save the file
-        $modelname = $classname . ".php";
         file_put_contents($savepath . "/" . $modelname, $model);
     }
     

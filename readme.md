@@ -10,6 +10,8 @@ Thin Martian CMS platform built on the Laravel PHP Framework
 
 ## Install
 
+> **TO DO: Package isn't currently on packagist, so use a `repositories: [{ type: 'vcs', url: 'path/to/git' }]` in your `composer.json` for now.**
+
 Firstly, install the latest version of Laravel the usual way you do it, then:
 
 Require the package from composer
@@ -113,6 +115,14 @@ If you get a phpunit error then:
 1. Install phpunit globally as per the PHPUnit website instructions
 2. Or, add `vendor/bin/phpunit` to your `$PATH`
 3. Or, call `./vendor/bin/phpunit` instead of just `phpunit`
+
+## Resetting the CMS
+
+If, for whatever reason you want to reset the entire CMS back to pre-install state you can do this by running:
+
+    php artisan cms:destroy
+
+**IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions.
 
 ## Assets
 

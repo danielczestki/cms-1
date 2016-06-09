@@ -35,6 +35,7 @@ class CmsServiceProvider extends ServiceProvider
         \Thinmartian\Cms\App\Console\Commands\Migrations::class,
         \Thinmartian\Cms\App\Console\Commands\Models::class,
         \Thinmartian\Cms\App\Console\Commands\Controllers::class,
+        \Thinmartian\Cms\App\Console\Commands\Destroy::class,
         \Thinmartian\Cms\App\Console\Commands\Version::class,
     ];
     
@@ -128,17 +129,16 @@ class CmsServiceProvider extends ServiceProvider
      * @return void
      */
     private function browserActions()
-    {if (! app()->runningInConsole()) {
+    {if (! app()->runningInConsole()) { if (request()->is("admin*")) {
         // Tell the user to run build cos they haven't done it yet
         if (! file_exists(app_path("Cms"))) {
-            exit("<h1>Thin Martian CMS</h1><p>Please run php artisan cms:build</p>");
+            exit(view("cms::admin.install.runcommand")->render());
         }
         // do they have a admin user? they must have one?
         if (! \DB::table("cms_users")->count()) {
-            echo "You don't have an admin user to login with. Please run php artisan cms:build again";
-            exit;
+            exit(view("cms::admin.install.missingadmin")->render());
         }
-    }}
+    }}}
     
     /**
      * Publish the stock definitions
