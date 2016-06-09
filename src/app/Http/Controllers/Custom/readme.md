@@ -1,1 +1,0 @@
-All controllers here are copied over from the Thin Martian CMS package and allow you to override/add to the core controllers.
