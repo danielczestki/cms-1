@@ -53,6 +53,16 @@ abstract class Controller extends BaseController
         $this->setModel();
         $this->input = $input;
         $this->sharedVars();
+        
+        
+        
+        
+        \CmsMedia::make(public_path("foo.jpg"))->resize(300, 200)->save(public_path("foo2.jpg"));
+        de("done");
+        
+        
+        
+        
     }
     
     /**

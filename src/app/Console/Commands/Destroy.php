@@ -88,6 +88,8 @@ class Destroy extends Command
             $this->destroyCmsFolder();
             //  Delete the public asset vendor folder
             $this->destroyAssetsFolder();
+            //  Delete the public config folder
+            $this->destroyConfigFolder();
             //  Delete all models
             $this->destroyModels();
             //  Delete all controllers
@@ -118,6 +120,16 @@ class Destroy extends Command
     protected function destroyAssetsFolder()
     {
         $this->filesystem->remove(public_path("vendor/cms"));
+    }
+    
+    /**
+     * Deletes the public config folder
+     * 
+     * @return void
+     */
+    protected function destroyConfigFolder()
+    {
+        $this->filesystem->remove(config_path("cms"));
     }
         
     /**

@@ -11,9 +11,9 @@ return [
     | dropdown that will appear on most listing pages.
     |
     */
-   
+
     "records_per_page" => 50,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Record per page options
@@ -23,9 +23,9 @@ return [
     | dictate the 'Results per page' dropdown
     |
     */
-   
+
     "records_per_page_options" => range(10, 200, 10),
-   
+
     /*
     |--------------------------------------------------------------------------
     | Default sorting
@@ -34,8 +34,21 @@ return [
     | Set the default sorting order and direction
     |
     */
-    
+
     "default_sort_column" => "id",
-    "default_sort_direction" => "desc"
+    "default_sort_direction" => "desc",
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Intervention image driver
+    |--------------------------------------------------------------------------
+    |
+    | Set the default default driver used by the intervention image library.
+    | We use 'gd' by default as this is more standard, but feel free to change
+    | to 'imagick' if preferred.
+    |
+    */
+   
+    "intervention_driver" => "gd",
    
 ];

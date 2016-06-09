@@ -12,6 +12,7 @@ use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
 use Thinmartian\Cms\App\Html\CmsFormBuilder;
 use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYamlService;
+use Thinmartian\Cms\App\Services\Media\Media as CmsMediaService;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -87,6 +88,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->updateConfig();
         $this->registerYaml();
         $this->registerFormBuilder();
+        $this->registerMedia();
         $this->registerCommands();
     }
     
@@ -130,7 +132,7 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function browserActions()
     {if (! app()->runningInConsole()) { if (request()->is("admin*")) {
-        // Tell the user to run build cos they haven't done it yet
+        // Tell the user to run build cos they haven"t done it yet
         if (! file_exists(app_path("Cms"))) {
             exit(view("cms::admin.install.runcommand")->render());
         }
@@ -273,22 +275,6 @@ class CmsServiceProvider extends ServiceProvider
             config(["auth.defaults.guard" => self::NAME]);
             config(["auth.defaults.passwords" => self::NAME]);
         }
-    }    
-    
-    /**
-     * Register the CMS form builder
-     * 
-     * @return void
-     */
-    private function registerFormBuilder()
-    {
-        $this->app->register(HtmlServiceProvider::class);
-        $this->app->singleton('cmsform', function ($app) {
-            return new CmsFormBuilder;
-        });
-        $this->app->alias("cmsform", CmsFormBuilder::class);
-        $this->loader->alias("Form", "Collective\Html\FormFacade");
-        $this->loader->alias("CmsForm", "Thinmartian\Cms\App\Facades\CmsFormFacade");
     }
     
     /**
@@ -298,11 +284,41 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function registerYaml()
     {
-        $this->app->singleton('cmsyaml', function ($app) {
+        $this->app->singleton("cmsyaml", function ($app) {
             return new CmsYamlService;
         });
         $this->app->alias("cmsyaml", CmsYamlService::class);
         $this->loader->alias("CmsYaml", "Thinmartian\Cms\App\Facades\CmsYamlFacade");
+    }
+    
+    /**
+     * Register the CMS form builder
+     * 
+     * @return void
+     */
+    private function registerFormBuilder()
+    {
+        $this->app->register(HtmlServiceProvider::class);
+        $this->app->singleton("cmsform", function ($app) {
+            return new CmsFormBuilder;
+        });
+        $this->app->alias("cmsform", CmsFormBuilder::class);
+        $this->loader->alias("Form", "Collective\Html\FormFacade");
+        $this->loader->alias("CmsForm", "Thinmartian\Cms\App\Facades\CmsFormFacade");
+    }
+    
+    /**
+     * Register the CMS Media
+     * 
+     * @return void
+     */
+    private function registerMedia()
+    {
+        $this->app->singleton("cmsmedia", function ($app) {
+            return new CmsMediaService;
+        });
+        $this->app->alias("cmsmedia", CmsMediaService::class);
+        $this->loader->alias("CmsMedia", "Thinmartian\Cms\App\Facades\CmsMediaFacade");
     }
     
 }
