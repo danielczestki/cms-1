@@ -101,8 +101,19 @@ Simply run the below from the root of your Laravel project and follow the instru
 
 Navigate to `/admin` in your browser and you should be presented with a login screen, enter the admin details you just created and you are ready to code.
 
+### Assets
 
-## Testing
+To compile assets, use the usual `gulp` or `gulp watch` from within the `src` folder (e.g. `packages/thinmartian/cms/src`).
+
+When a user uses the CMS all calls will be made to the laravel root `public/vendor/cms` folder, this would mean a `cms:build` artisan command would have to be run for every style change, this is far from ideal. So within your nginx conf, add something similar to the following to your `server` group
+
+    location ~ ^/vendor/cms/(.*)$ {
+        alias /path/to/thinmartiancms/packages/thinmartian/cms/src/public/$1;
+    }
+
+Now all calls to `/vendor/cms/css/app.css` for example will be redirected to the `src/` compiled version. Of course, DO NOT add the above conf to the production site, the user must use `php artisan cms:build` for this.
+
+### Testing
 
 The Thin Martian CMS by nature relies heavily... well completely on the Laravel framework and ecosystem and a fully installed and working copy of `laravel/laravel`, as all routes and classes are pulled from there. Therefore, a fully functioning CMS is required to run all tests.
 
@@ -123,15 +134,3 @@ If, for whatever reason you want to reset the entire CMS back to pre-install sta
     php artisan cms:destroy
 
 **IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions.
-
-## Assets
-
-To compile assets, use the usual `gulp` or `gulp watch` from within the `src` folder (e.g. `packages/thinmartiancms/cms/src`).
-
-When a user uses the CMS all calls will be made to the laravel root `public/vendor/cms` folder, this would mean a `cms:build` artisan command would have to be run for every style change, this is far from ideal. So within your nginx conf, add something similar to the following to your `server` group
-
-    location ~ ^/vendor/cms/(.*)$ {
-        alias /var/www/thinmartiancms/packages/thinmartian/cms/src/public/$1;
-    }
-
-Now all calls to `/vendor/cms/css/app.css` for example will be redirected to the `src/` compiled version. Of course, DO NOT add the above conf to the production site, the user must use `php artisan cms:build` for this.
