@@ -1,4 +1,4 @@
-@extends("cms::admin.layouts.bare")
+@extends("cms::admin.layouts.session")
 
 @section("body_class", "Session")
 @section("title", "Login")

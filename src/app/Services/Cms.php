@@ -32,6 +32,7 @@ class Cms {
      */
     protected $protectedControllers = [
         "Controller.php",
+        "MediaController.php",
         "AuthController.php",
         "PasswordController.php"
     ];

@@ -96,7 +96,7 @@ class Build extends Command
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
         $this->artisan->call("migrate");
-        usleep(200000);
+        usleep(100000);
         
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
@@ -115,7 +115,7 @@ class Build extends Command
         $bar->finish();
         
         $this->comment("Dumping composer...");
-        exec('composer dump -o');
+        exec("composer dump -o");
     }
     
     /**
@@ -126,9 +126,9 @@ class Build extends Command
     private function requestAdmin()
     {
         $credentials = [];
-        $credentials["firstname"] = $this->ask("What is you first name?");
-        $credentials["surname"] = $this->ask("What is your surname?");
-        $credentials["email"] = $this->ask("What is your email address?");
+        $credentials["firstname"] = $this->ask("What is you first name?", "Steve");
+        $credentials["surname"] = $this->ask("What is your surname?", "McKeogh");
+        $credentials["email"] = $this->ask("What is your email address?", "steve@codegent.com");
         $credentials["password"] = $this->secret("Enter a password");
         $credentials["password_confirmation"] = $this->secret("Confirm your password");
         $credentials["password_confirmed"] = false;

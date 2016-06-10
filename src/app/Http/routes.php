@@ -11,13 +11,8 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     
     // Custom/editable routes (copied over on publish)
     Route::group(["namespace" => "App\Cms\Http\Controllers", "middleware" => ["auth.cms"]], function() {
-        
-        Route::get("/", ["as" => "cms-dashboard", "uses" => function() {
-            return view("cms::admin.dashboard.index");
-        }]);
-        
-        
-        // build routes from the Yaml
+                
+        // Build routes from the Yaml
         if (file_exists(app_path("Cms/Definitions/"))) {
             $finder = new Finder();
             foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
@@ -25,6 +20,11 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
                 Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
             }
         }
+        
+        // Predefined routes
+        Route::get("/", ["as" => "cms-dashboard", "uses" => function() {
+            return view("cms::admin.dashboard.index");
+        }]);
         
     });
     

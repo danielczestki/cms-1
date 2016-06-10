@@ -1,0 +1,67 @@
+body.MediaLibrary
+    background: #fff
+    
+    #media 
+        height: 100vh
+        
+    $title_height = 115px
+    .Title
+        height: $title_height
+        padding-top: 32px
+        padding-bottom: 0
+        padding-left: 18px
+        padding-right: 18px
+        background: $Color__grey--1
+        &--sub .Title__buttons
+            padding-top: 16px
+    .MediaMain
+        width: 100%
+        height: "calc(100% - %s)" % $title_height
+        overflow: auto
+        -webkit-overflow-scrolling: touch
+        &--pad 
+            padding: 12px
+            background: $Color__grey--1
+    .MediaListing
+        width: 100%
+        min-height: 100%
+        column-count: 4
+        column-gap: 0
+        &__image
+            width: 100%
+            display: block
+    .MediaNoresults
+        height: 100%
+        padding: 0 12px
+        text-align: center
+        &__title
+            font-size: 30px
+            font-weight: 300
+            line-height: 40px
+        
+    //
+    // Responsive
+    //
+    
+    +respond(huge-screen)
+        .MediaListing
+            column-count: 6 !important
+    +respond(large-screen)
+        .MediaListing
+            column-count: 5
+    +respond(all-devices)
+        $title_height = 155px
+        .Title 
+            height: $title_height
+            padding-top: 12px
+        .MediaMain
+            height: "calc(100% - %s)" % $title_height
+        .MediaListing
+            column-count: 3
+    +respond(phone-portrait)
+        .MediaListing
+            column-count: 2
+        .MediaNoresults
+            &__title
+                font-size: 20px
+                line-height: 30px

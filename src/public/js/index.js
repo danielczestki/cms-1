@@ -25256,49 +25256,55 @@ var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-require("./plugins/ui");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Init the app
+ * Init the app (cms)
  */
-new _vue2.default({
-  el: "#app",
-  data: {
-    nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method
-    nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
-    nav_open: false // is the nav open or not
-  },
-  components: {
-    alert: require("./components/Alert/Alert") },
-  // form alert and success messages
-  methods: {
-    // Reveal/hide the primary nav on clicking a toggle button
+if (document.getElementById("app")) {
 
-    primary_click: function primary_click() {
-      this.nav_open = !this.nav_open;
-      this.nav_clicked = !this.nav_clicked;
-    },
+  new _vue2.default({
+    el: "#app",
+    data: {
+      nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method
+      nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
+      nav_open: false, // is the nav open or not
+      media_open: true },
+    // is the media dialog open or not?
+    components: {
+      alert: require("./components/Alert/Alert"), // form alert and success messages
+      mediadialog: require("./components/Mediadialog/Mediadialog") },
+    // media dialog popup (the iframe basically)
+    methods: {
+      // Reveal/hide the primary nav on clicking a toggle button
 
-    // Reveal/hide the primary nav on hover (after a timeout)
-    primary_hover: function primary_hover(state) {
-      var _this = this;
+      primary_click: function primary_click() {
+        this.nav_open = !this.nav_open;
+        this.nav_clicked = !this.nav_clicked;
+      },
 
-      clearTimeout(this.nav_timeout);
-      if (this.nav_clicked) return false;
-      if (state == "out") {
-        this.nav_open = false;
-        return true;
+      // Reveal/hide the primary nav on hover (after a timeout)
+      primary_hover: function primary_hover(state) {
+        var _this = this;
+
+        clearTimeout(this.nav_timeout);
+        if (this.nav_clicked) return false;
+        if (state == "out") {
+          this.nav_open = false;
+          return true;
+        }
+        this.nav_timeout = setTimeout(function () {
+          _this.nav_open = true;
+        }, 1000);
+      },
+      media_click: function media_click() {
+        this.media_open = !this.media_open;
       }
-      this.nav_timeout = setTimeout(function () {
-        _this.nav_open = true;
-      }, 1000);
     }
-  }
-});
+  });
+}
 
-},{"./components/Alert/Alert":8,"./plugins/ui":9,"vue":5}],7:[function(require,module,exports){
+},{"./components/Alert/Alert":8,"./components/Mediadialog/Mediadialog":10,"vue":5}],7:[function(require,module,exports){
 module.exports = '<div class="Alert Alert--{{ type }}" v-show="visible">\n    <slot></slot>\n    <i class="Alert__close fa fa-times" v-on:click="close"></i>\n</div>';
 },{}],8:[function(require,module,exports){
 "use strict";
@@ -25324,6 +25330,61 @@ module.exports = {
 };
 
 },{"./Alert.html":7}],9:[function(require,module,exports){
+module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window">\n        <a href="#" class="Media__close" v-on:click.prevent="toggle"><i class="fa fa-times"></i></a>\n        <iframe :src="_src" class="Media__iframe" seamless></iframe>\n    </div>\n</div>';
+},{}],10:[function(require,module,exports){
+"use strict";
+
+module.exports = {
+
+  props: ["open", "src"],
+  template: require("./Mediadialog.html"),
+  computed: {
+    _src: function _src() {
+      return this.open ? this.src : "about:blank";
+    }
+  },
+  methods: {
+    // show/hide the dialog
+
+    toggle: function toggle() {
+      this.open = !this.open;
+    }
+  }
+
+};
+
+},{"./Mediadialog.html":9}],11:[function(require,module,exports){
+"use strict";
+
+require("./plugins/ui");
+
+require("./app");
+
+require("./media");
+
+},{"./app":6,"./media":12,"./plugins/ui":13}],12:[function(require,module,exports){
+"use strict";
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Init the media dialog
+ */
+if (document.getElementById("media")) {
+
+  new _vue2.default({
+    el: "#media",
+    ready: function ready() {
+      console.log("sdsd");
+    }
+  });
+}
+
+},{"vue":5}],13:[function(require,module,exports){
 "use strict";
 
 var _jquery = require("jquery");
@@ -25345,21 +25406,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   /**
    * Init the tinymce editors. We don't use a Vuejs component here as we
    * want to utlise the form model binding without any config, this way
-   * this work automatically.
+   * this work automatically. Also we only call tiny if we have a wysiwyg
+   * on the page, if not, chances are tinymce isn't even on this page!
    */
-  tinymce.init({
-    selector: ".Form__wysiwyg",
-    statusbar: false,
-    menubar: "edit insert table view tools",
-    toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat",
-    content_css: "/vendor/cms/css/wysiwyg.css",
-    plugins: "link autolink image code paste searchreplace anchor charmap table imagetools hr contextmenu visualchars visualblocks",
-    paste_data_images: true,
-    paste_word_valid_elements: "b,strong,i,em,h1,h2,a",
-    paste_webkit_styles: "color font-size",
-    paste_retain_style_properties: "color font-size",
-    contextmenu: "cut copy paste | bold italic | link image inserttable"
-  });
+  if ((0, _jquery2.default)(".Form__wysiwyg").length) {
+    tinymce.init({
+      selector: ".Form__wysiwyg",
+      statusbar: false,
+      menubar: "edit insert table view tools",
+      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat",
+      content_css: "/vendor/cms/css/wysiwyg.css",
+      plugins: "link autolink image code paste searchreplace anchor charmap table imagetools hr contextmenu visualchars visualblocks",
+      paste_data_images: true,
+      paste_word_valid_elements: "b,strong,i,em,h1,h2,a",
+      paste_webkit_styles: "color font-size",
+      paste_retain_style_properties: "color font-size",
+      contextmenu: "cut copy paste | bold italic | link image inserttable"
+    });
+  }
 
   // Insert contet at the current cursor position ("f-body" is the ID of the textarea)
   // tinymce.get("f-body").execCommand("mceInsertContent", false, "INSERT ME HERE");
@@ -25390,7 +25454,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
        * and JS DOM hooks for the UI
        */
 
-},{"../vendor/jquery-slimscroll.js":10,"jquery":1,"pikaday-time":4}],10:[function(require,module,exports){
+},{"../vendor/jquery-slimscroll.js":14,"jquery":1,"pikaday-time":4}],14:[function(require,module,exports){
 'use strict';
 
 /*! Copyright (c) 2011 Piotr Rochala (http://rocha.la)
@@ -25859,6 +25923,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   });
 });
 
-},{"jquery":1}]},{},[6]);
+},{"jquery":1}]},{},[11]);
 
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=index.js.map

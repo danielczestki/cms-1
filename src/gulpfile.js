@@ -6,5 +6,5 @@ elixir(function(mix) {
 });
 
 elixir(function(mix) {
-  mix.browserify("app.js");
+  mix.browserify("index.js");
 });

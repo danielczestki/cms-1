@@ -13,6 +13,11 @@
  */
  
  respond($media) 
+    // large screen and above (> 1600px)
+    if $media == huge-screen
+        @media (min-width: 1600px)
+            {block}
+            
     // large screen and above (> 1200px)
     if $media == large-screen
         @media (min-width: $Responsive__desktop--min)

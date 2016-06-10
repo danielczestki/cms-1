@@ -1,0 +1,48 @@
+
+.Media
+    width: 100%
+    background: rgba(#000, .7)
+    top: 0
+    left: 0
+    bottom: 0
+    position: fixed
+    
+    &__window
+        $gutter = 30px
+        background: #fff
+        left: $gutter
+        right: $gutter
+        top: $gutter
+        bottom: $gutter
+        position: absolute
+    &__close
+        width: 35px
+        height: 35px
+        background: $Color__orange--1
+        text-align: center
+        color: #fff !important
+        text-decoration: none !important
+        font-size: 22px
+        line-height: 32px
+        right: 0
+        top: 0
+        position: absolute
+    &__iframe
+        width: 100%
+        height: 100%
+        margin: 0
+        border: 0
+        
+    
+//
+// Responsive
+//
+
++respond(all-phones)
+    .Media
+        &__window
+            $gutter = 12px
+            left: $gutter
+            right: $gutter
+            top: $gutter
+            bottom: $gutter

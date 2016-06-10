@@ -4,6 +4,6 @@
 
 @section("content")
     
-    DASHBOARD!!
+    DASHBOARD!! - <a href="#" v-on:click.prevent="media_click">Open media</a>
     
 @endsection
