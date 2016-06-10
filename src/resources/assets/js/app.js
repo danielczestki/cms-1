@@ -11,7 +11,7 @@ if (document.getElementById("app")) {
       nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method
       nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
       nav_open: false, // is the nav open or not
-      media_open: true, // is the media dialog open or not?
+      media_open: false, // is the media dialog open or not?
     },
     components: {
       alert: require("./components/Alert/Alert"), // form alert and success messages
