@@ -4,6 +4,18 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 use Intervention\Image\ImageManager;
 
+
+/*
+    // LOGIC FOR SAVING THE CROPPED IMAGE TO THE USERS
+    // PREFERRED CENTER POINT
+    $width = 500;
+    $height = 500;
+    $x = 890 - ($width/2);
+    $y = 396 - ($height/2);
+    CmsImage::make(storage_path("image.jpg"))->crop($width, $height, $x, $y)->save(storage_path("image-updated.jpg"));
+*/  
+
+
 class Image {
     
     use MediaHelpers;
@@ -20,11 +32,6 @@ class Image {
     {
         $this->image = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
     }    
-    
-    
-    public function testing() {
-        return "yada";
-    }
     
     /**
      * Dynamically call the method on the ImageManger instance.

@@ -21,27 +21,27 @@
     
     <!-- Content -->
     <main class="MediaMain">
-         <div class="MediaListing">
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/1.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/4.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/5.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/7.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/5.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/1.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a>
-            <a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a>
-        </div>
+         <ul class="MediaListing">
+            <li class="MediaListing__item"><a href=""><i class="MediaListing__icon fa fa-photo" title="Image"></i><img src="{{ asset('vendor/cms/img/dummy/thumbs/1.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><i class="MediaListing__icon fa fa-film" title="Video"></i><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><i class="MediaListing__icon fa fa-youtube" title="Embed"></i><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/4.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/5.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/7.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/5.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/1.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a></li>
+            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
+        </ul>
         
         <!-- <div class="MediaNoresults Utility--valign-middle"><div>
             <p class="MediaNoresults__title">You haven't uploaded anything yet</p>

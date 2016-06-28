@@ -4,9 +4,14 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 trait MediaHelpers {
      
-     public function sharedshit()
+     /**
+      * Fetch the media disk from the config
+      * 
+      * @return string
+      */
+     public function getMediadisk()
      {
-        return "shared this";
+        return config("cms.cms.media_disk");
      }
     
 }

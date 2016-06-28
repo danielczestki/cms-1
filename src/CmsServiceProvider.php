@@ -14,6 +14,8 @@ use Thinmartian\Cms\App\Html\CmsFormBuilder;
 use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYamlService;
 use Thinmartian\Cms\App\Services\Media\Image as CmsImageService;
 use Thinmartian\Cms\App\Services\Media\Video as CmsVideoService;
+use Thinmartian\Cms\App\Services\Media\Document as CmsDocumentService;
+use Thinmartian\Cms\App\Services\Media\Embed as CmsEmbedService;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -327,6 +329,18 @@ class CmsServiceProvider extends ServiceProvider
         });
         $this->app->alias("cmsvideo", CmsVideoService::class);
         $this->loader->alias("CmsVideo", "Thinmartian\Cms\App\Facades\CmsVideoFacade");
+        // Document
+        $this->app->singleton("cmsdocument", function ($app) {
+            return new CmsDocumentService;
+        });
+        $this->app->alias("cmsdocument", CmsDocumentService::class);
+        $this->loader->alias("CmsDocument", "Thinmartian\Cms\App\Facades\CmsDocumentFacade");
+        // Embed
+        $this->app->singleton("cmsembed", function ($app) {
+            return new CmsEmbedService;
+        });
+        $this->app->alias("cmsembed", CmsEmbedService::class);
+        $this->loader->alias("CmsEmbed", "Thinmartian\Cms\App\Facades\CmsEmbedFacade");
     }
     
 }

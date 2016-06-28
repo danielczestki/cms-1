@@ -6,10 +6,7 @@ import Vue from "vue";
 if (document.getElementById("media")) {
   
   new Vue({
-    el: "#media",
-    ready() {
-      console.log("sdsd");
-    }
+    el: "#media"
   });
   
 }

@@ -25383,10 +25383,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 if (document.getElementById("media")) {
 
   new _vue2.default({
-    el: "#media",
-    ready: function ready() {
-      console.log("sdsd");
-    }
+    el: "#media"
   });
 }
 

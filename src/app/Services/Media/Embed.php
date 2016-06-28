@@ -2,14 +2,13 @@
 
 namespace Thinmartian\Cms\App\Services\Media;
 
-
-class Video {
+class Embed {
     
     use MediaHelpers;
     
     /**
      * constructor
      */
-    public function __construct() {}   
+    public function __construct() {}
     
 }

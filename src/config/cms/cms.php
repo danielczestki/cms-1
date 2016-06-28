@@ -50,5 +50,19 @@ return [
     */
    
     "intervention_driver" => "gd",
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Media disk
+    |--------------------------------------------------------------------------
+    |
+    | Thin Martian CMS utilises the wonderful Laravel Filesystem/Cloud storage.
+    | Set the disk below you want Thin Martian CMS to upload your media to. This
+    | of course must be a valid disk setup within your config/filesystems.php
+    | configuration. Examples are 'local', 's3' etc.
+    |
+    */
+
+    "media_disk" => "s3",
    
 ];
