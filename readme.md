@@ -62,7 +62,6 @@ And
 
 	npm install
 
-Also, we need to `npm install` from the root of your app, so `cd` to the root of your app and run `npm install` there also.
 
 ### Edit the root `composer.json`
 
