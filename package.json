@@ -16,6 +16,7 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
+    "gulp": "^3.9.1",
     "jquery": "^2.2.4",
     "jquery-slimscroll": "^1.3.6",
     "laravel-elixir-stylus": "^1.0.1",
