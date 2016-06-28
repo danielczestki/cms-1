@@ -62,6 +62,8 @@ And
 
 	npm install
 
+Also, we need to `npm install` from the root of your app, so `cd` to the root of your app and run `npm install` there also.
+
 ### Edit the root `composer.json`
 
 Now you need to make a few changes to the root `composer.json` file. **NOT** the one you just cloned, the root of your Laravel project created by your Laravel install.
