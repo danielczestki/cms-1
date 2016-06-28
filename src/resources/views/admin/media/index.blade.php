@@ -12,7 +12,7 @@
             <h2 class="h2">Currently uploaded media</h2>
         </div>
         <div class="Title__buttons">
-            <a href="{{ route('admin.media.create') }}" class="Button Button--icon Button--small Button--blue">
+            <a href="{{ route('admin.media.type') }}" class="Button Button--icon Button--small Button--blue">
                 <i class="Button__icon fa fa-plus-circle"></i>
                 Upload Media
             </a>

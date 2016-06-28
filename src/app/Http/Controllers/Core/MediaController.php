@@ -18,13 +18,24 @@ class MediaController extends Controller
     protected $name = "Media";
     
     /**
-     * Display a listing of the resource.
+     * Display the listing of the media items.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         return view("cms::admin.media.index");
+    }
+    
+    /**
+     * Before creating a new media, select the type
+     * (image, video, document or embed)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function type()
+    {
+        return view("cms::admin.media.type");
     }
     
     /**

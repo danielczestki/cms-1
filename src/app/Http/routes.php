@@ -19,6 +19,8 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
                 $filename = $file->getBasename('.' . $file->getExtension());
                 Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
             }
+            // create the special media routes
+            Route::get("media/type", ["as" => "admin.media.type", "uses" => "MediaController@type"]); // select the media type (image, document, video or embed)
         }
         
         // Predefined routes
