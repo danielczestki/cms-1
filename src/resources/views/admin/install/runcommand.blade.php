@@ -8,4 +8,4 @@
         <p><code>php artisan cms:build</code></p>
         <p>Follow the instructions and refresh this page.</p>
     </div>
-@endsection8/
+@endsection
