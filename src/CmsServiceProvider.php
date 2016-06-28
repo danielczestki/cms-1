@@ -12,7 +12,8 @@ use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
 use Thinmartian\Cms\App\Html\CmsFormBuilder;
 use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYamlService;
-use Thinmartian\Cms\App\Services\Media\Media as CmsMediaService;
+use Thinmartian\Cms\App\Services\Media\Image as CmsImageService;
+use Thinmartian\Cms\App\Services\Media\Video as CmsVideoService;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -314,11 +315,18 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function registerMedia()
     {
-        $this->app->singleton("cmsmedia", function ($app) {
-            return new CmsMediaService;
+        // Image
+        $this->app->singleton("cmsimage", function ($app) {
+            return new CmsImageService;
         });
-        $this->app->alias("cmsmedia", CmsMediaService::class);
-        $this->loader->alias("CmsMedia", "Thinmartian\Cms\App\Facades\CmsMediaFacade");
+        $this->app->alias("cmsimage", CmsImageService::class);
+        $this->loader->alias("CmsImage", "Thinmartian\Cms\App\Facades\CmsImageFacade");
+        // Video
+        $this->app->singleton("cmsvideo", function ($app) {
+            return new CmsVideoService;
+        });
+        $this->app->alias("cmsvideo", CmsVideoService::class);
+        $this->loader->alias("CmsVideo", "Thinmartian\Cms\App\Facades\CmsVideoFacade");
     }
     
 }

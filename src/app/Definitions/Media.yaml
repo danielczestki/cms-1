@@ -5,21 +5,6 @@ meta:
   show_in_nav: true
   icon: "picture-o"
   
-# Field defs for the create/edit form
-fields:
-  title:
-    type: "text"
-    label: "Title"
-    persist: true
-    validationOnCreate: "required|max:80"
-    validationOnUpdate: "required|max:80"
- 
-# Listing columns for the listing/index page (ID, Date created and Date updated are automatically added)
-listing:
-  title:
-    label: "Title"
-    sortable: true
-  
-# Searchable columns in the CMS listing (must be database columns, no accessors allowed)
-searchable:
-  - title
+# Media is a core module of the Thin Martian CMS.
+# Therefore it's not possible to alter the fields,
+# listing or searchable definition.

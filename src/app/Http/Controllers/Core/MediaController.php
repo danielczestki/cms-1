@@ -2,6 +2,7 @@
 
 namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
+use CmsForm, CmsImage, CmsVideo;
 use Thinmartian\Cms\App\Http\Controllers\Core\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -35,7 +36,8 @@ class MediaController extends Controller
     {
         $type = "create";
         view()->share("formtype", $type);
-        return view("cms::admin.media.form", compact("type"));
+        $subtitle = "Upload new media";
+        return view("cms::admin.media.form", compact("type", "subtitle"));
     }
     
 }

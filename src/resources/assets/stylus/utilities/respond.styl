@@ -2,7 +2,9 @@
  * Utility/helper to help setup responsive media sets
  * width a memorable name opposed to a dimension
  *
- * @param   $media  "large-screen": large screen and above (> 1200px)
+ * @param   $media  "massive-screen": massive screen and above (> 1800px)
+                    "huge-screen": huge screen and above (> 1600px)
+                    "large-screen": large screen and above (> 1200px)
  *                  "desktop": tablet-landscape and desktop (> 1024px)
  *                  "all-devices": tablet portrait and below (< 1023px )
  *                  "all-phones": phone landscape and below (< 767px )
@@ -13,8 +15,13 @@
  */
  
  respond($media) 
-    // large screen and above (> 1600px)
-    if $media == huge-screen
+    // massive screen and above (> 1800px)
+    if $media == massive-screen
+        @media (min-width: 1800px)
+            {block}
+            
+    // huge screen and above (> 1600px)
+    else if $media == huge-screen
         @media (min-width: 1600px)
             {block}
             

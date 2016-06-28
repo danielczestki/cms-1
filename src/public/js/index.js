@@ -25325,8 +25325,14 @@ module.exports = {
     close: function close() {
       this.visible = false;
     }
-  }
+  },
+  ready: function ready() {
+    var _this = this;
 
+    setTimeout(function () {
+      _this.visible = false;
+    }, 7000);
+  }
 };
 
 },{"./Alert.html":7}],9:[function(require,module,exports){

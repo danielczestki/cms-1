@@ -5,15 +5,15 @@ namespace Thinmartian\Cms\App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Thinmartian\Cms\App\Services\Media\Media
+ * @see \Thinmartian\Cms\App\Services\Media\Video
  */
-class CmsMediaFacade extends Facade {
+class CmsVideoFacade extends Facade {
 
     /**
      * Get the registered name of the component.
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return "cmsmedia"; }
+    protected static function getFacadeAccessor() { return "cmsvideo"; }
 
 }

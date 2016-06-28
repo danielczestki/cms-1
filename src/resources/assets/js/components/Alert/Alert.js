@@ -12,6 +12,11 @@ module.exports = {
     close() {
       this.visible = false
     }
+  },
+  ready() {
+    setTimeout(() => {
+      this.visible = false;
+    }, 7000);
   }
   
 }

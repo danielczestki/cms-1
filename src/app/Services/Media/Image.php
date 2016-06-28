@@ -4,7 +4,9 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 use Intervention\Image\ImageManager;
 
-class Media {
+class Image {
+    
+    use MediaHelpers;
     
     /**
      * @var Intervention\Image\ImageManager
@@ -18,6 +20,11 @@ class Media {
     {
         $this->image = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
     }    
+    
+    
+    public function testing() {
+        return "yada";
+    }
     
     /**
      * Dynamically call the method on the ImageManger instance.

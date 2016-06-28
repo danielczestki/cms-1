@@ -9,7 +9,7 @@
     <div class="Title Title--sub Utility--clearfix">
         <div class="Title__titles">
             <h1 class="h1">Media Library</h1>
-            <h2 class="h2">Upload new media</h2>
+            <h2 class="h2">{{ $subtitle }}</h2>
         </div>
         <div class="Title__buttons">
             <a href="{{ route('admin.media.index') }}" class="Button Button--icon Button--small Button--grey">

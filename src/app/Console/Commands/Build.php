@@ -114,8 +114,9 @@ class Build extends Command
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
         
-        $this->comment("Dumping composer...");
+        $this->comment("Optimising application...");
         exec("composer dump -o");
+        $this->artisan->call("optimize");
     }
     
     /**

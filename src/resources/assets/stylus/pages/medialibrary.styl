@@ -18,6 +18,7 @@ body.MediaLibrary
         width: 100%
         height: "calc(100% - %s)" % $title_height
         overflow: auto
+        overflow-x: hidden
         -webkit-overflow-scrolling: touch
         &--pad 
             padding: 12px
@@ -25,11 +26,10 @@ body.MediaLibrary
     .MediaListing
         width: 100%
         min-height: 100%
-        column-count: 4
-        column-gap: 0
         &__image
-            width: 100%
-            display: block
+            width: 20%
+            height: auto
+            float: left
     .MediaNoresults
         height: 100%
         padding: 0 12px
@@ -43,12 +43,15 @@ body.MediaLibrary
     // Responsive
     //
     
-    +respond(huge-screen)
-        .MediaListing
-            column-count: 6 !important
     +respond(large-screen)
-        .MediaListing
-            column-count: 5
+        .MediaListing__image
+            width: 16.6666%
+    +respond(huge-screen)
+        .MediaListing__image
+            width: 14.2857%
+    +respond(massive-screen)
+        .MediaListing__image
+            width: 12.5%
     +respond(all-devices)
         $title_height = 155px
         .Title 
@@ -56,12 +59,12 @@ body.MediaLibrary
             padding-top: 12px
         .MediaMain
             height: "calc(100% - %s)" % $title_height
-        .MediaListing
-            column-count: 3
+        .MediaListing__image
+            width: 25%
     +respond(phone-portrait)
-        .MediaListing
-            column-count: 2
         .MediaNoresults
             &__title
                 font-size: 20px
                 line-height: 30px
+        .MediaListing__image
+            width: 33.3333%

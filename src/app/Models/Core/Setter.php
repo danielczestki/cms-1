@@ -12,6 +12,7 @@ trait Setter
      */
     protected function setCmsFillable()
     {
+        if (property_exists($this, "fillable") and $this->fillable) return false;
         $arr = [];
         $fields = $this->getYamlFields();
         foreach ($fields as $idx => $data) {
@@ -27,6 +28,7 @@ trait Setter
      */
     protected function setCmsDates()
     {
+        if (property_exists($this, "dates") and $this->dates) return false;
         $arr = [];
         $fields = $this->getYamlFields();
         foreach ($fields as $idx => $data) {
