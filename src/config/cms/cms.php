@@ -64,5 +64,21 @@ return [
     */
 
     "media_disk" => "s3",
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Media types
+    |--------------------------------------------------------------------------
+    |
+    | Which of the four media types do you want to allow users to upload. All
+    | uploads (apart from embed) will be stored on your media_disk that was
+    | specified above.
+    |
+    */
+    
+    "media_allow_images" => true,
+    "media_allow_videos" => true,
+    "media_allow_documents" => true,
+    "media_allow_embeds" => true,
    
 ];

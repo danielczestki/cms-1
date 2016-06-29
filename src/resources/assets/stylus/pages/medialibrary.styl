@@ -55,6 +55,35 @@ body.MediaLibrary
             font-size: 30px
             font-weight: 300
             line-height: 40px
+    .MediaTypes
+        display: inline-block
+        &__type
+            width: 180px
+            height: 180px
+            margin: 6px
+            text-align: center
+            display: inline-block
+        &__link
+            transition: background .2s
+            height: 100%
+            background: $Color__orange--1
+            font-size: 50px
+            line-height: 160px
+            color: #fff
+            display: block
+            position: relative
+            &:hover
+                background: $Color__blue--1
+        &__title
+            width: 100%
+            text-align: center
+            font-size: 22px
+            font-weight: 300
+            line-height: normal
+            bottom: 18px
+            left: 0
+            position: absolute
+            display: block
         
     //
     // Responsive
@@ -70,14 +99,23 @@ body.MediaLibrary
         .MediaListing__item
             width: 12.5%
     +respond(all-devices)
+        .MediaListing__item
+            width: 25%
+        .MediaTypes
+            display: block
+            &__type
+                width: calc(25% - 12px)
+                height: 170px
+                float: left
+            &__link
+                line-height: 150px
+    +respond(all-phones)
         $title_height = 155px
         .Title 
             height: $title_height
             padding-top: 12px
         .MediaMain
             height: "calc(100% - %s)" % $title_height
-        .MediaListing__item
-            width: 25%
     +respond(phone-portrait)
         .MediaNoresults
             &__title
@@ -85,3 +123,13 @@ body.MediaLibrary
                 line-height: 30px
         .MediaListing__item
             width: 33.3333%
+        .MediaTypes
+            &__type
+                width: auto
+                height: 150px
+                margin-left: 0
+                margin-right: 0
+                display: block
+                float: none
+            &__link
+                line-height: 120px

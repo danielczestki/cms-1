@@ -392,6 +392,9 @@ table {
 .Utility--muted {
   color: #999 !important;
 }
+.Utility--text-center {
+  text-align: center !important;
+}
 .Utility--font-weight-light {
   font-weight: 300 !important;
 }
@@ -1750,6 +1753,40 @@ body.MediaLibrary .MediaNoresults__title {
   font-weight: 300;
   line-height: 40px;
 }
+body.MediaLibrary .MediaTypes {
+  display: inline-block;
+}
+body.MediaLibrary .MediaTypes__type {
+  width: 180px;
+  height: 180px;
+  margin: 6px;
+  text-align: center;
+  display: inline-block;
+}
+body.MediaLibrary .MediaTypes__link {
+  transition: background 0.2s;
+  height: 100%;
+  background: #ff5339;
+  font-size: 50px;
+  line-height: 160px;
+  color: #fff;
+  display: block;
+  position: relative;
+}
+body.MediaLibrary .MediaTypes__link:hover {
+  background: #303b51;
+}
+body.MediaLibrary .MediaTypes__title {
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: normal;
+  bottom: 18px;
+  left: 0;
+  position: absolute;
+  display: block;
+}
 @media (min-width: 1200px) {
   body.MediaLibrary .MediaListing__item {
     width: 16.6666%;
@@ -1766,15 +1803,28 @@ body.MediaLibrary .MediaNoresults__title {
   }
 }
 @media (max-width: 1023px) {
+  body.MediaLibrary .MediaListing__item {
+    width: 25%;
+  }
+  body.MediaLibrary .MediaTypes {
+    display: block;
+  }
+  body.MediaLibrary .MediaTypes__type {
+    width: calc(25% - 12px);
+    height: 170px;
+    float: left;
+  }
+  body.MediaLibrary .MediaTypes__link {
+    line-height: 150px;
+  }
+}
+@media (max-width: 767px) {
   body.MediaLibrary .Title {
     height: 155px;
     padding-top: 12px;
   }
   body.MediaLibrary .MediaMain {
     height: calc(100% - 155px);
-  }
-  body.MediaLibrary .MediaListing__item {
-    width: 25%;
   }
 }
 @media (max-width: 479px) {
@@ -1784,6 +1834,17 @@ body.MediaLibrary .MediaNoresults__title {
   }
   body.MediaLibrary .MediaListing__item {
     width: 33.3333%;
+  }
+  body.MediaLibrary .MediaTypes__type {
+    width: auto;
+    height: 150px;
+    margin-left: 0;
+    margin-right: 0;
+    display: block;
+    float: none;
+  }
+  body.MediaLibrary .MediaTypes__link {
+    line-height: 120px;
   }
 }
 body.Session .Background,
