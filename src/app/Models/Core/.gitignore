@@ -1,5 +1,6 @@
 *
 !.gitignore
 !CmsUser.php
+!CmsMedium.php
 !Model.php
 !Setter.php
