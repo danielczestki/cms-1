@@ -25,7 +25,7 @@
     
     <!-- Form -->
     <main class="MediaMain MediaMain--pad">
-        {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
+        {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $formtype, "filters" => $filters]) }}
             {{ CmsForm::text(["name" => "ssd", "label" => "sdsd"]) }}
             {{ CmsForm::buttons() }}
         {{ CmsForm::close() }}

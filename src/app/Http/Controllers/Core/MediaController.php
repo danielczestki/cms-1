@@ -2,7 +2,7 @@
 
 namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
-use CmsForm, CmsImage, CmsVideo;
+use CmsForm, CmsImage, CmsVideo, CmsDocument, CmsEmbed;
 use Thinmartian\Cms\App\Http\Controllers\Core\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -16,6 +16,16 @@ class MediaController extends Controller
      * @var string
      */
     protected $name = "Media";
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("cms.media.valid", ["only" => ["create"]]);
+        $this->middleware("cms.media.allowed", ["only" => ["create"]]);
+    }
     
     /**
      * Display the listing of the media items.
@@ -45,10 +55,9 @@ class MediaController extends Controller
      */
     public function create()
     {
-        $type = "create";
-        view()->share("formtype", $type);
+        $formtype = "create";
         $subtitle = "Upload new media";
-        return view("cms::admin.media.form", compact("type", "subtitle"));
+        return view("cms::admin.media.form", compact("formtype", "subtitle"));
     }
     
 }

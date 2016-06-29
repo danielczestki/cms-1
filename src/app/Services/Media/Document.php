@@ -4,7 +4,7 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 class Document {
     
-    use MediaHelpers;
+    use Media;
     
     /**
      * constructor

@@ -63,7 +63,6 @@ class Cms {
        "2016_05_16_200000_create_cms_mediables_table.php"
     ];
     
-    
     /**
      * Return the protected files
      * 

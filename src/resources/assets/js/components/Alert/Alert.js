@@ -14,6 +14,7 @@ module.exports = {
     }
   },
   ready() {
+    console.log("sdsd");
     setTimeout(() => {
       this.visible = false;
     }, 7000);

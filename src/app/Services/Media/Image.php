@@ -18,7 +18,7 @@ use Intervention\Image\ImageManager;
 
 class Image {
     
-    use MediaHelpers;
+    use Media;
     
     /**
      * @var Intervention\Image\ImageManager

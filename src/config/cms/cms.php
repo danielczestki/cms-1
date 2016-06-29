@@ -76,9 +76,9 @@ return [
     |
     */
     
-    "media_allow_images" => true,
-    "media_allow_videos" => true,
-    "media_allow_documents" => true,
-    "media_allow_embeds" => true,
+    "media_allow_image" => true,
+    "media_allow_video" => true,
+    "media_allow_document" => false,
+    "media_allow_embed" => true,
    
 ];

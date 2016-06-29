@@ -5,7 +5,7 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 class Video {
     
-    use MediaHelpers;
+    use Media;
     
     /**
      * constructor

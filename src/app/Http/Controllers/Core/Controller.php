@@ -46,12 +46,12 @@ abstract class Controller extends BaseController
     /**
      * constructor
      */
-    public function __construct(ResourceInput $input)
+    public function __construct()
     {
         $this->controller = $this->name . "Controller";
         CmsYaml::setFile($this->name);
         $this->setModel();
-        $this->input = $input;
+        $this->input = new ResourceInput;
         $this->sharedVars();        
     }
     

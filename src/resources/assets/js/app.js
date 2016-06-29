@@ -1,5 +1,8 @@
 import Vue from "vue";
 
+// Global components (likely form elements)
+Vue.component("alert", require("./components/Alert/Alert"));
+
 /**
  * Init the app (cms)
  */
@@ -14,7 +17,6 @@ if (document.getElementById("app")) {
       media_open: false, // is the media dialog open or not?
     },
     components: {
-      alert: require("./components/Alert/Alert"), // form alert and success messages
       mediadialog: require("./components/Mediadialog/Mediadialog"), // media dialog popup (the iframe basically)
     },
     methods: {

@@ -4,7 +4,7 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 class Embed {
     
-    use MediaHelpers;
+    use Media;
     
     /**
      * constructor

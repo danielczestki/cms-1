@@ -25258,6 +25258,9 @@ var _vue2 = _interopRequireDefault(_vue);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Global components (likely form elements)
+_vue2.default.component("alert", require("./components/Alert/Alert"));
+
 /**
  * Init the app (cms)
  */
@@ -25272,7 +25275,6 @@ if (document.getElementById("app")) {
       media_open: false },
     // is the media dialog open or not?
     components: {
-      alert: require("./components/Alert/Alert"), // form alert and success messages
       mediadialog: require("./components/Mediadialog/Mediadialog") },
     // media dialog popup (the iframe basically)
     methods: {
@@ -25329,6 +25331,7 @@ module.exports = {
   ready: function ready() {
     var _this = this;
 
+    console.log("sdsd");
     setTimeout(function () {
       _this.visible = false;
     }, 7000);

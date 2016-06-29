@@ -8,8 +8,12 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Collective\Html\HtmlServiceProvider;
+
 use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
+use Thinmartian\Cms\App\Http\Middleware\ValidMediaType;
+use Thinmartian\Cms\App\Http\Middleware\AllowedMediaType;
+
 use Thinmartian\Cms\App\Html\CmsFormBuilder;
 use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYamlService;
 use Thinmartian\Cms\App\Services\Media\Image as CmsImageService;
@@ -126,6 +130,8 @@ class CmsServiceProvider extends ServiceProvider
     {
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
+        $router->middleware("cms.media.valid", ValidMediaType::class);
+        $router->middleware("cms.media.allowed", AllowedMediaType::class);
     }
     
     /**
