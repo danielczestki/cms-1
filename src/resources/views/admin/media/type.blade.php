@@ -38,11 +38,7 @@
                 @endforeach
             </ul>
             
-        {{ CmsForm::buttons([
-            "save_label" => "Next",
-            "save_icon" => "arrow-right",
-            "hide_save_exit" => true
-        ]) }}
+        </div></div>
     </main>
     
 @endsection
