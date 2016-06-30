@@ -1,8 +1,6 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
 class CreateCmsMediablesTable extends Migration
 {
     /**
@@ -22,7 +20,6 @@ class CreateCmsMediablesTable extends Migration
             $table->primary(['media_id', 'mediable_id', 'mediable_type', 'mediable_category'], "cms_mediables_pk");
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -60,7 +60,7 @@ class Cms {
        "2016_05_16_000000_create_cms_users_table.php",
        "2016_05_16_100000_create_cms_password_resets_table.php",
        "2016_05_16_200000_create_cms_media_table.php",
-       "2016_05_16_200000_create_cms_mediables_table.php"
+       "2016_05_16_300000_create_cms_mediables_table.php"
     ];
     
     /**
