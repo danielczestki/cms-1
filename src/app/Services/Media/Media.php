@@ -15,15 +15,18 @@ trait Media {
     protected $mediaTypes = [
         "image" => [
             "label" => "Image",
-            "icon" => "photo"
+            "icon" => "photo",
+            "accepted" => ["jpg", "jpe", "jpeg", "gif", "png"]
         ],
         "video" => [
             "label" => "Video",
-            "icon" => "film"
+            "icon" => "film",
+            "accepted" => ["mp4", "mov", "wmv", "m4v", "avi"]
         ],
         "document" => [
             "label" => "Document",
-            "icon" => "file"
+            "icon" => "file",
+            "accepted" => ["doc", "docx", "xls", "xlsx", "pps", "ppt", "pdf", "zip", "rtf", "txt"]
         ],
         "embed" => [
             "label" => "Embed",

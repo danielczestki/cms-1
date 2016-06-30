@@ -3,6 +3,7 @@
 namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
+use CmsImage;
 
 class CmsFormBuilder {
     
@@ -128,6 +129,14 @@ class CmsFormBuilder {
     public function file($data = [])
     {
         $data["type"] = "file";
+        if (isset($data["mediatype"])) {
+            if ($accepted = CmsImage::getMediaTypes($data["mediatype"] . ".accepted")) {
+                array_walk($accepted, function(&$item, $key) {
+                    $item = "." . $item;
+                });
+                $data["accept"] = implode(",", $accepted);
+            }
+        }
         return $this->input($data, "file");
     }
     

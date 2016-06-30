@@ -1,6 +1,6 @@
 module.exports = {
   
-  props: ["name", "mediatype"],
+  props: ["name", "mediatype", "accept"],
   template: require("./Fileupload.html"),
   data() {
     return {
@@ -31,7 +31,10 @@ module.exports = {
       this.spinner = true;
       this.image = null;
       let file = event.target.files[0];
-      if (! file.type.match('image.*')) return false;
+      if (! file.type.match('image.*')) {
+        this.spinner = false;
+        return false;
+      }
       var reader = new FileReader();
       reader.onload = ((f) => {
         return (e) => {

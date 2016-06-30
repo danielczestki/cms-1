@@ -25483,13 +25483,13 @@ module.exports = {
 };
 
 },{"./Alert.html":7}],9:[function(require,module,exports){
-module.exports = '<div class="Utility--hidden">\n    <input type="file" name="{{ name }}" id="f-{{ name }}" v-el:field v-model="field" v-on:change="preview">\n</div>\n<div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div>\n\n\n<!-- <div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div> -->';
+module.exports = '<div class="Utility--hidden">\n    <input type="file" name="{{ name }}" id="f-{{ name }}" accept="{{ accept }}" v-el:field v-model="field" v-on:change="preview">\n</div>\n<div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div>\n\n\n<!-- <div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div> -->';
 },{}],10:[function(require,module,exports){
 "use strict";
 
 module.exports = {
 
-  props: ["name", "mediatype"],
+  props: ["name", "mediatype", "accept"],
   template: require("./Fileupload.html"),
   data: function data() {
     return {
@@ -25524,7 +25524,10 @@ module.exports = {
       this.spinner = true;
       this.image = null;
       var file = event.target.files[0];
-      if (!file.type.match('image.*')) return false;
+      if (!file.type.match('image.*')) {
+        this.spinner = false;
+        return false;
+      }
       var reader = new FileReader();
       reader.onload = function (f) {
         return function (e) {

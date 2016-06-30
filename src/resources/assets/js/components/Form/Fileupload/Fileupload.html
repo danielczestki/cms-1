@@ -1,5 +1,5 @@
 <div class="Utility--hidden">
-    <input type="file" name="{{ name }}" id="f-{{ name }}" v-el:field v-model="field" v-on:change="preview">
+    <input type="file" name="{{ name }}" id="f-{{ name }}" accept="{{ accept }}" v-el:field v-model="field" v-on:change="preview">
 </div>
 <div class="Form__file">
     <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>
