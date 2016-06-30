@@ -1,0 +1,25 @@
+<div class="Utility--hidden">
+    <input type="file" name="{{ name }}" id="f-{{ name }}" v-el:field v-model="field" v-on:change="preview">
+</div>
+<div class="Form__file">
+    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>
+    <div class="Form__file-placeholder Utility--text-truncate" :class="{'Form__file-placeholder--empty': ! field}" v-on:click="browse">
+        {{ placeholder }}
+        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>
+    </div>
+    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == 'image'">
+        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>
+    </div>
+</div>
+
+
+<!-- <div class="Form__file">
+    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>
+    <div class="Form__file-placeholder Utility--text-truncate" :class="{'Form__file-placeholder--empty': ! field}" v-on:click="browse">
+        {{ placeholder }}
+        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>
+    </div>
+    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == 'image'">
+        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>
+    </div>
+</div> -->

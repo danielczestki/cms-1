@@ -3,6 +3,7 @@
 namespace Thinmartian\Cms\App\Services\Media;
 
 use Intervention\Image\ImageManager;
+use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 
 
 /*
@@ -32,6 +33,43 @@ class Image {
     {
         $this->image = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
     }    
+    
+    /**
+     * Store the image
+     * 
+     * @param  ResourceInput $input
+     * @return App\Cms\CmsMedium
+     */
+    public function store(ResourceInput $input)
+    {
+        $media = $this->createMedia($input);
+        $form = $input->getInput();
+        
+        dd($media);
+    }
+    
+    /**
+     * Get the form validation rules on create
+     * 
+     * @return array
+     */
+    public function validationOnCreate()
+    {
+        return [
+            "type" => "required|in:". implode(",", array_keys($this->getMediaTypes())),
+            "title" => "required|max:100",
+        ];
+    }
+    
+    /**
+     * Get the form validation rules on update
+     * 
+     * @return array
+     */
+    public function validationOnUpdate()
+    {
+        return [];
+    }
     
     /**
      * Dynamically call the method on the ImageManger instance.

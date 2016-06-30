@@ -19,14 +19,14 @@ class CmsMediumImage extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['filename', 'extension', 'original_name', 'original_extension', 'original_filesize', 'original_width', 'original_height'];
+    protected $fillable = ["filename", "extension", "original_name", "original_extension", "original_filesize", "original_width", "original_height"];
     
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'cms_medium_id';
+    protected $primaryKey = "cms_medium_id";
     
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -54,6 +54,6 @@ class CmsMediumImage extends BaseModel
      */
     public function media()
     {
-        return $this->belongsTo('App\Cms\CmsMedium', 'cms_medium_id');
+        return $this->belongsTo("App\Cms\CmsMedium", "cms_medium_id");
     }
 }

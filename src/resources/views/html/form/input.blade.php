@@ -5,7 +5,9 @@
         @include("cms::html.form._symbol", ["fix" => "prefix"])       
         @include("cms::html.form._symbol", ["fix" => "suffix"])     
         @if ($type == "password")
-            {{ Form::password($name, @$additional) }}
+            {{ Form::$type($name, @$additional) }}
+        @elseif ($type == "file") 
+            <fileupload name="{{ $name }}" mediatype="{{ @$mediatype }}"></fileupload>
         @else
             {{ Form::$type($name, @$value, @$additional) }}    
         @endif

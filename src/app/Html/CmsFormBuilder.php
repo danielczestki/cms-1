@@ -120,6 +120,18 @@ class CmsFormBuilder {
     }
     
     /**
+     * Render a input[type=file]
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function file($data = [])
+    {
+        $data["type"] = "file";
+        return $this->input($data, "file");
+    }
+    
+    /**
      * Renders most input[type=$type]
      * 
      * @param  array  $data The element attributes
@@ -373,8 +385,8 @@ class CmsFormBuilder {
     {
         $data["class"] = @$data["class"] . " Form__control";
         $data["additional"] = array_except($data, $this->attributeSchema);
-        $data["additional"]["maxlength"] = $this->getMaxLength($data);
-        $data["required"] = $this->isRequired($data);
+        $data["additional"]["maxlength"] = (isset($data["maxlength"]) and $data["maxlength"]) ? $data["maxlength"] : $this->getMaxLength($data);
+        $data["required"] = (isset($data["required"]) and $data["required"]) ? true : $this->isRequired($data);
         $data["additional"]["id"] = "f-{$data['name']}";
         if ($type == "number") {
             unset($data["additional"]["maxlength"]);

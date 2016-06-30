@@ -25405,6 +25405,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Global components (likely form elements)
 _vue2.default.component("alert", require("./components/Alert/Alert"));
+_vue2.default.component("fileupload", require("./components/Form/Fileupload/Fileupload"));
 
 /**
  * Init the app (cms)
@@ -25449,7 +25450,7 @@ if (document.getElementById("app")) {
   });
 }
 
-},{"./components/Alert/Alert":8,"./components/Mediadialog/Mediadialog":10,"vue":5}],7:[function(require,module,exports){
+},{"./components/Alert/Alert":8,"./components/Form/Fileupload/Fileupload":10,"./components/Mediadialog/Mediadialog":12,"vue":5}],7:[function(require,module,exports){
 module.exports = '<div class="Alert Alert--{{ type }}" v-show="visible">\n    <slot></slot>\n    <i class="Alert__close fa fa-times" v-on:click="close"></i>\n</div>';
 },{}],8:[function(require,module,exports){
 "use strict";
@@ -25482,8 +25483,68 @@ module.exports = {
 };
 
 },{"./Alert.html":7}],9:[function(require,module,exports){
-module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window">\n        <a href="#" class="Media__close" v-on:click.prevent="toggle"><i class="fa fa-times"></i></a>\n        <iframe :src="_src" class="Media__iframe" seamless></iframe>\n    </div>\n</div>';
+module.exports = '<div class="Utility--hidden">\n    <input type="file" name="{{ name }}" id="f-{{ name }}" v-el:field v-model="field" v-on:change="preview">\n</div>\n<div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div>\n\n\n<!-- <div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div> -->';
 },{}],10:[function(require,module,exports){
+"use strict";
+
+module.exports = {
+
+  props: ["name", "mediatype"],
+  template: require("./Fileupload.html"),
+  data: function data() {
+    return {
+      field: null,
+      image: null,
+      spinner: false
+    };
+  },
+
+  computed: {
+    placeholder: function placeholder() {
+      return this.field ? this.field.replace(/^.*[\\\/]/, '') : "No file selected.";
+    },
+    stylePreview: function stylePreview() {
+      if (!this.image) return {};
+      return {
+        "background-image": "url(" + this.image + ")"
+      };
+    }
+  },
+  methods: {
+    /**
+     * Activated when the user clicks the browse button
+     */
+
+    browse: function browse() {
+      this.$els.field.click();
+    },
+    preview: function preview(event) {
+      var _this = this;
+
+      this.spinner = true;
+      this.image = null;
+      var file = event.target.files[0];
+      if (!file.type.match('image.*')) return false;
+      var reader = new FileReader();
+      reader.onload = function (f) {
+        return function (e) {
+          _this.image = e.target.result;
+          _this.spinner = false;
+        };
+      }(file);
+      reader.readAsDataURL(file);
+    },
+    clear: function clear() {
+      this.field = "";
+      this.image = null;
+    }
+  }
+
+};
+
+},{"./Fileupload.html":9}],11:[function(require,module,exports){
+module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window">\n        <a href="#" class="Media__close" v-on:click.prevent="toggle"><i class="fa fa-times"></i></a>\n        <iframe :src="_src" class="Media__iframe" seamless></iframe>\n    </div>\n</div>';
+},{}],12:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -25505,7 +25566,7 @@ module.exports = {
 
 };
 
-},{"./Mediadialog.html":9}],11:[function(require,module,exports){
+},{"./Mediadialog.html":11}],13:[function(require,module,exports){
 "use strict";
 
 require("./plugins/ui");
@@ -25514,7 +25575,7 @@ require("./app");
 
 require("./media");
 
-},{"./app":6,"./media":12,"./plugins/ui":13}],12:[function(require,module,exports){
+},{"./app":6,"./media":14,"./plugins/ui":15}],14:[function(require,module,exports){
 "use strict";
 
 var _vue = require("vue");
@@ -25533,7 +25594,7 @@ if (document.getElementById("media")) {
   });
 }
 
-},{"vue":5}],13:[function(require,module,exports){
+},{"vue":5}],15:[function(require,module,exports){
 "use strict";
 
 var _jquery = require("jquery");
@@ -25603,7 +25664,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
        * and JS DOM hooks for the UI
        */
 
-},{"../vendor/jquery-slimscroll.js":14,"jquery":1,"pikaday-time":3}],14:[function(require,module,exports){
+},{"../vendor/jquery-slimscroll.js":16,"jquery":1,"pikaday-time":3}],16:[function(require,module,exports){
 'use strict';
 
 /*! Copyright (c) 2011 Piotr Rochala (http://rocha.la)
@@ -26072,6 +26133,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   });
 });
 
-},{"jquery":1}]},{},[11]);
+},{"jquery":1}]},{},[13]);
 
 //# sourceMappingURL=index.js.map

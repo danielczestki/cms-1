@@ -2,6 +2,7 @@ import Vue from "vue";
 
 // Global components (likely form elements)
 Vue.component("alert", require("./components/Alert/Alert"));
+Vue.component("fileupload", require("./components/Form/Fileupload/Fileupload"));
 
 /**
  * Init the app (cms)

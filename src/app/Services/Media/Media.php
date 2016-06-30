@@ -2,6 +2,9 @@
 
 namespace Thinmartian\Cms\App\Services\Media;
 
+use App\Cms\CmsMedium;
+use Thinmartian\Cms\App\Services\Resource\ResourceInput;
+
 trait Media {
      
     /**
@@ -33,7 +36,7 @@ trait Media {
       * 
       * @return string
       */
-     public function getMediadisk()
+     public function getMediaDisk()
      {
         return config("cms.cms.media_disk");
      }
@@ -49,6 +52,22 @@ trait Media {
             $this->mediaTypes[$name]["enabled"] = config("cms.cms.media_allow_". $name, true);
         }
         return $medianame ? array_get($this->mediaTypes, $medianame) : $this->mediaTypes;
+    }
+    
+    /**
+     * Create the parent cms_media record
+     * 
+     * @param  ResourceInput $input
+     * @return App\Cms\CmsMedium
+     */
+    protected function createMedia(ResourceInput $input)
+    {
+        $form = $input->getInput();
+        $record = new CmsMedium;
+        $record->title = $form["title"];
+        $record->disk = $this->getMediaDisk();
+        $record->save();
+        return $record;
     }
     
 }
