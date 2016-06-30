@@ -9815,102 +9815,6 @@ return jQuery;
 }));
 
 },{}],2:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = setTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    clearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],3:[function(require,module,exports){
 //! moment.js
 //! version : 2.13.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -13951,7 +13855,7 @@ process.umask = function() { return 0; };
     return _moment;
 
 }));
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /*!
  * Pikaday
  *
@@ -14210,6 +14114,7 @@ process.umask = function() { return 0; };
         incrementHourBy: 1,
         incrementMinuteBy: 1,
         incrementSecondBy: 1,
+        timeLabel: null,
 
         // option to prevent calendar from auto-closing after date is selected
         autoClose: true,
@@ -14258,6 +14163,7 @@ process.umask = function() { return 0; };
     renderDay = function(opts)
     {
         var arr = [];
+        var ariaSelected = 'false';
         if (opts.isEmpty) {
             if (opts.showDaysInNextAndPreviousMonths) {
                 arr.push('is-outside-current-month');
@@ -14273,6 +14179,7 @@ process.umask = function() { return 0; };
         }
         if (opts.isSelected) {
             arr.push('is-selected');
+            ariaSelected = 'true';
         }
         if (opts.isInRange) {
             arr.push('is-inrange');
@@ -14283,7 +14190,7 @@ process.umask = function() { return 0; };
         if (opts.isEndRange) {
             arr.push('is-endrange');
         }
-        return '<td data-day="' + opts.day + '" class="' + arr.join(' ') + '">' +
+        return '<td data-day="' + opts.day + '" class="' + arr.join(' ') + '" aria-selected="' + ariaSelected + '">' +
                  '<button class="pika-button pika-day" type="button" ' +
                     'data-pika-year="' + opts.year + '" data-pika-month="' + opts.month + '" data-pika-day="' + opts.day + '">' +
                         opts.day +
@@ -14317,16 +14224,16 @@ process.umask = function() { return 0; };
         for (i = 0; i < 7; i++) {
             arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
         }
-        return '<thead>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</thead>';
+        return '<thead><tr>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</tr></thead>';
     },
 
-    renderTitle = function(instance, c, year, month, refYear)
+    renderTitle = function(instance, c, year, month, refYear, randId)
     {
         var i, j, arr,
             opts = instance._o,
             isMinYear = year === opts.minYear,
             isMaxYear = year === opts.maxYear,
-            html = '<div class="pika-title">',
+            html = '<div id="' + randId + '" class="pika-title" role="heading" aria-live="assertive">',
             monthHtml,
             yearHtml,
             prev = true,
@@ -14334,10 +14241,11 @@ process.umask = function() { return 0; };
 
         for (arr = [], i = 0; i < 12; i++) {
             arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
-                (i === month ? ' selected': '') +
-                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled' : '') + '>' +
+                (i === month ? ' selected="selected"': '') +
+                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled="disabled"' : '') + '>' +
                 opts.i18n.months[i] + '</option>');
         }
+
         monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month" tabindex="-1">' + arr.join('') + '</select></div>';
 
         if (isArray(opts.yearRange)) {
@@ -14350,7 +14258,7 @@ process.umask = function() { return 0; };
 
         for (arr = []; i < j && i <= opts.maxYear; i++) {
             if (i >= opts.minYear) {
-                arr.push('<option value="' + i + '"' + (i === year ? ' selected': '') + '>' + (i) + '</option>');
+                arr.push('<option value="' + i + '"' + (i === year ? ' selected="selected"': '') + '>' + (i) + '</option>');
             }
         }
         yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year" tabindex="-1">' + arr.join('') + '</select></div>';
@@ -14379,9 +14287,9 @@ process.umask = function() { return 0; };
         return html += '</div>';
     },
 
-    renderTable = function(opts, data)
+    renderTable = function(opts, data, randId)
     {
-        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
+        return '<table cellpadding="0" cellspacing="0" class="pika-table" role="grid" aria-labelledby="' + randId + '">' + renderHead(opts) + renderBody(data) + '</table>';
     },
 
     renderTimePicker = function(num_options, selected_val, select_class, display_func, increment_by) {
@@ -14397,6 +14305,7 @@ process.umask = function() { return 0; };
     renderTime = function(hh, mm, ss, opts)
     {
         var to_return = '<table cellpadding="0" cellspacing="0" class="pika-time"><tbody><tr>' +
+            (opts.timeLabel !== null ? '<td class="pika-time-label">'+opts.timeLabel+'</td>' : '') +
             renderTimePicker(24, hh, 'pika-select-hour', function(i) {
                 if (opts.use24hour) {
                     return i;
@@ -14444,18 +14353,19 @@ process.umask = function() { return 0; };
             }
 
             if (!hasClass(target, 'is-disabled')) {
-                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
+                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty') && !hasClass(target.parentNode, 'is-disabled')) {
                     var newDate = new Date(
                             target.getAttribute('data-pika-year'),
                             target.getAttribute('data-pika-month'),
                             target.getAttribute('data-pika-day')
                         );
                     // Preserve time selection when date changed
-                    if (self._d && opts.showTime) {
-                        newDate.setHours(self._d.getHours());
-                        newDate.setMinutes(self._d.getMinutes());
+                    var prevDate = self._d || opts.defaultDate;
+                    if (prevDate && isDate(prevDate) && opts.showTime) {
+                        newDate.setHours(prevDate.getHours());
+                        newDate.setMinutes(prevDate.getMinutes());
                         if (opts.showSeconds) {
-                            newDate.setSeconds(self._d.getSeconds());
+                            newDate.setSeconds(prevDate.getSeconds());
                         }
                     }
                     self.setDate(newDate);
@@ -14511,6 +14421,34 @@ process.umask = function() { return 0; };
             }
             else if (hasClass(target, 'pika-select-second')) {
                 self.setTime(null, null, target.value);
+            }
+        };
+
+        self._onKeyChange = function(e)
+        {
+            e = e || window.event;
+
+            if (self.isVisible()) {
+
+                switch(e.keyCode){
+                    case 13:
+                    case 27:
+                        opts.field.blur();
+                        break;
+                    case 37:
+                        e.preventDefault();
+                        self.adjustDate('subtract', 1);
+                        break;
+                    case 38:
+                        self.adjustDate('subtract', 7);
+                        break;
+                    case 39:
+                        self.adjustDate('add', 1);
+                        break;
+                    case 40:
+                        self.adjustDate('add', 7);
+                        break;
+                }
             }
         };
 
@@ -14598,6 +14536,7 @@ process.umask = function() { return 0; };
         addEvent(self.el, 'mousedown', self._onMouseDown, true);
         addEvent(self.el, 'touchend', self._onMouseDown, true);
         addEvent(self.el, 'change', self._onChange);
+        addEvent(document, 'keydown', self._onKeyChange);
 
         if (opts.field) {
             if (opts.container) {
@@ -14748,11 +14687,11 @@ process.umask = function() { return 0; };
         },
 
         /**
-         * return a Date object of the current selection
+         * return a Date object of the current selection with fallback for the current date
          */
         getDate: function()
         {
-            return isDate(this._d) ? new Date(this._d.getTime()) : null;
+            return isDate(this._d) ? new Date(this._d.getTime()) : new Date();
         },
 
         /**
@@ -14863,6 +14802,30 @@ process.umask = function() { return 0; };
             this.adjustCalendars();
         },
 
+        adjustDate: function(sign, days) {
+
+            var day = this.getDate();
+            var difference = parseInt(days)*24*60*60*1000;
+
+            var newDay;
+
+            if (sign === 'add') {
+                newDay = new Date(day.valueOf() + difference);
+            } else if (sign === 'subtract') {
+                newDay = new Date(day.valueOf() - difference);
+            }
+
+            if (hasMoment) {
+                if (sign === 'add') {
+                    newDay = moment(day).add(days, "days").toDate();
+                } else if (sign === 'subtract') {
+                    newDay = moment(day).subtract(days, "days").toDate();
+                }
+            }
+
+            this.setDate(newDay);
+        },
+
         adjustCalendars: function() {
             this.calendars[0] = adjustCalendar(this.calendars[0]);
             for (var c = 1; c < this._o.numberOfMonths; c++) {
@@ -14918,10 +14881,17 @@ process.umask = function() { return 0; };
          */
         setMinDate: function(value)
         {
-            if (!this._o.showTime) setToStartOfDay(value);
-            this._o.minDate = value;
-            this._o.minYear  = value.getFullYear();
-            this._o.minMonth = value.getMonth();
+            if(value instanceof Date) {
+                if (!this._o.showTime) setToStartOfDay(value);
+                this._o.minDate = value;
+                this._o.minYear  = value.getFullYear();
+                this._o.minMonth = value.getMonth();
+            } else {
+                this._o.minDate = defaults.minDate;
+                this._o.minYear  = defaults.minYear;
+                this._o.minMonth = defaults.minMonth;
+                this._o.startRange = defaults.startRange;
+            }
             this.draw();
         },
 
@@ -14930,10 +14900,17 @@ process.umask = function() { return 0; };
          */
         setMaxDate: function(value)
         {
-            setToStartOfDay(value);
-            this._o.maxDate = value;
-            this._o.maxYear = value.getFullYear();
-            this._o.maxMonth = value.getMonth();
+            if(value instanceof Date) {
+                if (!this._o.showTime) setToStartOfDay(value);
+                this._o.maxDate = value;
+                this._o.maxYear = value.getFullYear();
+                this._o.maxMonth = value.getMonth();
+            } else {
+                this._o.maxDate = defaults.maxDate;
+                this._o.maxYear = defaults.maxYear;
+                this._o.maxMonth = defaults.maxMonth;
+                this._o.endRange = defaults.endRange;
+            }
             this.draw();
         },
 
@@ -14960,7 +14937,8 @@ process.umask = function() { return 0; };
                 maxYear = opts.maxYear,
                 minMonth = opts.minMonth,
                 maxMonth = opts.maxMonth,
-                html = '';
+                html = '',
+                randId;
 
             if (this._y <= minYear) {
                 this._y = minYear;
@@ -14975,16 +14953,19 @@ process.umask = function() { return 0; };
                 }
             }
 
+            randId = 'pika-title-' + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 2);
+
             for (var c = 0; c < opts.numberOfMonths; c++) {
-                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) + this.render(this.calendars[c].year, this.calendars[c].month) + '</div>';
+                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year, randId) + this.render(this.calendars[c].year, this.calendars[c].month, randId) + '</div>';
             }
 
             if (opts.showTime) {
+                var prevDate = this._d || this._o.defaultDate;
                 html += '<div class="pika-time-container">' +
                         renderTime(
-                            this._d ? this._d.getHours() : 0,
-                            this._d ? this._d.getMinutes() : 0,
-                            this._d ? this._d.getSeconds() : 0,
+                            prevDate && isDate(prevDate) ? prevDate.getHours() : 0,
+                            prevDate && isDate(prevDate) ? prevDate.getMinutes() : 0,
+                            prevDate && isDate(prevDate) ? prevDate.getSeconds() : 0,
                             opts)
                     + '</div>';
             }
@@ -15000,11 +14981,10 @@ process.umask = function() { return 0; };
             }
 
             if (typeof this._o.onDraw === 'function') {
-                var self = this;
-                sto(function() {
-                    self._o.onDraw.call(self);
-                }, 0);
+                this._o.onDraw(this);
             }
+          // let the screen reader user know to use arrow keys
+          this._o.field.setAttribute('aria-label', 'Use the arrow keys to pick a date');
         },
 
         adjustPosition: function()
@@ -15061,7 +15041,7 @@ process.umask = function() { return 0; };
         /**
          * render HTML for a particular month
          */
-        render: function(year, month)
+        render: function(year, month, randId)
         {
             var opts   = this._o,
                 now    = new Date(),
@@ -15104,8 +15084,8 @@ process.umask = function() { return 0; };
                     isStartRange = opts.startRange && compareDates(opts.startRange, day),
                     isEndRange = opts.endRange && compareDates(opts.endRange, day),
                     isInRange = opts.startRange && opts.endRange && opts.startRange < day && day < opts.endRange,
-                    isDisabled = (opts.minDate && day < opts.minDate) ||
-                                 (opts.maxDate && day > opts.maxDate) ||
+                    isDisabled = (minDate_date && day < minDate_date) ||
+                                 (maxDate_date && day > maxDate_date) ||
                                  (opts.disableWeekends && isWeekend(day)) ||
                                  (opts.disableDayFn && opts.disableDayFn(day));
 
@@ -15146,7 +15126,7 @@ process.umask = function() { return 0; };
                     r = 0;
                 }
             }
-            return renderTable(opts, data);
+            return renderTable(opts, data, randId);
         },
 
         isVisible: function()
@@ -15156,7 +15136,7 @@ process.umask = function() { return 0; };
 
         show: function()
         {
-            if (!this._v) {
+            if (!this.isVisible()) {
                 removeClass(this.el, 'is-hidden');
                 this._v = true;
                 this.draw();
@@ -15216,10 +15196,131 @@ process.umask = function() { return 0; };
 
 }));
 
-},{"moment":3}],5:[function(require,module,exports){
+},{"moment":2}],4:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+(function () {
+  try {
+    cachedSetTimeout = setTimeout;
+  } catch (e) {
+    cachedSetTimeout = function () {
+      throw new Error('setTimeout is not defined');
+    }
+  }
+  try {
+    cachedClearTimeout = clearTimeout;
+  } catch (e) {
+    cachedClearTimeout = function () {
+      throw new Error('clearTimeout is not defined');
+    }
+  }
+} ())
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = cachedSetTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    cachedClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        cachedSetTimeout(drainQueue, 0);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],5:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.24
+ * Vue.js v1.0.26
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -15618,10 +15719,15 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
 var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var isWechat = UA && UA.indexOf('micromessenger') > 0;
+var iosVersionMatch = isIos && UA.match(/os ([\d_]+)/);
+var iosVersion = iosVersionMatch && iosVersionMatch[1].split('_');
+
+// detecting iOS UIWebView by indexedDB
+var hasMutationObserverBug = iosVersion && Number(iosVersion[0]) >= 9 && Number(iosVersion[1]) >= 3 && !window.indexedDB;
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -15662,7 +15768,7 @@ var nextTick = (function () {
   }
 
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
+  if (typeof MutationObserver !== 'undefined' && !hasMutationObserverBug) {
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(counter);
@@ -15734,12 +15840,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
-  if (this.size === this.limit) {
-    removed = this.shift();
-  }
 
   var entry = this.get(key, true);
   if (!entry) {
+    if (this.size === this.limit) {
+      removed = this.shift();
+    }
     entry = {
       key: key
     };
@@ -15984,7 +16090,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -16771,7 +16877,8 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        !/^(data|time|rtc|rb)$/.test(tag)
+        // Firefox returns unknown for some "Interactive elements."
+        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
       );
     }
   };
@@ -17107,7 +17214,9 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      parent = mergeOptions(parent, child.mixins[i], vm);
+      var mixin = child.mixins[i];
+      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
+      parent = mergeOptions(parent, mixinOptions, vm);
     }
   }
   for (key in parent) {
@@ -17535,10 +17644,13 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
+	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
 	isIos: isIos,
-	isWechat: isWechat,
+	iosVersionMatch: iosVersionMatch,
+	iosVersion: iosVersion,
+	hasMutationObserverBug: hasMutationObserverBug,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -18026,7 +18138,9 @@ var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var booleanLiteralRE = /^(?:true|false)$/;
+var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
+
+function noop() {}
 
 /**
  * Save / Rewrite / Restore
@@ -18108,7 +18222,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here becaue the regex matches 1 extra char
+  // pad 1 space here because the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -18129,7 +18243,15 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
+    if (process.env.NODE_ENV !== 'production') {
+      /* istanbul ignore if */
+      if (e.toString().match(/unsafe-eval|CSP/)) {
+        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
+      } else {
+        warn('Invalid expression. ' + 'Generated function body: ' + body);
+      }
+    }
+    return noop;
   }
 }
 
@@ -18191,8 +18313,8 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat true/false as paths
-  !booleanLiteralRE.test(exp) &&
+  // don't treat literal values as paths
+  !literalValueRE$1.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
@@ -18608,7 +18730,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if (isA || isO) {
+  if ((isA || isO) && Object.isExtensible(val)) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -18671,6 +18793,7 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
+var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -18693,8 +18816,9 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
+  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch) {
+  if (!tagMatch && !entityMatch && !commentMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -19661,7 +19785,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * wathcer's dependency collection phase because we want
+   * watcher's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -20004,7 +20128,10 @@ var text$2 = {
   },
 
   update: function update(value) {
-    this.el.value = _toString(value);
+    // #3029 only update when the value changes. This prevent
+    // browsers from overwriting values like selectionStart
+    value = _toString(value);
+    if (value !== this.el.value) this.el.value = value;
   },
 
   unbind: function unbind() {
@@ -20053,6 +20180,8 @@ var radio = {
 var select = {
 
   bind: function bind() {
+    var _this = this;
+
     var self = this;
     var el = this.el;
 
@@ -20084,7 +20213,12 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', this.forceUpdate);
+    this.vm.$on('hook:attached', function () {
+      nextTick(_this.forceUpdate);
+    });
+    if (!inDoc(el)) {
+      nextTick(this.forceUpdate);
+    }
   },
 
   update: function update(value) {
@@ -21354,7 +21488,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value);
+  value = coerceProp(prop, value, vm);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -21473,13 +21607,17 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value) {
+function coerceProp(prop, value, vm) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  // coerce is a function
-  return coerce(value);
+  if (typeof coerce === 'function') {
+    return coerce(value);
+  } else {
+    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
+    return value;
+  }
 }
 
 /**
@@ -22011,10 +22149,9 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
+    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    if (oldId) {
-      removeClass(el, oldId + '-transition');
-    }
+    removeClass(el, oldId + '-transition');
     addClass(el, id + '-transition');
   }
 };
@@ -22439,7 +22576,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = value;
+            node.data = _toString(value);
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -23423,7 +23560,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop() {}
+function noop$1() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -23522,7 +23659,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop;
+      this._update = noop$1;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -24960,7 +25097,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
     },
     write: function write(value) {
       try {
@@ -25033,7 +25170,13 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
+    var length = args.length;
+    if (length > 1) {
+      var index = value % 10 - 1;
+      return index in args ? args[index] : args[length - 1];
+    } else {
+      return args[0] + (value === 1 ? '' : 's');
+    }
   },
 
   /**
@@ -25218,7 +25361,9 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          definition.name = id;
+          if (!definition.name) {
+            definition.name = id;
+          }
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -25233,7 +25378,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.24';
+Vue.version = '1.0.26';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -25249,7 +25394,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":2}],6:[function(require,module,exports){
+},{"_process":4}],6:[function(require,module,exports){
 "use strict";
 
 var _vue = require("vue");
@@ -25273,10 +25418,8 @@ if (document.getElementById("app")) {
       nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
       nav_open: false, // is the nav open or not
       media_open: false },
-    // is the media dialog open or not?
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") },
-    // media dialog popup (the iframe basically)
     methods: {
       // Reveal/hide the primary nav on clicking a toggle button
 
@@ -25460,7 +25603,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
        * and JS DOM hooks for the UI
        */
 
-},{"../vendor/jquery-slimscroll.js":14,"jquery":1,"pikaday-time":4}],14:[function(require,module,exports){
+},{"../vendor/jquery-slimscroll.js":14,"jquery":1,"pikaday-time":3}],14:[function(require,module,exports){
 'use strict';
 
 /*! Copyright (c) 2011 Piotr Rochala (http://rocha.la)
@@ -25846,7 +25989,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           me.scrollTop(delta);
 
           // fire scrolling event
-          me.trigger('slimscrolling', ~ ~delta);
+          me.trigger('slimscrolling', ~~delta);
 
           // ensure bar is visible
           showBar();
@@ -25880,13 +26023,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           clearTimeout(queueHide);
 
           // when bar reached top or bottom
-          if (percentScroll == ~ ~percentScroll) {
+          if (percentScroll == ~~percentScroll) {
             //release wheel
             releaseScroll = o.allowPageScroll;
 
             // publish approporiate event
             if (lastScroll != percentScroll) {
-              var msg = ~ ~percentScroll == 0 ? 'top' : 'bottom';
+              var msg = ~~percentScroll == 0 ? 'top' : 'bottom';
               me.trigger('slimscroll', msg);
             }
           } else {
