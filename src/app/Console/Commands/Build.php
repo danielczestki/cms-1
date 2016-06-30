@@ -96,7 +96,6 @@ class Build extends Command
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
         $this->artisan->call("migrate");
-        usleep(100000);
         
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();

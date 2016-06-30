@@ -27,7 +27,9 @@
     <main class="MediaMain MediaMain--pad">
         {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $formtype, "filters" => $filters]) }}
             {{ CmsForm::hidden(["name" => "type", "value" => request()->get("type")]) }}
+            
             {{ CmsForm::text(["name" => "ssd", "label" => "sdsd"]) }}
+            
             {{ CmsForm::buttons() }}
         {{ CmsForm::close() }}
     </main>

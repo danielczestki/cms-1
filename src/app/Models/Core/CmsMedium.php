@@ -32,4 +32,12 @@ class CmsMedium extends Model
      * @var array
      */
     protected $dates = ["created_at", "updated_at"];
+    
+    /**
+     * Get the image record associated with the medium.
+     */
+    public function image()
+    {
+        return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumImage');
+    }
 }
