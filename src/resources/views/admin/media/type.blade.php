@@ -1,5 +1,7 @@
 @extends("cms::admin.layouts.media")
 
+@inject("media", "Thinmartian\Cms\App\Services\Media\Media")
+
 @section("body_class", "MediaLibrary")
 @section("title", "Media Library")
 
@@ -28,7 +30,7 @@
         <div class="Box"><div class="Form Utility--text-center">
             
             <ul class="MediaTypes">
-                @foreach (CmsImage::getMediaTypes() as $medianame => $mediatype)
+                @foreach ($media->getMediaTypes() as $medianame => $mediatype)
                     @if ($mediatype["enabled"])
                         <li class="MediaTypes__type"><a href="{{ route('admin.media.create', ['type' => $medianame]) }}" class="MediaTypes__link">
                             <i class="fa fa-{{ $mediatype['icon'] }}"></i>

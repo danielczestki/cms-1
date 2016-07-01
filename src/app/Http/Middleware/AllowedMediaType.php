@@ -2,7 +2,7 @@
 
 namespace Thinmartian\Cms\App\Http\Middleware;
 
-use Closure, CmsImage;
+use Closure;
 
 class AllowedMediaType
 {
@@ -16,8 +16,8 @@ class AllowedMediaType
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $type = $request->get("type");
-        if (! array_key_exists($type, CmsImage::getMediaTypes()) or ! CmsImage::getMediaTypes("{$type}.enabled")) {
+        $media = app()->make("Thinmartian\Cms\App\Services\Media\Media");
+        if (! $media->isValidMediaType($type = $request->get("type"))) {
             return redirect()->route("admin.media.type")->withError("Sorry, the media type {$type} is not allowed");
         }
         return $next($request);

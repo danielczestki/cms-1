@@ -78,4 +78,18 @@ class ResourceInput {
     {
         return array_except(request()->all(), $this->ignore);
     }
+    
+    /**
+     * Pull the param from the input if there is no prop
+     * 
+     * @param  string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (array_key_exists($name, $this->input)) {
+            return $this->input[$name];
+        }
+    }
+    
 }

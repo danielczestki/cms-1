@@ -2,7 +2,7 @@
 
 namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
-use CmsForm, CmsImage, CmsVideo, CmsDocument, CmsEmbed;
+use CmsForm;
 use App\Http\Controllers\Controller as BaseController;
 use Thinmartian\Cms\App\Http\Requests\Core\MediaRequest;
 use Illuminate\Http\Request;
@@ -12,6 +12,13 @@ use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 
 class MediaController extends BaseController
 {
+    
+    /**
+     * The media type service we are using
+     * 
+     * @var Thinmartian\Cms\App\Services\Media\Image|Video|Document|Embed
+     */
+    protected $media;
     
     /**
      * @var Thinmartian\Cms\App\Services\Resource\ResourceInput
@@ -28,6 +35,7 @@ class MediaController extends BaseController
         $this->middleware("cms.media.allowed", ["only" => ["create"]]);
         view()->share("controller", "MediaController");
         view()->share("filters", []);
+        $this->setMedia(); // try to set the media object
     }
     
     /**
@@ -58,7 +66,7 @@ class MediaController extends BaseController
      */
     public function create()
     {
-        $mediatype = CmsImage::getMediaTypes(request()->get("type"));
+        $mediatype = $this->media->getMediaTypes(request()->get("type"));
         $formtype = "create";
         $subtitle = "<i class='fa fa-{$mediatype['icon']}'></i> Upload a new " . strtolower($mediatype["label"]);
         return view("cms::admin.media.form", compact("mediatype", "formtype", "subtitle"));
@@ -105,23 +113,28 @@ class MediaController extends BaseController
      * Delegate a method to one of the services based on the type
      * 
      * @param  string $method The method to call on the service
+     * @param  mixed  $params
      * @return App\Cms\CmsMedium
      */
     private function delegate($method, ...$params)
     {
-        switch (request()->get("type")) {
-            case "image" :
-                return CmsImage::$method(...$params);
-            break;
-            case "video" :
-                return CmsVideo::$method(...$params);
-            break;
-            case "document" :
-                return CmsDocument::$method(...$params);
-            break;
-            case "embed" :
-                return CmsEmbed::$method(...$params);
-            break;
+        return $this->media->$method(...$params);
+    }
+    
+    /**
+     * Set the media prop, we can send the $type or default to what's
+     * in the request()
+     * 
+     * @param string $type image, document etc or we will use the request()->get("type")
+     */
+    private function setMedia($type = null)
+    {
+        $service = new \Thinmartian\Cms\App\Services\Media\Media;
+        $type = $type ?: request()->get("type");
+        
+        if ($service->isValidMediaType($type)) {
+            $this->media = app()->make("Thinmartian\Cms\App\Services\Media\\" . ucfirst($type));
+            $this->media->setInput($this->input);
         }
     }
     

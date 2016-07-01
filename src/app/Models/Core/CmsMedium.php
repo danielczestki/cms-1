@@ -24,7 +24,7 @@ class CmsMedium extends Model
      *
      * @var array
      */
-    protected $fillable = ["title", "type", "disk", "status", "filename", "extension", "title", "original_name", "original_extension", "original_filesize"];
+    protected $fillable = ["type", "disk", "visibility", "cache_buster", "title", "uploaded", "filename", "extension", "original_name", "original_extension", "original_mime", "original_filesize"];
     
     /**
      * The attributes that should be mutated to dates.
@@ -40,4 +40,19 @@ class CmsMedium extends Model
     {
         return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumImage');
     }
+    
+    /**
+     * Boot methods
+     * 
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::saving(function($record) {
+            $record->cache_buster = str_random(15);
+        });
+    }
+    
 }
