@@ -8,7 +8,16 @@ Thin Martian CMS platform built on the Laravel PHP Framework
 
 ----------
 
-## Install
+## Setup and Installation
+
+### System Requirements
+
+- PHP 5.6+ (we use variadic functions)
+- Laravel 5.2+
+- Database (Any Laravel supported database)
+- PHP GD library
+
+### Install
 
 > **TO DO: Package isn't currently on packagist, so use a `repositories: [{ type: 'vcs', url: 'path/to/git' }]` in your `composer.json` for now.**
 

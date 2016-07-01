@@ -43,7 +43,11 @@
             ]) }}
             
             
-            {{ CmsForm::buttons(["hide_save_exit" => true]) }}
+            {{ CmsForm::buttons([
+                "save_label" => "Next Step",
+                "save_icon" => "arrow-right",
+                "hide_save_exit" => true
+            ]) }}
         {{ CmsForm::close() }}
     </main>
     

@@ -19,7 +19,7 @@ class CmsMediumImage extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ["filename", "extension", "original_name", "original_extension", "original_filesize", "original_width", "original_height"];
+    protected $fillable = ["filename", "extension", "aspect", "focal", "original_name", "original_extension", "original_filesize", "original_width", "original_height"];
     
     /**
      * The primary key for the model.

@@ -78,36 +78,49 @@ class MediaController extends BaseController
         if (method_exists($this, "saving")) {
             $this->saving($this->input);
         }
-        $media = $this->persist("store");
+        // persist
+        $media = $this->delegate("store", $this->input);
         if (method_exists($this, "created")) {
-            $this->created($resource, $this->input);
+            $this->created($media, $this->input);
         }
         if (method_exists($this, "saved")) {
-            $this->saved($resource, $this->input);
+            $this->saved($media, $this->input);
         }
-        dd("DONE");
+        // send them off
+        return $this->delegate("redirectOnStore", $media);
     }
     
     /**
-     * Determine how to persist the the media
+     * Set the focal point of the image (images only use this)
      * 
-     * @param  string $method The CRUD op we are doing (e.g. store, update etc)
+     * @param  integer $cms_medium_id
+     * @return \Illuminate\Http\Response
+     */
+    public function focal($cms_medium_id)
+    {
+        dd("FOCAL: {$cms_medium_id}");
+    }
+    
+    /**
+     * Delegate a method to one of the services based on the type
+     * 
+     * @param  string $method The method to call on the service
      * @return App\Cms\CmsMedium
      */
-    private function persist($method)
+    private function delegate($method, ...$params)
     {
         switch (request()->get("type")) {
             case "image" :
-                return CmsImage::$method($this->input);
+                return CmsImage::$method(...$params);
             break;
             case "video" :
-                return CmsVideo::$method($this->input);
+                return CmsVideo::$method(...$params);
             break;
             case "document" :
-                return CmsDocument::$method($this->input);
+                return CmsDocument::$method(...$params);
             break;
             case "embed" :
-                return CmsEmbed::$method($this->input);
+                return CmsEmbed::$method(...$params);
             break;
         }
     }

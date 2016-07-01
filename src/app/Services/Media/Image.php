@@ -4,7 +4,8 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 use Intervention\Image\ImageManager;
 use Thinmartian\Cms\App\Services\Resource\ResourceInput;
-
+use App\Cms\CmsMedium;
+use Thinmartian\Cms\App\Models\Core\CmsMediumImage;
 
 /*
     // LOGIC FOR SAVING THE CROPPED IMAGE TO THE USERS
@@ -34,6 +35,11 @@ class Image {
         $this->image = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
     }    
     
+    
+    //
+    // CRUD
+    // 
+    
     /**
      * Store the image
      * 
@@ -42,11 +48,57 @@ class Image {
      */
     public function store(ResourceInput $input)
     {
-        $media = $this->createMedia($input);
-        $form = $input->getInput();
-        
-        dd($media);
+        // create the parent media item first
+        $cms_media = $this->createMedia($input);
+        // upload the file
+        $upload = $this->upload($input, $cms_media);
+        // now store the image
+        $image = new CmsMediumImage;
+        $image->filename = "test";
+        $image->extension = "jpg";
+        $media->image()->save($image);
+        // return the parent media record
+        return $cms_media;
     }
+    
+    
+    //
+    // FILE UPLOADS
+    // 
+    
+    /**
+     * Upload the file to the preferred disk
+     * 
+     * @param  ResourceInput $input
+     * @param  CmsMedium     $cms_media
+     * @return
+     */
+    public function upload(ResourceInput $input, CmsMedium $cms_media)
+    {
+        // Upload the file first
+        $file = $this->uploadFile($input, $cms_media);
+        dd($file);
+    }
+    
+    
+    //
+    // REDIRECTS
+    // 
+    
+    /**
+     * Redirect the user after store
+     * 
+     * @return  Illuminate\Routing\Redirector
+     */
+    public function redirectOnStore(CmsMedium $cms_media) 
+    {
+        return redirect()->route("admin.media.focal", ["cms_medium_id" => $cms_media->id]);
+    }
+    
+    
+    //
+    // VALIDATION
+    // 
     
     /**
      * Get the form validation rules on create
@@ -58,6 +110,7 @@ class Image {
         return [
             "type" => "required|in:". implode(",", array_keys($this->getMediaTypes())),
             "title" => "required|max:100",
+            "file" => "required|file|image|mimes:". implode(",", $this->getMediaTypes("image.accepted"))
         ];
     }
     
@@ -70,6 +123,11 @@ class Image {
     {
         return [];
     }
+    
+    
+    //
+    // MAGIC
+    // 
     
     /**
      * Dynamically call the method on the ImageManger instance.

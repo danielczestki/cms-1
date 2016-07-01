@@ -67,6 +67,19 @@ return [
     
     /*
     |--------------------------------------------------------------------------
+    | Media path
+    |--------------------------------------------------------------------------
+    |
+    | Set the path to store the media. This path will be suffixes to Laravels
+    | default path for the disk (e.g 'local' would be storage/app/{your path}).
+    | Thin Martian CMS also automatically add a few more folders after your path.
+    |
+    */
+    
+    "media_path" => "cms",
+   
+    /*
+    |--------------------------------------------------------------------------
     | Media types
     |--------------------------------------------------------------------------
     |

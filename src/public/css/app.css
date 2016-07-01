@@ -1184,52 +1184,6 @@ textarea {
 .Form {
   width: 100%;
   display: table;
-/*&__file 
-        width: 100%
-        display: table
-        &-button, &-placeholder, &-preview
-            display: table-cell
-        &-placeholder 
-            height: 60px
-            padding: 0 70px 0 12px
-            line-height: 65px
-            position: relative
-            cursor: pointer
-            &--empty
-                color: $Color__grey--3
-        &-preview
-            width: 60px
-            height: 60px
-            text-align: center
-            background-color: #f1f1f1
-            background-repeat: no-repeat
-            background-position: 50% 50%
-            background-size: cover
-            position: relative
-            z-index: 1
-            &:before
-                content: "preview"
-                width: 100%
-                padding: 1px 0
-                font-size: 8px 
-                text-align: center
-                background: rgba($Color__grey--4, .8)
-                left: 0
-                bottom: 0
-                position: absolute
-        &-spinner
-            margin-top: 24px
-            color: $Color__grey--3
-        &-clear 
-            transition: color .2s
-            color: $Color__grey--4
-            font-size: 12px
-            right: -6px
-            top: -12px
-            position: relative
-            cursor: pointer
-            &:hover
-                color: $Color__red--1*/
 }
 .Form__row {
   display: table-row;
@@ -1336,8 +1290,10 @@ textarea {
   float: left;
 }
 .Form__file-placeholder {
-  width: calc(100% - 125px - 70px);
-  padding-left: 12px;
+  width: calc(100% - 125px - 60px);
+  padding: 0 12px;
+  border-top: solid 1px #e8e8e8;
+  border-bottom: solid 1px #e8e8e8;
   line-height: 65px;
   cursor: pointer;
   float: left;
@@ -1349,7 +1305,7 @@ textarea {
   width: 60px;
   height: 60px;
   text-align: center;
-  background-color: #f1f1f1;
+  background-color: #e8e8e8;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
