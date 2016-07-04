@@ -6,8 +6,21 @@
 import $ from "jquery";
 import slimScroll from "../vendor/jquery-slimscroll.js";
 import Pikaday from "pikaday-time";
+import NProgress from "nprogress";
 
 (function(){
+  
+  /**
+   * Hook up some NProgress bars to the forms that want it
+   */
+  let forms = document.querySelectorAll("form.Form--progress");
+  [].forEach.call(forms, (form) => {
+    form.onsubmit = function(ev) {
+      setTimeout(() => {
+        NProgress.start();
+      }, 500);
+    }
+  });
   
   /**
    * Init the tinymce editors. We don't use a Vuejs component here as we

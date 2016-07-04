@@ -21,7 +21,8 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
             }
             // create the special media routes
             Route::get("media/type", ["as" => "admin.media.type", "uses" => "MediaController@type"]); // select the media type (image, document, video or embed)
-            Route::get("media/focal/{cms_medium_id}", ["as" => "admin.media.focal", "uses" => "MediaController@focal"]); // set the focal point for the image (image only)
+            Route::get("media/focal/{cms_medium_id}", ["middleware" => "cms.media.is:image", "as" => "admin.media.focal", "uses" => "MediaController@focal"]); // select the focal point for the image (image only)
+            Route::post("media/focusing/{cms_medium_id}", ["middleware" => "cms.media.is:image", "as" => "admin.media.focusing", "uses" => "MediaController@focusing"]); // set the focal point for the image (image only)
         }
         
         // Predefined routes

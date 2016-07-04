@@ -6,7 +6,10 @@ import Vue from "vue";
 if (document.getElementById("media")) {
   
   new Vue({
-    el: "#media"
+    el: "#media",
+    components: {
+      mediafocus: require("./components/Mediafocus/Mediafocus")
+    },
   });
   
 }

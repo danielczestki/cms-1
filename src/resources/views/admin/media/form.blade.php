@@ -25,7 +25,7 @@
     
     <!-- Form -->
     <main class="MediaMain MediaMain--pad">
-        {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $formtype, "filters" => [], "files" => true]) }}
+        {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $formtype, "filters" => [], "files" => true, "progress" => true]) }}
             {{ CmsForm::hidden(["name" => "type", "value" => request()->get("type")]) }}
             
             {{ CmsForm::text([

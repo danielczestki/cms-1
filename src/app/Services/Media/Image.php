@@ -11,6 +11,39 @@ class Image extends Media
 {
     
     /**
+     * Width of the source image we create
+     * 
+     * @see  $this->uploadSource()
+     * @var integer
+     */
+    protected $sourceWidth = 1400;
+    
+    /**
+     * Path where we store the source image
+     * 
+     * @see  $this->uploadSource()
+     * @var string
+     */
+    protected $sourcePath;
+    
+    /**
+     * Allowed focal points
+     * 
+     * @var array
+     */
+    public $allowedFocals = [
+        "top-left",
+        "top",
+        "top-right",
+        "left",
+        "center",
+        "right",
+        "bottom-left",
+        "bottom",
+        "bottom-right"
+    ];
+    
+    /**
      * @var Intervention\Image\ImageManager
     */
     protected $intervention;
@@ -22,6 +55,7 @@ class Image extends Media
     {
         parent::__construct();
         $this->intervention = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
+        $this->sourcePath = config("filesystems.disks.local.root", storage_path("app")) . "/cms/media"; // use their local disk if they have one
     }   
     
     //
@@ -37,7 +71,7 @@ class Image extends Media
     {
         // create the parent media item first
         $this->storeCmsMedium();
-        // lets upload the file
+        // lets upload the raw file
         $this->upload();
         // now persist the image
         if ($this->uploadedFile->uploaded) {
@@ -47,9 +81,30 @@ class Image extends Media
             $resource->original_width = $image->width();
             $resource->original_height = $image->height();
             $this->cmsMedium->image()->save($resource);
+            // lets create the source file used for future variations
+            $this->uploadSource();
         }
         // Return the model back to the controller
         return $this->cmsMedium;     
+    }
+    
+    /**
+     * We create a small image locally that will be used as the base image
+     * for all future resize variations. Otherwise, we may have to collected
+     * from s3 on every new image which could get crazy
+     * 
+     * @return void
+     */
+    public function uploadSource()
+    {
+        // move the file first
+        $this->input->file->move($this->getSourcePath(false), $this->uploadedFile->file);
+        // now resize it 
+        $image = $this->intervention->make($this->getSourcePath());
+        $image->resize($this->sourceWidth, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image->save(null, 100);
     }
     
     //
@@ -96,10 +151,22 @@ class Image extends Media
     
     //
     // Getters
-    // 
+    //
+    
+    /**
+     * Get the source path (optionally with the file)
+     * 
+     * @param  boolean $file Bind the file to the end of the path
+     * @return string
+     */
+    public function getSourcePath($file = true)
+    {
+        return $this->sourcePath . "/" . $this->cmsMedium->id . "/source/" . ($file ? $this->uploadedFile->file : null);
+    }
     
     /**
      * Return the aspect ratio of the image
+     * 
      * @param  Intervention\Image\Image $image
      * @return string
      */
@@ -131,146 +198,3 @@ class Image extends Media
     } 
     
 }
-
-// namespace Thinmartian\Cms\App\Services\Media;
-
-// use Intervention\Image\ImageManager;
-// use Thinmartian\Cms\App\Services\Resource\ResourceInput;
-// use App\Cms\CmsMedium;
-// use Thinmartian\Cms\App\Models\Core\CmsMediumImage;
-
-// /*
-//     // LOGIC FOR SAVING THE CROPPED IMAGE TO THE USERS
-//     // PREFERRED CENTER POINT
-//     $width = 500;
-//     $height = 500;
-//     $x = 890 - ($width/2);
-//     $y = 396 - ($height/2);
-//     CmsImage::make(storage_path("image.jpg"))->crop($width, $height, $x, $y)->save(storage_path("image-updated.jpg"));
-// */  
-
-
-// class Image {
-    
-//     use Media;
-    
-//     /**
-//      * @var Intervention\Image\ImageManager
-//      */
-//     protected $image;
-    
-//     /**
-//      * constructor
-//      */
-//     public function __construct()
-//     {
-//         $this->image = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
-//     }    
-    
-    
-//     //
-//     // CRUD
-//     // 
-    
-//     /**
-//      * Store the image
-//      * 
-//      * @param  ResourceInput $input
-//      * @return App\Cms\CmsMedium
-//      */
-//     public function store(ResourceInput $input)
-//     {
-//         // create the parent media item first
-//         $cms_media = $this->createMedia($input);
-//         // upload the file
-//         $upload = $this->upload($input, $cms_media);
-//         // now store the image
-//         $image = new CmsMediumImage;
-//         $image->filename = "test";
-//         $image->extension = "jpg";
-//         $media->image()->save($image);
-//         // return the parent media record
-//         return $cms_media;
-//     }
-    
-    
-//     //
-//     // FILE UPLOADS
-//     // 
-    
-//     *
-//      * Upload the file to the preferred disk
-//      * 
-//      * @param  ResourceInput $input
-//      * @param  CmsMedium     $cms_media
-//      * @return
-     
-//     public function upload(ResourceInput $input, CmsMedium $cms_media)
-//     {
-//         // Upload the file first
-//         $file = $this->uploadFile($input, $cms_media);
-//         dd($file);
-//     }
-    
-    
-//     //
-//     // REDIRECTS
-//     // 
-    
-//     /**
-//      * Redirect the user after store
-//      * 
-//      * @return  Illuminate\Routing\Redirector
-//      */
-//     public function redirectOnStore(CmsMedium $cms_media) 
-//     {
-//         return redirect()->route("admin.media.focal", ["cms_medium_id" => $cms_media->id]);
-//     }
-    
-    
-//     //
-//     // VALIDATION
-//     // 
-    
-//     /**
-//      * Get the form validation rules on create
-//      * 
-//      * @return array
-//      */
-//     public function validationOnCreate()
-//     {
-//         return [
-//             "type" => "required|in:". implode(",", array_keys($this->getMediaTypes())),
-//             "title" => "required|max:100",
-//             "file" => "required|file|image|mimes:". implode(",", $this->getMediaTypes("image.accepted"))
-//         ];
-//     }
-    
-//     /**
-//      * Get the form validation rules on update
-//      * 
-//      * @return array
-//      */
-//     public function validationOnUpdate()
-//     {
-//         return [];
-//     }
-    
-    
-//     //
-//     // MAGIC
-//     // 
-    
-//     /**
-//      * Dynamically call the method on the ImageManger instance.
-//      *
-//      * @param  string $method
-//      * @param  array  $parameters
-//      * @return mixed
-//      */
-//     public function __call($method, $parameters)
-//     {
-//         return call_user_func_array([$this->image, $method], $parameters);
-//     }    
-    
-// }

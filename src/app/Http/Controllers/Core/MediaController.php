@@ -3,6 +3,7 @@
 namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
 use CmsForm;
+use App\Cms\CmsMedium;
 use App\Http\Controllers\Controller as BaseController;
 use Thinmartian\Cms\App\Http\Requests\Core\MediaRequest;
 use Illuminate\Http\Request;
@@ -99,14 +100,30 @@ class MediaController extends BaseController
     }
     
     /**
-     * Set the focal point of the image (images only use this)
+     * Select the focal point of the image (images only use this)
      * 
      * @param  integer $cms_medium_id
      * @return \Illuminate\Http\Response
      */
     public function focal($cms_medium_id)
     {
-        dd("FOCAL: {$cms_medium_id}");
+        $resource = CmsMedium::find($cms_medium_id)->first(); // we know this exists, the middleware checks this
+        $media = $this->setMedia($resource);
+        return view("cms::admin.media.focal", compact("cms_medium_id", "resource", "media"));
+    }
+    
+    /**
+     * Set the focal point of the image (images only use this)
+     * 
+     * @param  integer $cms_medium_id
+     * @return \Illuminate\Http\Response
+     */
+    public function focusing($cms_medium_id)
+    {
+        $resource = CmsMedium::find($cms_medium_id)->first(); // we know this exists, the middleware checks this
+        $resource->image->focal = request()->get("focal", "center");
+        $resource->image->save();
+        dd("Saved!");
     }
     
     /**
@@ -125,17 +142,20 @@ class MediaController extends BaseController
      * Set the media prop, we can send the $type or default to what's
      * in the request()
      * 
-     * @param string $type image, document etc or we will use the request()->get("type")
+     * @param string $cms_medium
      */
-    private function setMedia($type = null)
+    private function setMedia($cms_medium = null)
     {
         $service = new \Thinmartian\Cms\App\Services\Media\Media;
-        $type = $type ?: request()->get("type");
+        $type = $cms_medium ? $cms_medium->type : request()->get("type");
         
         if ($service->isValidMediaType($type)) {
             $this->media = app()->make("Thinmartian\Cms\App\Services\Media\\" . ucfirst($type));
             $this->media->setInput($this->input);
+            if ($cms_medium) $this->media->setCmsMedium($cms_medium);
+            return $this->media;
         }
+        return null;
     }
     
 }

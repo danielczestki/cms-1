@@ -19,6 +19,10 @@
         </div>
     </div>
     
+    <!-- Status messages -->
+    {{ CmsForm::error() }}
+    {{ CmsForm::success() }}
+    
     <!-- Content -->
     <main class="MediaMain">
          <ul class="MediaListing">

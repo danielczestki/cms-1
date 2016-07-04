@@ -6,23 +6,6 @@ class UploadedFile
 {
     
     /**
-     * Allowed focal points
-     * 
-     * @var array
-     */
-    public $allowedFocals = [
-        "top-left",
-        "top",
-        "top-right",
-        "left",
-        "center",
-        "right",
-        "bottom-left",
-        "bottom",
-        "bottom-right"
-    ];
-    
-    /**
      * Base path for all media uploads
      * 
      * @var string
@@ -92,10 +75,8 @@ class UploadedFile
     /**
      * Constructor
      */
-    public function __construct($cms_medium = null)
+    public function __construct()
     {
-        // TODO: For updates, pull in a $cms_medium and build the 
-        // object from the data in there
         $this->disk = config("cms.cms.media_disk");
         $this->basePath = config("cms.cms.media_path") . "/" . "media";
     }
