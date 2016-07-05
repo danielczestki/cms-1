@@ -123,7 +123,7 @@ class MediaController extends BaseController
         $resource = CmsMedium::find($cms_medium_id)->first(); // we know this exists, the middleware checks this
         $resource->image->focal = request()->get("focal", "center");
         $resource->image->save();
-        dd("Saved!");
+        return redirect()->route("admin.media.index")->withSuccess(ucfirst($resource->type) . " successfully saved!");
     }
     
     /**

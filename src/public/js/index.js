@@ -25810,7 +25810,6 @@ module.exports = {
   ready: function ready() {
     var _this = this;
 
-    console.log("sdsd");
     setTimeout(function () {
       _this.visible = false;
     }, 7000);

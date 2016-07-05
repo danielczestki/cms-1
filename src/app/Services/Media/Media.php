@@ -79,8 +79,6 @@ class Media
     {
         $record = new CmsMedium;
         $record->type = $this->input->type;
-        $record->disk = $this->uploadedFile->disk;
-        $record->visibility = $this->uploadedFile->visibility;
         $record->title = $this->input->title;
         $record->uploaded = $uploaded;
         $record->save();
@@ -102,24 +100,6 @@ class Media
         $this->cmsMedium->original_mime = $this->uploadedFile->originalMime;
         $this->cmsMedium->original_filesize = $this->uploadedFile->originalFilesize;
         $this->cmsMedium->save();
-    }
-    
-    //
-    // Validation
-    // 
-    
-    /**
-     * Determine if the media type is valid
-     * 
-     * @param  string  $type
-     * @return boolean
-     */
-    public function isValidMediaType($type = null)
-    {
-        if (! $type) return false;
-        if (! array_key_exists($type, $this->getMediaTypes())) return false;
-        if (! $this->getMediaTypes("{$type}.enabled")) return false;
-        return true;
     }
     
     //
@@ -150,8 +130,70 @@ class Media
     }
     
     //
+    // Validation
+    // 
+    
+    /**
+     * Determine if the media type is valid
+     * 
+     * @param  string  $type
+     * @return boolean
+     */
+    public function isValidMediaType($type = null)
+    {
+        if (! $type) return false;
+        if (! array_key_exists($type, $this->getMediaTypes())) return false;
+        if (! $this->getMediaTypes("{$type}.enabled")) return false;
+        return true;
+    }
+    
+    /**
+     * Does a file exist on the storage system
+     * 
+     * @param  string $filepath
+     * @return boolean
+     */
+    public function fileExists($filepath)
+    {
+        if ($this->isLocal()) {
+            // Local, so do a sotrage check as its quick
+            return Storage::disk($this->uploadedFile->disk)->exists($filepath);
+        } else {
+            // In the cloud, storage check takes double time, do a simple url check
+            $headers = @get_headers($this->getPublicUrl($filepath));
+            return strpos($headers[0], "200") ? true : false;
+        }
+    }
+    
+    //
     // Getters
     // 
+    
+    /**
+     * Determine the location of the disk and return the URL
+     * 
+     * @param  string $filepath
+     * @return string
+     */
+    public function getPublicUrl($filepath)
+    {
+        if ($this->isLocal()) {
+            return env("APP_URL") . "/" . $filepath; 
+        } else {
+            return config("cms.cms.media_cloud_url") . "/" . $filepath;
+        }
+    }
+    
+    /**
+     * Return the original path
+     * 
+     * @param  boolean $file Bind the file to the end of the path
+     * @return string
+     */
+    public function getOriginalPath($file = false)
+    {
+        return $this->uploadedFile->path . "/" . "/original/" . ($file ? $this->uploadedFile->file : null);
+    }
     
     /**
      * Return the allowed media types
@@ -167,14 +209,13 @@ class Media
     }
     
     /**
-     * Return the original path
+     * Determine if the disk is local or cloud based
      * 
-     * @param  boolean $file Bind the file to the end of the path
-     * @return string
+     * @return boolean
      */
-    public function getOriginalPath($file = false)
+    public function isLocal()
     {
-        return $this->uploadedFile->path . "/" . "/original/" . ($file ? $this->uploadedFile->file : null);
+        return config("filesystems.disks.{$this->uploadedFile->disk}.driver") == "local";
     }
     
     //
@@ -194,11 +235,11 @@ class Media
     /**
      * Set cmsMedium prop
      * 
-     * @param CmsMedium $cms_medium
+     * @param mixed $cms_medium CmsMedium model OR cms_medium_id
      */
-    public function setCmsMedium(CmsMedium $cms_medium)
+    public function setCmsMedium($cms_medium)
     {
-        $this->cmsMedium = $cms_medium;
+        $this->cmsMedium = is_object($cms_medium) ? $cms_medium : CmsMedium::findOrFail($cms_medium);
         $this->setUploadedFile();
     }
     

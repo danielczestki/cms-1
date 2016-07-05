@@ -25,7 +25,7 @@ class UploadedFile
      * 
      * @var string
     */
-    public $visibility = "public";
+    public $visibility;
     
     /**
      * @var string
@@ -78,6 +78,7 @@ class UploadedFile
     public function __construct()
     {
         $this->disk = config("cms.cms.media_disk");
+        $this->visibility = config("cms.cms.media_visibility");
         $this->basePath = config("cms.cms.media_path") . "/" . "media";
     }
     

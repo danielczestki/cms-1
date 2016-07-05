@@ -24,7 +24,7 @@ class CmsMedium extends Model
      *
      * @var array
      */
-    protected $fillable = ["type", "disk", "visibility", "cache_buster", "title", "uploaded", "filename", "extension", "original_name", "original_extension", "original_mime", "original_filesize"];
+    protected $fillable = ["type", "cache_buster", "title", "uploaded", "filename", "extension", "original_name", "original_extension", "original_mime", "original_filesize"];
     
     /**
      * The attributes that should be mutated to dates.

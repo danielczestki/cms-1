@@ -86,6 +86,8 @@ class Destroy extends Command
             $this->info("Destroying CMS, please wait...");
             // Delete the App/Cms folder
             $this->destroyCmsFolder();
+            //  Delete the media folder
+            $this->destroyMediaFolder();
             //  Delete the public asset vendor folder
             $this->destroyAssetsFolder();
             //  Delete the public config folder
@@ -110,6 +112,16 @@ class Destroy extends Command
     protected function destroyCmsFolder()
     {
         $this->filesystem->remove(app_path("Cms"));
+    }
+    
+    /**
+     * Deletes the media folder
+     * 
+     * @return void
+     */
+    protected function destroyMediaFolder()
+    {
+        $this->filesystem->remove(config("filesystems.disks.local.root", storage_path("app")) . "/cms");
     }
     
     /**

@@ -27,6 +27,13 @@ class Image extends Media
     protected $sourcePath;
     
     /**
+     * Set the generated image filename format
+     * 
+     * @var string
+     */
+    protected $imageFile = "{filename}-{width}x{height}.{extension}";
+    
+    /**
      * Allowed focal points
      * 
      * @var array
@@ -56,7 +63,36 @@ class Image extends Media
         parent::__construct();
         $this->intervention = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
         $this->sourcePath = config("filesystems.disks.local.root", storage_path("app")) . "/cms/media"; // use their local disk if they have one
-    }   
+    }  
+    
+    //
+    // Generate
+    //  
+    
+    /**
+     * The bread and butter, generates the images and moves it to the 
+     * final disk and serves the path back to the browser
+     * 
+     * @param  integer  $cms_medium_id  The cms_medium_id we are generating
+     * @param  mixed    $width          Set to null for auto
+     * @param  mixed    $height         Set to null for auto
+     * @return string
+     */
+    public function get($cms_medium_id, $width = null, $height = null)
+    {
+        // Set and check
+        $this->setCmsMedium($cms_medium_id);
+        if ($this->cmsMedium->type != "image") return false;
+        // Generate the file name now so we can check for existence first
+        $imagepath = $this->getImagePath($this->getImageFile($width, $height));
+        // Already there?
+        if ($this->fileExists($imagepath)) return $this->getPublicUrl($imagepath);
+        // generate the image
+        // move to final resting place
+        // return full url string
+        
+        dd($this);
+    }
     
     //
     // CRUD
@@ -152,6 +188,29 @@ class Image extends Media
     //
     // Getters
     //
+    
+    /**
+     * Return the image path
+     * 
+     * @param  string   $filename   Omit for the path only
+     * @return string
+     */
+    public function getImagePath($filename = null)
+    {
+        return $this->uploadedFile->path . "/image/" . $filename;
+    }
+    
+    /**
+     * Build and return the generatred filename
+     * 
+     * @param  mixed $width
+     * @param  mixed $height
+     * @return string
+     */
+    public function getImageFile($width = null, $height = null)
+    {
+        return str_ireplace(["{filename}", "{width}", "{height}", "{extension}"], [$this->uploadedFile->filename, $width ?: 0, $height ?: 0, $this->uploadedFile->extension], $this->imageFile);
+    }
     
     /**
      * Get the source path (optionally with the file)

@@ -67,7 +67,7 @@ return [
     
     /*
     |--------------------------------------------------------------------------
-    | Media path
+    | Media paths
     |--------------------------------------------------------------------------
     |
     | Set the path to store the media. This path will be suffixes to Laravels
@@ -76,9 +76,26 @@ return [
     | If changed after uploading media, all media will need to be moved to this
     | new location as the path is not persisted.
     |
+    | The media_cloud_url should be your cloud endpoint for all http requests.
+    | This is only required for cloud disks (above), local can be null
+    |
     */
     
     "media_path" => "cms",
+    "media_cloud_url" => "http://dev.thinmartian.cms.s3-eu-west-1.amazonaws.com",
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Media visibility
+    |--------------------------------------------------------------------------
+    |
+    | Set the visibility of uploaded files. This is only applicable to cloud
+    | storage such as s3. By default this is set to "public" so it's visible to
+    | all, anything else may prevent visitors viewing the media
+    |
+    */
+    
+    "media_visibility" => "public",
    
     /*
     |--------------------------------------------------------------------------
