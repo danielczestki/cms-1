@@ -56,4 +56,19 @@ class CmsMediumImage extends BaseModel
     {
         return $this->belongsTo("App\Cms\CmsMedium", "cms_medium_id");
     }
+    
+    /**
+     * Boot methods
+     * 
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::saving(function($record) {
+            $record->media->cache_buster = str_random(15);
+            $record->media->save();
+        });
+    }
 }

@@ -17,7 +17,6 @@ class IsMediaType
      */
     public function handle($request, Closure $next, $type = null)
     {
-        //return redirect()->route("admin.media.index")->withError("You can only set the focal point on images");
         // We do have a id right?
         $cms_medium_id = $request->cms_medium_id ?: app()->abort(404);
         // Good, does it exist?

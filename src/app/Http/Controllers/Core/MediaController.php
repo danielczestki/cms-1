@@ -46,7 +46,8 @@ class MediaController extends BaseController
      */
     public function index()
     {
-        return view("cms::admin.media.index");
+        $listing = CmsMedium::orderBy("created_at", "desc")->get();
+        return view("cms::admin.media.index", compact("listing"));
     }
     
     /**
@@ -107,7 +108,7 @@ class MediaController extends BaseController
      */
     public function focal($cms_medium_id)
     {
-        $resource = CmsMedium::find($cms_medium_id)->first(); // we know this exists, the middleware checks this
+        $resource = CmsMedium::find($cms_medium_id); // we know this exists, the middleware checks this
         $media = $this->setMedia($resource);
         return view("cms::admin.media.focal", compact("cms_medium_id", "resource", "media"));
     }
@@ -120,7 +121,7 @@ class MediaController extends BaseController
      */
     public function focusing($cms_medium_id)
     {
-        $resource = CmsMedium::find($cms_medium_id)->first(); // we know this exists, the middleware checks this
+        $resource = CmsMedium::find($cms_medium_id); // we know this exists, the middleware checks this
         $resource->image->focal = request()->get("focal", "center");
         $resource->image->save();
         return redirect()->route("admin.media.index")->withSuccess(ucfirst($resource->type) . " successfully saved!");

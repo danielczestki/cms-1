@@ -10,6 +10,11 @@ class Media
 {
     
     /**
+     * @var string
+     */
+    protected $tempPath;
+    
+    /**
      * @var Thinmartian\Cms\App\Services\Resource\ResourceInput
      */
     protected $input;
@@ -61,6 +66,7 @@ class Media
     public function __construct()
     {
         $this->uploadedFile = new UploadedFile;
+        $this->tempPath = storage_path("app/cms/temp");
         ini_set("default_socket_timeout", 9999);
         ini_set("max_execution_time", 9999);
         set_time_limit(0);
@@ -129,6 +135,17 @@ class Media
         $this->updateCmsMedium();
     }
     
+    /**
+     * Store a file on the disk
+     * 
+     * @param  string $filepath Full path where the file should be stored
+     * @param  string $file     The source file we want to move
+     */
+    protected function storeFile($destination, $source)
+    {
+        return Storage::disk($this->uploadedFile->disk)->put($destination, File::get($source), $this->uploadedFile->visibility);
+    }
+    
     //
     // Validation
     // 
@@ -178,9 +195,9 @@ class Media
     public function getPublicUrl($filepath)
     {
         if ($this->isLocal()) {
-            return env("APP_URL") . "/" . $filepath; 
+            return env("APP_URL") . "/storage/" . $filepath . "?" . $this->cmsMedium->cache_buster; 
         } else {
-            return config("cms.cms.media_cloud_url") . "/" . $filepath;
+            return config("cms.cms.media_cloud_url") . "/" . $filepath . "?" . $this->cmsMedium->cache_buster;
         }
     }
     
@@ -193,6 +210,17 @@ class Media
     public function getOriginalPath($file = false)
     {
         return $this->uploadedFile->path . "/" . "/original/" . ($file ? $this->uploadedFile->file : null);
+    }
+    
+    /**
+     * Return the path to a temp file
+     * 
+     * @param  string $file Leave blank for the path only
+     * @return string
+     */
+    public function getTempPath($file = null)
+    {
+        return $this->tempPath . "/" . $file;
     }
     
     /**
@@ -209,6 +237,16 @@ class Media
     }
     
     /**
+     * Return the image quality
+     * 
+     * @return integer
+     */
+    public function getImageQuality()
+    {
+        return config("cms.cms.media_image_quality", 100);
+    }
+    
+    /**
      * Determine if the disk is local or cloud based
      * 
      * @return boolean
@@ -216,6 +254,17 @@ class Media
     public function isLocal()
     {
         return config("filesystems.disks.{$this->uploadedFile->disk}.driver") == "local";
+    }
+    
+    /**
+     * Get the icon by the media type
+     * 
+     * @param  string $type
+     * @return string
+     */
+    public function getIconByType($type)
+    {
+        return $this->mediaTypes[$type]["icon"];
     }
     
     //

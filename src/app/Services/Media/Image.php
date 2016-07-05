@@ -31,7 +31,7 @@ class Image extends Media
      * 
      * @var string
      */
-    protected $imageFile = "{filename}-{width}x{height}.{extension}";
+    protected $imageFile = "{filename}-{width}x{height}-{focal}.{extension}";
     
     /**
      * Allowed focal points
@@ -70,15 +70,15 @@ class Image extends Media
     //  
     
     /**
-     * The bread and butter, generates the images and moves it to the 
-     * final disk and serves the path back to the browser
+     * Fetch the URL to the image
      * 
      * @param  integer  $cms_medium_id  The cms_medium_id we are generating
      * @param  mixed    $width          Set to null for auto
      * @param  mixed    $height         Set to null for auto
+     * @param  boolean  $force          Force a regenerationg of the image (ignore the file exist check)
      * @return string
      */
-    public function get($cms_medium_id, $width = null, $height = null)
+    public function get($cms_medium_id, $width = null, $height = null, $force = false)
     {
         // Set and check
         $this->setCmsMedium($cms_medium_id);
@@ -86,12 +86,37 @@ class Image extends Media
         // Generate the file name now so we can check for existence first
         $imagepath = $this->getImagePath($this->getImageFile($width, $height));
         // Already there?
-        if ($this->fileExists($imagepath)) return $this->getPublicUrl($imagepath);
-        // generate the image
-        // move to final resting place
-        // return full url string
-        
-        dd($this);
+        if (! $force and $this->fileExists($imagepath)) return $this->getPublicUrl($imagepath);
+        // Generate the image and store
+        $this->generate($width, $height);
+        return $this->getPublicUrl($imagepath);
+    }
+    
+    /**
+     * Generate the image and store int
+     * 
+     * @param  mixed $width  Set to null for auto
+     * @param  mixed $height Set to null for auto
+     */
+    private function generate($width = null, $height = null)
+    {
+        $image = $this->intervention->make($this->getSourcePath());
+        $imagefile = $this->getImageFile($width, $height);
+        $imagepath = $this->getImagePath($imagefile);
+        $temppath = $this->getTempPath($imagefile);
+        if ($width and $height) {
+            // Do a fit and use the selected focal point
+            $image->fit($width, $height, null, $this->cmsMedium->image->focal);
+        } else {
+            // Resize by width OR height only
+            $image->resize($width, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+        // Save and push to storage
+        $image->save($temppath, $this->getImageQuality());
+        $this->storeFile($imagepath, $temppath);
+        unlink($temppath);
     }
     
     //
@@ -209,7 +234,7 @@ class Image extends Media
      */
     public function getImageFile($width = null, $height = null)
     {
-        return str_ireplace(["{filename}", "{width}", "{height}", "{extension}"], [$this->uploadedFile->filename, $width ?: 0, $height ?: 0, $this->uploadedFile->extension], $this->imageFile);
+        return str_ireplace(["{filename}", "{width}", "{height}", "{focal}", "{extension}"], [$this->uploadedFile->filename, $width ?: 0, $height ?: 0, $this->cmsMedium->image->focal, $this->uploadedFile->extension], $this->imageFile);
     }
     
     /**

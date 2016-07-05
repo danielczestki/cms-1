@@ -1,5 +1,7 @@
 @extends("cms::admin.layouts.media")
 
+@inject("media", "Thinmartian\Cms\App\Services\Media\Media")
+
 @section("body_class", "MediaLibrary")
 @section("title", "Media Library")
 
@@ -25,35 +27,26 @@
     
     <!-- Content -->
     <main class="MediaMain">
-         <ul class="MediaListing">
-            <li class="MediaListing__item"><a href=""><i class="MediaListing__icon fa fa-photo" title="Image"></i><img src="{{ asset('vendor/cms/img/dummy/thumbs/1.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><i class="MediaListing__icon fa fa-film" title="Video"></i><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><i class="MediaListing__icon fa fa-youtube" title="Embed"></i><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/4.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/5.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/7.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/5.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/6.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/1.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/8.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/2.jpg') }}" class="MediaListing__image"></a></li>
-            <li class="MediaListing__item"><a href=""><img src="{{ asset('vendor/cms/img/dummy/thumbs/3.jpg') }}" class="MediaListing__image"></a></li>
-        </ul>
-        
-        <!-- <div class="MediaNoresults Utility--valign-middle"><div>
-            <p class="MediaNoresults__title">You haven't uploaded anything yet</p>
-            <a href="{{ route('admin.media.create') }}" class="Button Button--icon Button--small Button--blue">
-                <i class="Button__icon fa fa-plus-circle"></i>
-                Upload Media
-            </a>
-        </div></div> -->
+        @if ($listing->count()) 
+             <ul class="MediaListing">
+                @foreach ($listing as $record)
+                    <li class="MediaListing__item"><a href="">
+                        <i class="MediaListing__icon fa fa-{{ $media->getIconByType($record->type) }}" title="{{ ucwords($record->type) }}"></i>
+                        @if ($record->type == "image")
+                            <img src="{{ CmsImage::get($record->id, 600, 600) }}" class="MediaListing__image">
+                        @endif
+                    </a></li>
+                @endforeach
+            </ul>
+        @else
+            <div class="MediaNoresults Utility--valign-middle"><div>
+                <p class="MediaNoresults__title">You haven't uploaded anything yet</p>
+                <a href="{{ route('admin.media.create') }}" class="Button Button--icon Button--small Button--blue">
+                    <i class="Button__icon fa fa-plus-circle"></i>
+                    Upload Media
+                </a>
+            </div></div>
+        @endif
         
     </main>
     

@@ -122,6 +122,7 @@ class Destroy extends Command
     protected function destroyMediaFolder()
     {
         $this->filesystem->remove(config("filesystems.disks.local.root", storage_path("app")) . "/cms");
+        $this->filesystem->remove(storage_path("app/public/cms"));
     }
     
     /**

@@ -22,12 +22,12 @@
     <!-- Status messages -->
     {{ CmsForm::error() }}
     {{ CmsForm::success() }}
-    
+        
     <!-- Form -->
     <main class="MediaMain MediaMain--pad">
         {{ Form::model(@$resource, ["route" => ["admin.media.focusing", $cms_medium_id]]) }}
             <div class="Box Utility--clearfix"><div class="Form">
-                <mediafocus image="http://dev.thinmartian.cms.s3.amazonaws.com/cms/media/2/original/mi7G4jx5fSit2Eq.jpeg" section="{{ $resource->image->focal }}"></mediafocus>
+                <mediafocus image="{{ CmsImage::get($resource->id, 1024) }}" section="{{ $resource->image->focal }}"></mediafocus>
             {{ CmsForm::buttons([
                 "save_label" => "Finish",
                 "hide_save_exit" => true

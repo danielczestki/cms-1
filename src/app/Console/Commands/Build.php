@@ -82,6 +82,7 @@ class Build extends Command
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
+        mkdir(storage_path("app/cms/temp"), 0777, true);
         usleep(400000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");

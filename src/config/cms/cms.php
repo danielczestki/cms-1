@@ -59,7 +59,11 @@ return [
     | Thin Martian CMS utilises the wonderful Laravel Filesystem/Cloud storage.
     | Set the disk below you want Thin Martian CMS to upload your media to. This
     | of course must be a valid disk setup within your config/filesystems.php
-    | configuration. Examples are 'local', 's3' etc.
+    | configuration. Examples are 'public', 's3' etc.
+    |
+    | IMPORTANT: As per the Laravel documentation, if using a 'public' disk, be
+    | sure to create a symbolic link between your storage and public, e.g. 
+    | public/storage which points to the storage/app/public directory.
     |
     */
 
@@ -112,5 +116,17 @@ return [
     "media_allow_video" => true,
     "media_allow_document" => true,
     "media_allow_embed" => true,
+   
+    /*
+    |--------------------------------------------------------------------------
+    | Media quality
+    |--------------------------------------------------------------------------
+    |
+    | Set the quality of save media assets. This applies to jpeg images only.
+    | Set the value between 1 and 100 (100 be highest quality).
+    |
+    */
+    
+    "media_image_quality" => 100,
    
 ];
