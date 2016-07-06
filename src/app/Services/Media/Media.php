@@ -98,6 +98,7 @@ class Media
      */
     protected function updateCmsMedium()
     {
+        $this->cmsMedium->title = $this->input->title;
         $this->cmsMedium->uploaded = $this->uploadedFile->uploaded;
         $this->cmsMedium->filename = $this->uploadedFile->filename;
         $this->cmsMedium->extension = $this->uploadedFile->extension;
@@ -122,7 +123,7 @@ class Media
         // Start by setting some values in the UploadedFile object
         $file = $this->input->file;
         $this->uploadedFile->path = $this->uploadedFile->basePath . "/" . $this->cmsMedium->id;
-        $this->uploadedFile->filename = str_random(15);
+        $this->uploadedFile->filename = $this->uploadedFile->filename ?: str_random(15);
         $this->uploadedFile->extension = strtolower($file->guessExtension());
         $this->uploadedFile->file = $this->uploadedFile->filename . "." . $this->uploadedFile->extension;
         $this->uploadedFile->originalName = $file->getClientOriginalName();

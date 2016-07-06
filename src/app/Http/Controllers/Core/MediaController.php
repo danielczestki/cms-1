@@ -68,10 +68,11 @@ class MediaController extends BaseController
      */
     public function create()
     {
-        $mediatype = $this->media->getMediaTypes(request()->get("type"));
+        $mediakey = request()->get("type");
+        $mediatype = $this->media->getMediaTypes($mediakey);
         $formtype = "create";
         $subtitle = "<i class='fa fa-{$mediatype['icon']}'></i> Upload a new " . strtolower($mediatype["label"]);
-        return view("cms::admin.media.form", compact("mediatype", "formtype", "subtitle"));
+        return view("cms::admin.media.form", compact("mediakey", "mediatype", "formtype", "subtitle"));
     }
     
     /**
@@ -96,8 +97,52 @@ class MediaController extends BaseController
         if (method_exists($this, "saved")) {
             $this->saved($media, $this->input);
         }
-        // send them off
         return $this->delegate("redirectOnStore", $media);
+    }
+    
+    /**
+     * Show the form for editing a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($cms_medium_id)
+    {
+        if (! $resource = CmsMedium::find($cms_medium_id)) return app()->abort(404);
+        $mediakey = $resource->type;
+        $this->setMedia($resource);
+        $mediatype = $this->media->getMediaTypes($mediakey);
+        $formtype = "edit";
+        $subtitle = "<i class='fa fa-{$mediatype['icon']}'></i> Edit " . strtolower($mediatype["label"]);
+        $preview = $this->media->preview();
+        return view("cms::admin.media.form", compact("mediakey", "mediatype", "formtype", "subtitle", "resource", "preview"));
+    }
+    
+    /**
+     * Update the specified media in storage.
+     *
+     * @param  \Thinmartian\Cms\App\Http\Requests\Core\ResourceRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(MediaRequest $request, $id)
+    {
+        $media = CmsMedium::findOrFail($id);
+        $this->setMedia($media);
+        if (method_exists($this, "updating")) {
+            $this->updating($media, $this->input);
+        }
+        if (method_exists($this, "saving")) {
+            $this->saving($this->input);
+        }
+        // persist
+        $media = $this->delegate("update");
+        if (method_exists($this, "updated")) {
+            $this->updated($media, $this->input);
+        }
+        if (method_exists($this, "saved")) {
+            $this->saved($media, $this->input);
+        }
+        return $this->delegate("redirectOnUpdate", $media);
     }
     
     /**
@@ -171,7 +216,7 @@ class MediaController extends BaseController
      * Set the media prop, we can send the $type or default to what's
      * in the request()
      * 
-     * @param string $cms_medium
+     * @param App\Cms\CmsMedium $cms_medium
      */
     private function setMedia($cms_medium = null)
     {

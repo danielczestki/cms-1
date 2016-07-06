@@ -12,10 +12,12 @@
             <h2 class="h2">{!! $subtitle !!}</h2>
         </div>
         <div class="Title__buttons">
-            <a href="{{ route('admin.media.type') }}" class="Button Button--icon Button--small Button--grey">
-                <i class="Button__icon fa fa-chevron-circle-left"></i>
-                Choose another type
-            </a>
+            @if ($formtype == "create")
+                <a href="{{ route('admin.media.type') }}" class="Button Button--icon Button--small Button--grey">
+                    <i class="Button__icon fa fa-chevron-circle-left"></i>
+                    Choose another type
+                </a>
+            @endif
         </div>
     </div>
     
@@ -26,20 +28,26 @@
     <!-- Form -->
     <main class="MediaMain MediaMain--pad">
         {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $formtype, "filters" => [], "files" => true, "progress" => true]) }}
-            {{ CmsForm::hidden(["name" => "type", "value" => request()->get("type")]) }}
+            {{ CmsForm::hidden(["name" => "type", "value" => $mediakey]) }}
             
             {{ CmsForm::text([
                 "name" => "title",
                 "label" => "Title",
                 "required" => true,
                 "maxlength" => 100,
-                "info" => request()->get("type") == 'image' ? "Also serves as the image alt attribute" : null
+                "info" => $mediakey == 'image' ? "Also serves as the image alt attribute" : null
             ]) }}
+            @if ($formtype == "edit") 
+                {{ CmsForm::content([
+                    "label" => "Current media",
+                    "value" => $preview
+                ]) }}
+            @endif
             {{ CmsForm::file([
                 "name" => "file",
                 "label" => "Upload " . strtolower($mediatype["label"]),
                 "required" => true,
-                "mediatype" => request()->get("type")
+                "mediatype" => $mediakey
             ]) }}
             
             

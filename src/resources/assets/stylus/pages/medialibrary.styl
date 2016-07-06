@@ -36,9 +36,9 @@ body.MediaLibrary
                 opacity: 1
             &-delete-leave
                 opacity: 0
-            a 
-                display: block
-                position: relative
+        &__main
+            display: block
+            position: relative
         &__icon
             width: 30px
             height: 30px
@@ -46,20 +46,26 @@ body.MediaLibrary
             line-height: 30px
             color: #fff
             font-size: 18px
-            right: 0
             position: absolute
             z-index: 2
             &--type 
                 background: $Color__orange--1
+                right: 0
                 bottom: 0
+            &--edit
+                background: $Color__blue--4
+                left: 0
+                top: 0
+                &:hover
+                    background: darken($Color__blue--4, 10%)
             &--deleting, &--delete
                 background: $Color__red--4
+                right: 0
                 top: 0
-            &--deleting
-                {}
-            &--delete
+            &--delete, &--edit
                 transition: background .2s
                 cursor: pointer
+            &--delete
                 &:hover
                     background: darken($Color__red--4, 10%)
         &__image

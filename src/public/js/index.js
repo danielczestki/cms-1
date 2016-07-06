@@ -27384,13 +27384,13 @@ module.exports = {
 };
 
 },{"./Mediafocus.html":15}],17:[function(require,module,exports){
-module.exports = '<a href="#" v-if="!deleted" transition="MediaListing__item-delete" v-on:click.prevent="click">\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ type }}" title="{{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this media item?"></i>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <slot></slot>\n</a>';
+module.exports = '<div class="MediaListing__main" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <slot></slot>\n</div>';
 },{}],18:[function(require,module,exports){
 "use strict";
 
 module.exports = {
 
-  props: ["csrf", "deleteUrl", "id", "type"],
+  props: ["csrf", "editUrl", "deleteUrl", "id", "icon", "type"],
   template: require("./Mediathumb.html"),
   data: function data() {
     return {

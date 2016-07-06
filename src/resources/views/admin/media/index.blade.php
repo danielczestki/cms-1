@@ -31,7 +31,13 @@
              <ul class="MediaListing">
                 @foreach ($listing as $record)
                     <li class="MediaListing__item">
-                        <mediathumb csrf="{{ csrf_token() }}" delete-url="{{ route('admin.media.destroy', $record->id) }}" type="{{ $record->type }}">
+                        <mediathumb
+                            csrf="{{ csrf_token() }}"
+                            edit-url="{{ route('admin.media.edit', $record->id) }}"
+                            delete-url="{{ route('admin.media.destroy', $record->id) }}"
+                            icon="{{ $media->getIconByType($record->type) }}"
+                            type="{{ $record->type }}"
+                        >
                             @if ($record->type == "image")
                                 <img src="{{ CmsImage::get($record->id, 600, 600) }}" class="MediaListing__image">
                             @elseif ($record->type == "video")
@@ -48,7 +54,7 @@
         @else
             <div class="MediaNoresults Utility--valign-middle"><div>
                 <p class="MediaNoresults__title">You haven't uploaded anything yet</p>
-                <a href="{{ route('admin.media.create') }}" class="Button Button--icon Button--small Button--blue">
+                <a href="{{ route('admin.media.type') }}" class="Button Button--icon Button--small Button--blue">
                     <i class="Button__icon fa fa-plus-circle"></i>
                     Upload Media
                 </a>

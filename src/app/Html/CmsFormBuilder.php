@@ -320,6 +320,17 @@ class CmsFormBuilder {
     // 
     
     /**
+     * Static field (no inputs)
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function content($data)
+    {
+        return $this->render(view("cms::html.form.content", $data)); 
+    }
+    
+    /**
      * Return the subtitle for the page
      * 
      * @param  string $type create or edit

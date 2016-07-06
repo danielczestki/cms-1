@@ -119,6 +119,16 @@ class Image extends Media
         unlink($temppath);
     }
     
+    /**
+     * Return a preview of the item for listing across the place
+     * 
+     * @return string
+     */
+    public function preview()
+    {
+        return '<img src="'. $this->get($this->cmsMedium->id, 200, 200) .'" >';
+    }
+    
     //
     // CRUD
     // 
@@ -147,6 +157,33 @@ class Image extends Media
         }
         // Return the model back to the controller
         return $this->cmsMedium;     
+    }
+    
+    /**
+     * Update the image
+     * 
+     * @return App\Cms\CmsMedium
+     */
+    public function update()
+    {
+        // update the parent media item first
+        $this->updateCmsMedium();
+        if ($this->input->file) {
+            // lets upload the raw file
+            $this->upload();
+            // now persist the image
+            if ($this->uploadedFile->uploaded) {
+                $image = $this->intervention->make($this->input->file);
+                $this->cmsMedium->image->aspect = $this->getAspect($image);
+                $this->cmsMedium->image->original_width = $image->width();
+                $this->cmsMedium->image->original_height = $image->height();
+                $this->cmsMedium->image->save();
+                // lets create the source file used for future variations
+                $this->uploadSource();
+            }
+        }
+        // Return the model back to the controller
+        return $this->cmsMedium; 
     }
     
     /**
@@ -193,7 +230,10 @@ class Image extends Media
     */
     public function validationOnUpdate()
     {
-        return [];
+        return [
+            "title" => "required|max:100",
+            "file" => "file|image|mimes:". implode(",", $this->getMediaTypes("image.accepted"))
+        ];
     }
     
     //
@@ -206,6 +246,16 @@ class Image extends Media
      * @return  Illuminate\Routing\Redirector
     */
     public function redirectOnStore($cms_medium_id) 
+    {
+        return redirect()->route("admin.media.focal", ["cms_medium_id" => $cms_medium_id]);
+    }
+    
+    /**
+     * Redirect the user after update
+     * 
+     * @return  Illuminate\Routing\Redirector
+    */
+    public function redirectOnUpdate($cms_medium_id) 
     {
         return redirect()->route("admin.media.focal", ["cms_medium_id" => $cms_medium_id]);
     }

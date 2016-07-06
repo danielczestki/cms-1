@@ -27,7 +27,7 @@
     <main class="MediaMain MediaMain--pad">
         {{ Form::model(@$resource, ["route" => ["admin.media.focusing", $cms_medium_id]]) }}
             <div class="Box Utility--clearfix"><div class="Form">
-                <mediafocus image="{{ CmsImage::get($resource->id, 1024) }}" section="{{ $resource->image->focal }}"></mediafocus>
+                <mediafocus image="{{ $resource->image->aspect == "portrait" ? CmsImage::get($resource->id, null, 1024, true) : CmsImage::get($resource->id, 1024, null, true) }}" section="{{ $resource->image->focal }}"></mediafocus>
             {{ CmsForm::buttons([
                 "save_label" => "Finish",
                 "hide_save_exit" => true

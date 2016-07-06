@@ -9,6 +9,7 @@ use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 use Thinmartian\Cms\App\Services\Cms;
+use Storage;
 
 class Destroy extends Command
 {
@@ -123,6 +124,7 @@ class Destroy extends Command
     {
         $this->filesystem->remove(config("filesystems.disks.local.root", storage_path("app")) . "/cms");
         $this->filesystem->remove(storage_path("app/public/cms"));
+        Storage::disk(config("cms.cms.media_disk"))->deleteDirectory(config("cms.cms.media_path"));
     }
     
     /**

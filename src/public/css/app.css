@@ -1856,7 +1856,7 @@ body.MediaLibrary .MediaListing__item-delete-enter {
 body.MediaLibrary .MediaListing__item-delete-leave {
   opacity: 0;
 }
-body.MediaLibrary .MediaListing__item a {
+body.MediaLibrary .MediaListing__main {
   display: block;
   position: relative;
 }
@@ -1867,20 +1867,30 @@ body.MediaLibrary .MediaListing__icon {
   line-height: 30px;
   color: #fff;
   font-size: 18px;
-  right: 0;
   position: absolute;
   z-index: 2;
 }
 body.MediaLibrary .MediaListing__icon--type {
   background: #ff5339;
+  right: 0;
   bottom: 0;
+}
+body.MediaLibrary .MediaListing__icon--edit {
+  background: #348fe2;
+  left: 0;
+  top: 0;
+}
+body.MediaLibrary .MediaListing__icon--edit:hover {
+  background: #1f81db;
 }
 body.MediaLibrary .MediaListing__icon--deleting,
 body.MediaLibrary .MediaListing__icon--delete {
   background: #d70202;
+  right: 0;
   top: 0;
 }
-body.MediaLibrary .MediaListing__icon--delete {
+body.MediaLibrary .MediaListing__icon--delete,
+body.MediaLibrary .MediaListing__icon--edit {
   transition: background 0.2s;
   cursor: pointer;
 }
