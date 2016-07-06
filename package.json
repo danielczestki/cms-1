@@ -23,6 +23,7 @@
     "laravel-elixir-stylus": "^1.0.1",
     "nprogress": "^0.2.0",
     "pikaday-time": "^1.4.0",
-    "vue": "^1.0.24"
+    "vue": "^1.0.24",
+    "vue-resource": "^0.9.3"
   }
 }

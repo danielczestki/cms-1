@@ -1,0 +1,6 @@
+<a href="#" v-if="!deleted" transition="MediaListing__item-delete" v-on:click.prevent="click">
+    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ type }}" title="{{ type }}"></i>
+    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this media item?"></i>
+    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>
+    <slot></slot>
+</a>

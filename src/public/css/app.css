@@ -1846,6 +1846,16 @@ body.MediaLibrary .MediaListing__item {
   width: 20%;
   float: left;
 }
+body.MediaLibrary .MediaListing__item-delete-transition {
+  transition: opacity 0.4s;
+  opacity: 1;
+}
+body.MediaLibrary .MediaListing__item-delete-enter {
+  opacity: 1;
+}
+body.MediaLibrary .MediaListing__item-delete-leave {
+  opacity: 0;
+}
 body.MediaLibrary .MediaListing__item a {
   display: block;
   position: relative;
@@ -1855,12 +1865,27 @@ body.MediaLibrary .MediaListing__icon {
   height: 30px;
   text-align: center;
   line-height: 30px;
-  background: #ff5339;
   color: #fff;
   font-size: 18px;
   right: 0;
-  bottom: 0;
   position: absolute;
+  z-index: 2;
+}
+body.MediaLibrary .MediaListing__icon--type {
+  background: #ff5339;
+  bottom: 0;
+}
+body.MediaLibrary .MediaListing__icon--deleting,
+body.MediaLibrary .MediaListing__icon--delete {
+  background: #d70202;
+  top: 0;
+}
+body.MediaLibrary .MediaListing__icon--delete {
+  transition: background 0.2s;
+  cursor: pointer;
+}
+body.MediaLibrary .MediaListing__icon--delete:hover {
+  background: #c10202;
 }
 body.MediaLibrary .MediaListing__image {
   width: 100%;

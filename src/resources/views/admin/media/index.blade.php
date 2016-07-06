@@ -30,12 +30,19 @@
         @if ($listing->count()) 
              <ul class="MediaListing">
                 @foreach ($listing as $record)
-                    <li class="MediaListing__item"><a href="">
-                        <i class="MediaListing__icon fa fa-{{ $media->getIconByType($record->type) }}" title="{{ ucwords($record->type) }}"></i>
-                        @if ($record->type == "image")
-                            <img src="{{ CmsImage::get($record->id, 600, 600) }}" class="MediaListing__image">
-                        @endif
-                    </a></li>
+                    <li class="MediaListing__item">
+                        <mediathumb csrf="{{ csrf_token() }}" delete-url="{{ route('admin.media.destroy', $record->id) }}" type="{{ $record->type }}">
+                            @if ($record->type == "image")
+                                <img src="{{ CmsImage::get($record->id, 600, 600) }}" class="MediaListing__image">
+                            @elseif ($record->type == "video")
+                                VIDEO
+                            @elseif ($record->type == "document")
+                                DOCUMENT
+                            @elseif ($record->type == "embed")
+                                EMBED
+                            @endif
+                        </mediathumb>
+                    </li>
                 @endforeach
             </ul>
         @else

@@ -128,6 +128,34 @@ class MediaController extends BaseController
     }
     
     /**
+     * Remove the specified media item from storage.
+     *
+     * @param  int  $id
+     * @return array
+     */
+    public function destroy($cms_medium_id)
+    {
+        // Find it first
+        if (! $resource = CmsMedium::find($cms_medium_id)) return $this->destroyResponse("Sorry, we couldn't find this media item");
+        // We got it, proceed
+        $resource->delete();
+        // All done
+        return $this->destroyResponse("OK", true);
+    }
+    
+    /**
+     * Return the array for the destroy method, that the AJAX can hook on to
+     * 
+     * @param  string  $message
+     * @param  boolean $success
+     * @return array
+     */
+    private function destroyResponse($message = null, $success = false)
+    {
+        return ["success" => $success, "message" => $message];
+    }
+    
+    /**
      * Delegate a method to one of the services based on the type
      * 
      * @param  string $method The method to call on the service

@@ -29,6 +29,13 @@ body.MediaLibrary
         &__item
             width: 20%
             float: left
+            &-delete-transition
+                transition: opacity .4s
+                opacity: 1
+            &-delete-enter
+                opacity: 1
+            &-delete-leave
+                opacity: 0
             a 
                 display: block
                 position: relative
@@ -37,12 +44,24 @@ body.MediaLibrary
             height: 30px
             text-align: center
             line-height: 30px
-            background: $Color__orange--1
             color: #fff
             font-size: 18px
             right: 0
-            bottom: 0
             position: absolute
+            z-index: 2
+            &--type 
+                background: $Color__orange--1
+                bottom: 0
+            &--deleting, &--delete
+                background: $Color__red--4
+                top: 0
+            &--deleting
+                {}
+            &--delete
+                transition: background .2s
+                cursor: pointer
+                &:hover
+                    background: darken($Color__red--4, 10%)
         &__image
             width: 100%
             height: auto

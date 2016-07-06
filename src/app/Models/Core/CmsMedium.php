@@ -2,6 +2,9 @@
 
 namespace Thinmartian\Cms\App\Models\Core;
 
+use DB, Storage;
+use Symfony\Component\Filesystem\Filesystem;
+
 class CmsMedium extends Model
 {
     
@@ -41,6 +44,8 @@ class CmsMedium extends Model
         return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumImage');
     }
     
+    
+    
     /**
      * Boot methods
      * 
@@ -49,9 +54,21 @@ class CmsMedium extends Model
     public static function boot()
     {
         parent::boot();
+        $filesystem = new Filesystem;
 
         self::saving(function($record) {
             $record->cache_buster = str_random(15);
+        });
+        
+        self::deleting(function($record) use ($filesystem) {
+            // remove the assets first, source first
+            $sourcePath = config("filesystems.disks.local.root", storage_path("app")) . ("/cms/media/" . $record->id);
+            $filesystem->remove($sourcePath);
+            // Now on the disk
+            Storage::disk(config("cms.cms.media_disk"))->deleteDirectory(config("cms.cms.media_path") . "/media/" . $record->id);
+            // now kill the DB records
+            DB::table("cms_mediables")->where("media_id", $record->id)->delete();
+            $record->image->delete();
         });
     }
     

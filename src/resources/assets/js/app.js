@@ -1,8 +1,11 @@
 import Vue from "vue";
+import VueResource from "vue-resource";
+Vue.use(VueResource);
 
 // Global components (likely form elements)
 Vue.component("alert", require("./components/Alert/Alert"));
 Vue.component("fileupload", require("./components/Form/Fileupload/Fileupload"));
+Vue.component("mediathumb", require("./components/Mediathumb/Mediathumb"));
 
 /**
  * Init the app (cms)
