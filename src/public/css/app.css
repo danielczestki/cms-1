@@ -1353,6 +1353,10 @@ textarea {
   cursor: pointer;
   float: left;
 }
+.Form__file-placeholder--full {
+  width: calc(100% - 125px);
+  border-right: solid 1px #e8e8e8;
+}
 .Form__file-placeholder--empty {
   color: #a9a9a9;
 }
@@ -1883,6 +1887,14 @@ body.MediaLibrary .MediaListing__icon--edit {
 body.MediaLibrary .MediaListing__icon--edit:hover {
   background: #1f81db;
 }
+body.MediaLibrary .MediaListing__icon--focal {
+  background: #00ac71;
+  left: 0;
+  bottom: 0;
+}
+body.MediaLibrary .MediaListing__icon--focal:hover {
+  background: #009b66;
+}
 body.MediaLibrary .MediaListing__icon--deleting,
 body.MediaLibrary .MediaListing__icon--delete {
   background: #d70202;
@@ -1890,7 +1902,8 @@ body.MediaLibrary .MediaListing__icon--delete {
   top: 0;
 }
 body.MediaLibrary .MediaListing__icon--delete,
-body.MediaLibrary .MediaListing__icon--edit {
+body.MediaLibrary .MediaListing__icon--edit,
+body.MediaLibrary .MediaListing__icon--focal {
   transition: background 0.2s;
   cursor: pointer;
 }

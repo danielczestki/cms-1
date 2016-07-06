@@ -58,11 +58,17 @@ body.MediaLibrary
                 top: 0
                 &:hover
                     background: darken($Color__blue--4, 10%)
+            &--focal
+                background: $Color__green--1
+                left: 0
+                bottom: 0
+                &:hover
+                    background: darken($Color__green--1, 10%)
             &--deleting, &--delete
                 background: $Color__red--4
                 right: 0
                 top: 0
-            &--delete, &--edit
+            &--delete, &--edit, &--focal
                 transition: background .2s
                 cursor: pointer
             &--delete

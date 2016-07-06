@@ -35,6 +35,7 @@
                             csrf="{{ csrf_token() }}"
                             edit-url="{{ route('admin.media.edit', $record->id) }}"
                             delete-url="{{ route('admin.media.destroy', $record->id) }}"
+                            focal-url="{{ route('admin.media.focal', $record->id) }}"
                             icon="{{ $media->getIconByType($record->type) }}"
                             type="{{ $record->type }}"
                         >

@@ -27280,7 +27280,7 @@ module.exports = {
 };
 
 },{"./Alert.html":9}],11:[function(require,module,exports){
-module.exports = '<div class="Utility--hidden">\n    <input type="file" name="{{ name }}" id="f-{{ name }}" accept="{{ accept }}" v-el:field v-model="field" v-on:change="preview">\n</div>\n<div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div>\n\n\n<!-- <div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div> -->';
+module.exports = '<div class="Utility--hidden">\n    <input type="file" name="{{ name }}" id="f-{{ name }}" accept="{{ accept }}" v-el:field v-model="field" v-on:change="preview">\n</div>\n<div class="Form__file">\n    <button type="button" class="Form__file-button Button Button--large Button--orange" v-on:click="browse">Browse...</button>\n    <div class="Form__file-placeholder Utility--text-truncate" :class="{\'Form__file-placeholder--empty\': ! field, \'Form__file-placeholder--full\': mediatype != \'image\'}" v-on:click="browse">\n        {{ placeholder }}\n        <i class="Form__file-clear fa fa-times" title="Empty field" v-show="field" v-on:click.stop="clear"></i>\n    </div>\n    <div class="Form__file-preview" :style="stylePreview" v-if="mediatype == \'image\'">\n        <i class="Form__file-spinner fa fa-spinner fa-spin" v-show="spinner"></i>\n    </div>\n</div>';
 },{}],12:[function(require,module,exports){
 "use strict";
 
@@ -27384,13 +27384,13 @@ module.exports = {
 };
 
 },{"./Mediafocus.html":15}],17:[function(require,module,exports){
-module.exports = '<div class="MediaListing__main" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <slot></slot>\n</div>';
+module.exports = '<div class="MediaListing__main" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <slot></slot>\n</div>';
 },{}],18:[function(require,module,exports){
 "use strict";
 
 module.exports = {
 
-  props: ["csrf", "editUrl", "deleteUrl", "id", "icon", "type"],
+  props: ["csrf", "editUrl", "deleteUrl", "focalUrl", "id", "icon", "type"],
   template: require("./Mediathumb.html"),
   data: function data() {
     return {

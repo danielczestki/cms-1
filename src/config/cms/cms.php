@@ -113,7 +113,7 @@ return [
     */
     
     "media_allow_image" => true,
-    "media_allow_video" => true,
+    "media_allow_video" => false,
     "media_allow_document" => true,
     "media_allow_embed" => true,
    

@@ -50,12 +50,21 @@
                 "mediatype" => $mediakey
             ]) }}
             
-            
-            {{ CmsForm::buttons([
-                "save_label" => "Next Step",
-                "save_icon" => "arrow-right",
-                "hide_save_exit" => true
-            ]) }}
+            @if ($formtype == "edit") 
+                {{ CmsForm::buttons([
+                    "save_label" => "Next Step",
+                    "save_icon" => "arrow-right",
+                    "save_exit_label" => "Set Focal",
+                    "save_exit_icon" => "crosshairs",
+                    "save_exit_link" => route("admin.media.focal", $resource->id),
+                ]) }}
+            @else
+                {{ CmsForm::buttons([
+                    "save_label" => "Next Step",
+                    "save_icon" => "arrow-right",
+                    "hide_save_exit" => true
+                ]) }}
+            @endif
         {{ CmsForm::close() }}
     </main>
     

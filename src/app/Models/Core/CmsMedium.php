@@ -44,6 +44,14 @@ class CmsMedium extends Model
         return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumImage');
     }
     
+    /**
+     * Get the document record associated with the medium.
+     */
+    public function document()
+    {
+        return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumDocument');
+    }
+    
     
     
     /**
@@ -68,7 +76,8 @@ class CmsMedium extends Model
             Storage::disk(config("cms.cms.media_disk"))->deleteDirectory(config("cms.cms.media_path") . "/media/" . $record->id);
             // now kill the DB records
             DB::table("cms_mediables")->where("media_id", $record->id)->delete();
-            $record->image->delete();
+            if ($mapping = $record->image) $mapping->delete();
+            if ($mapping = $record->document) $mapping->delete();
         });
     }
     
