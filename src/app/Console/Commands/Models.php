@@ -126,16 +126,15 @@ class Models extends Commands
         $modelname = $classname . ".php";
         // if the model is protected do not add/edit/overwrite/delete... don't touch it hear me!
         if ($type == "core" and in_array($modelname, $this->cms->getProtectedModels(false))) return;
-        // we are good to write
-        $stub = file_get_contents($stubpath);
-        $fileName = $this->getFilename($filename);
-        $tablename = $this->getTablename($fileName);
-        // start new stuff
+        // deal with relations
+        $yamlFileName = $this->getFilename($filename);
+        $tablename = $this->getTablename($yamlFileName);
         $fullpath = $this->getFullYamlPath($filename);
         $yaml = $this->yaml->parse(file_get_contents($fullpath));
         $relations  = $this->buildRelations($yaml, $filename);
-        // end new stuff
-        $model = str_ireplace(["{classname}", "{yaml}", "{tablename}", "{relations}"], [$classname, $fileName, $tablename, $relations], $stub);
+        // we are good to write
+        $stub = file_get_contents($stubpath);
+        $model = str_ireplace(["{classname}", "{yaml}", "{tablename}", "{relations}"], [$classname, $yamlFileName, $tablename, $relations], $stub);
         // save the file
         file_put_contents($savepath . "/" . $modelname, $model);
     }
