@@ -66,6 +66,13 @@ class Models extends Commands
         $this->customPath = realpath(__DIR__ . "/../../Models/Custom/");
         $this->stubCorePath = realpath(__DIR__ . "/stubs/model_core.stub");
         $this->stubCustomPath = realpath(__DIR__ . "/stubs/model_custom.stub");
+        $this->hasOnePath = realpath(__DIR__ . "/stubs/relation_hasone.stub");
+        $this->hasManyPath = realpath(__DIR__ . "/stubs/relation_hasmany.stub");
+        $this->hasManyThroughPath = realpath(__DIR__ . "/stubs/relation_hasmanythrough.stub");
+        $this->belongsToPath = realpath(__DIR__ . "/stubs/relation_belongsto.stub");
+        $this->belongsToManyPath = realpath(__DIR__ . "/stubs/relation_belongstomany.stub");
+        $this->stubMorphToManyPath = realpath(__DIR__ . "/stubs/relation_morphtomany.stub");
+        $this->stubMorphedByManyPath = realpath(__DIR__ . "/stubs/relation_morphedbymany.stub");
     }
 
     /**
@@ -121,9 +128,14 @@ class Models extends Commands
         if ($type == "core" and in_array($modelname, $this->cms->getProtectedModels(false))) return;
         // we are good to write
         $stub = file_get_contents($stubpath);
-        $yaml = $this->getFilename($filename);
-        $tablename = $this->getTablename($yaml);
-        $model = str_ireplace(["{classname}", "{yaml}", "{tablename}"], [$classname, $yaml, $tablename], $stub);
+        $fileName = $this->getFilename($filename);
+        $tablename = $this->getTablename($fileName);
+        // start new stuff
+        $fullpath = $this->getFullYamlPath($filename);
+        $yaml = $this->yaml->parse(file_get_contents($fullpath));
+        $relations  = $this->buildSchema($yaml, $filename);
+        // end new stuff
+        $model = str_ireplace(["{classname}", "{yaml}", "{tablename}", "{relations}"], [$classname, $fileName, $tablename, $relations], $stub);
         // save the file
         file_put_contents($savepath . "/" . $modelname, $model);
     }
@@ -137,6 +149,79 @@ class Models extends Commands
     private function getModelName($filename)
     {
         return self::MODELPREFIX . trim(ucfirst(str_singular($this->getFileName($filename))));
+    }
+
+    /**
+     * Build the relations + inverse relations
+     * 
+     * @param  Symfony\Component\Yaml\Parser $yaml
+     * @return string
+     */
+    private function buildSchema($yaml, $filename)
+    {
+        $result = [];
+        // were any relations set?
+        $relations = isset($yaml["relations"]) ? $yaml["relations"] : [];
+        // loop
+        foreach ($relations as $relation => $attributes) {
+            // does a type attr exist? is a file for this type set? does the file exist?
+            if (isset($attributes['type']) && isset($this->{$attributes['type'] . 'Path'}) && file_exists($this->{$attributes['type'] . 'Path'})) {
+                // get the contents of stub
+                $stub = file_get_contents($this->{$attributes['type'] . 'Path'});
+                // generate a function name
+                $function = strtolower($relation);
+                // model name
+                $model = ucwords($relation);
+                // table name
+                $table = strtolower($relation) . 'able';
+                // generate string from stub
+                $result[$function] = str_ireplace(["{function}", "{model}", "{table}"], [$function, $model, $table], $stub);
+            }
+        }
+        // deal with any inverse relations - make a map of which functions have inverse ones
+        $inverseRelationsMap = ['hasOne'        => 'belongsTo',
+                                'hasMany'       => 'belongsTo',
+                                'belongsToMany' => 'belongsToMany',
+                                'morphToMany'   => 'morphedByMany',
+                                ];
+        // loop through all yaml files
+        foreach ($this->getYamlFiles() as $file) {
+            // look in every file other than the one we are currently creating
+            if ($filename !== $file) {
+                // get the path to the yaml file
+                $fullpath = $this->getFullYamlPath($file);
+                // parse the yaml
+                $yaml = $this->yaml->parse(file_get_contents($fullpath));
+                // strip the '.yaml' and make filename lowercase
+                $thisClass = preg_replace('/\\.[^.\\s]{3,4}$/', '', strtolower($filename));
+                // if any relations have been set
+                if (isset($yaml["relations"]) && count($yaml["relations"])) {
+                    // loop through them
+                    foreach ($yaml["relations"] as $relation => $attributes) {
+                        // does the current relation match the class we are creating?
+                        if ($relation == $thisClass) {
+                            if (isset($attributes['type']) 
+                                && 
+                                array_key_exists($attributes['type'], $inverseRelationsMap)
+                                && 
+                                isset($this->{$inverseRelationsMap[$attributes['type']] . 'Path'}) 
+                                && 
+                                file_exists($this->{$inverseRelationsMap[$attributes['type']] . 'Path'}))
+                            {
+                                // get the contents of stub
+                                $stub = file_get_contents($this->{$inverseRelationsMap[$attributes['type']] . 'Path'});
+                                $relation = preg_replace('/\\.[^.\\s]{3,4}$/', '', strtolower($file));
+                                $function = strtolower($relation);
+                                $model = ucwords($relation);
+                                $table = strtolower($relation) . 'able';
+                                $result[$function] = str_ireplace(["{function}", "{model}", "{table}"], [$function, $model, $table], $stub);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return count($result) ? implode($result, PHP_EOL) : null;
     }
     
 }
