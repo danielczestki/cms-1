@@ -23,28 +23,28 @@ class Models extends Commands
     
     /**
      * Path to the core folder
-     * 
+     *
      * @var string
      */
     protected $corePath;
     
     /**
      * Path to the custom folder
-     * 
+     *
      * @var string
      */
     protected $customPath;
     
     /**
      * Path to the core stub file
-     * 
+     *
      * @var string
      */
     protected $stubCorePath;
     
     /**
      * Path to the custom stub file
-     * 
+     *
      * @var string
      */
     protected $stubCustomPath;
@@ -91,7 +91,7 @@ class Models extends Commands
     
     /**
      * Build the core model
-     * 
+     *
      * @param  string $filename
      * @return void
      */
@@ -102,7 +102,7 @@ class Models extends Commands
     
     /**
      * Build the custom model
-     * 
+     *
      * @param  string $filename
      * @return void
      */
@@ -113,7 +113,7 @@ class Models extends Commands
     
     /**
      * Build the model
-     * 
+     *
      * @param  string $type
      * @param  string $filename
      * @param  string $stubpath
@@ -133,7 +133,7 @@ class Models extends Commands
         // start new stuff
         $fullpath = $this->getFullYamlPath($filename);
         $yaml = $this->yaml->parse(file_get_contents($fullpath));
-        $relations  = $this->buildSchema($yaml, $filename);
+        $relations  = $this->buildRelations($yaml, $filename);
         // end new stuff
         $model = str_ireplace(["{classname}", "{yaml}", "{tablename}", "{relations}"], [$classname, $fileName, $tablename, $relations], $stub);
         // save the file
@@ -142,7 +142,7 @@ class Models extends Commands
     
     /**
      * Get the model name
-     * 
+     *
      * @param  string $filename
      * @return string
      */
@@ -153,11 +153,11 @@ class Models extends Commands
 
     /**
      * Build the relations + inverse relations
-     * 
+     *
      * @param  Symfony\Component\Yaml\Parser $yaml
      * @return string
      */
-    private function buildSchema($yaml, $filename)
+    private function buildRelations($yaml, $filename)
     {
         $result = [];
         // were any relations set?
@@ -200,14 +200,13 @@ class Models extends Commands
                     foreach ($yaml["relations"] as $relation => $attributes) {
                         // does the current relation match the class we are creating?
                         if ($relation == $thisClass) {
-                            if (isset($attributes['type']) 
-                                && 
-                                array_key_exists($attributes['type'], $inverseRelationsMap)
-                                && 
-                                isset($this->{$inverseRelationsMap[$attributes['type']] . 'Path'}) 
-                                && 
-                                file_exists($this->{$inverseRelationsMap[$attributes['type']] . 'Path'}))
-                            {
+                            if (isset($attributes['type'])
+                            &&
+                            array_key_exists($attributes['type'], $inverseRelationsMap)
+                            &&
+                            isset($this->{$inverseRelationsMap[$attributes['type']] . 'Path'})
+                            &&
+                            file_exists($this->{$inverseRelationsMap[$attributes['type']] . 'Path'})) {
                                 // get the contents of stub
                                 $stub = file_get_contents($this->{$inverseRelationsMap[$attributes['type']] . 'Path'});
                                 $relation = preg_replace('/\\.[^.\\s]{3,4}$/', '', strtolower($file));
