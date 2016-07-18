@@ -52,8 +52,9 @@
             
             @if ($formtype == "edit") 
                 {{ CmsForm::buttons([
-                    "save_label" => "Next Step",
+                    "save_label" => $resource->type == "image" ? "Next Step" : "Finish",
                     "save_icon" => "arrow-right",
+                    "hide_save_exit" => $resource->type != "image" ? true : false,
                     "save_exit_label" => "Set Focal",
                     "save_exit_icon" => "crosshairs",
                     "save_exit_link" => route("admin.media.focal", $resource->id),

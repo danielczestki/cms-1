@@ -37,8 +37,21 @@ body.MediaLibrary
             &-delete-leave
                 opacity: 0
         &__main
+            font-size: 12px
             display: block
             position: relative
+            &--document, &--embed
+                .MediaListing__slot
+                    width: 100%
+                    height: 100%
+                    padding: 0 8px
+                    background: $Color__grey--5
+                    text-align: center
+                    text-shadow: 1px 1px 0 #fff
+                    left: 0
+                    top: 0
+                    position: absolute
+                    z-index: 2
         &__icon
             width: 30px
             height: 30px
@@ -47,7 +60,7 @@ body.MediaLibrary
             color: #fff
             font-size: 18px
             position: absolute
-            z-index: 2
+            z-index: 5
             &--type 
                 background: $Color__orange--1
                 right: 0
@@ -58,7 +71,7 @@ body.MediaLibrary
                 top: 0
                 &:hover
                     background: darken($Color__blue--4, 10%)
-            &--focal
+            &--focal, &--preview
                 background: $Color__green--1
                 left: 0
                 bottom: 0
@@ -77,6 +90,16 @@ body.MediaLibrary
         &__image
             width: 100%
             height: auto
+            display: block
+            position: relative
+            z-index: 1
+        &__filetype
+            margin-bottom: 6px
+            font-size: 26px
+            color: $Color__orange--1
+        &__sub
+            font-size: 11px 
+            color: $Color__grey--3
             display: block
     .MediaNoresults
         height: 100%
@@ -188,6 +211,8 @@ body.MediaLibrary
         .Title 
             height: $title_height
             padding-top: 12px
+        .MediaListing__item
+            width: 33.3333%
         .MediaMain
             height: "calc(100% - %s)" % $title_height
         .MediaFocal
@@ -203,7 +228,7 @@ body.MediaLibrary
                 font-size: 20px
                 line-height: 30px
         .MediaListing__item
-            width: 33.3333%
+            width: 50%
         .MediaTypes
             &__type
                 width: auto

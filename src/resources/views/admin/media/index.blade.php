@@ -1,7 +1,5 @@
 @extends("cms::admin.layouts.media")
 
-@inject("media", "Thinmartian\Cms\App\Services\Media\Media")
-
 @section("body_class", "MediaLibrary")
 @section("title", "Media Library")
 
@@ -31,24 +29,7 @@
              <ul class="MediaListing">
                 @foreach ($listing as $record)
                     <li class="MediaListing__item">
-                        <mediathumb
-                            csrf="{{ csrf_token() }}"
-                            edit-url="{{ route('admin.media.edit', $record->id) }}"
-                            delete-url="{{ route('admin.media.destroy', $record->id) }}"
-                            focal-url="{{ route('admin.media.focal', $record->id) }}"
-                            icon="{{ $media->getIconByType($record->type) }}"
-                            type="{{ $record->type }}"
-                        >
-                            @if ($record->type == "image")
-                                <img src="{{ CmsImage::get($record->id, 600, 600) }}" class="MediaListing__image">
-                            @elseif ($record->type == "video")
-                                VIDEO
-                            @elseif ($record->type == "document")
-                                DOCUMENT
-                            @elseif ($record->type == "embed")
-                                EMBED
-                            @endif
-                        </mediathumb>
+                        @include("cms::admin.partials.media.thumb", ["media" => $record])
                     </li>
                 @endforeach
             </ul>

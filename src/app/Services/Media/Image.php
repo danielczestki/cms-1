@@ -66,7 +66,7 @@ class Image extends Media
     }  
     
     //
-    // Generate
+    // Output
     //  
     
     /**

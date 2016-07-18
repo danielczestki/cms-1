@@ -1,7 +1,7 @@
 
 module.exports = {
   
-  props: ["csrf", "editUrl", "deleteUrl", "focalUrl", "id", "icon", "type"],
+  props: ["csrf", "editUrl", "deleteUrl", "focalUrl", "previewUrl", "id", "icon", "type"],
   template: require("./Mediathumb.html"),
   data() {
     return {

@@ -8,6 +8,73 @@ class Document extends Media
 {
     
     //
+    // Output
+    //  
+    
+    /**
+     * Fetch the URL to the document
+     * 
+     * @param  integer  $cms_medium_id  The cms_medium_id we are getting
+     * @return string
+     */
+    public function get($cms_medium_id)
+    {
+        // Set and check
+        $this->setCmsMedium($cms_medium_id);
+        if ($this->cmsMedium->type != "document") return "#";
+        // Send the public url back to them
+        return $this->getPublicUrl($this->getOriginalPath(true));
+    }
+    
+    /**
+     * Return a preview of the item for listing across the place
+     * 
+     * @return string
+     */
+    public function preview()
+    {
+        return '<a href="'. $this->getPublicUrl($this->getOriginalPath(true)) .'" target="_blank">View current document</a> <small>('. $this->cmsMedium->original_name .')</small>';
+    }
+    
+    /**
+     * Return the fontawesome class for the listing
+     * 
+     * @param  App\Cms\CmsMedium $cms_medium
+     * @return string
+     */
+    public function icon($cms_medium)
+    {
+        //"doc", "docx", "xls", "xlsx", "pps", "ppt", "pdf", "zip", "rtf", "txt"
+        switch ($cms_medium->extension) {
+            case "doc" :
+            case "docx" :
+            case "rtf" :
+                return "file-word-o";
+            break;
+            case "xls" :
+            case "xlsx" :
+                return "file-excel-o";
+            break;
+            case "pps" :
+            case "ppt" :
+                return "file-powerpoint-o";
+            break;
+            case "pdf" :
+                return "file-pdf-o";
+            break;
+            case "zip" :
+                return "file-zip-o";
+            break;
+            case "txt" :
+                return "file-txt-o";
+            break;
+            default :
+                return "file";
+            break;
+        }
+    }
+    
+    //
     // CRUD
     // 
     
@@ -30,6 +97,24 @@ class Document extends Media
         // Return the model back to the controller
         return $this->cmsMedium;     
     }
+    
+    /**
+     * Update the document
+     * 
+     * @return App\Cms\CmsMedium
+     */
+    public function update()
+    {
+        // update the parent media item first
+        $this->updateCmsMedium();
+        if ($this->input->file) {
+            // lets upload the raw file
+            $this->upload();
+        }
+        // Return the model back to the controller
+        return $this->cmsMedium; 
+    }
+    
     
     //
     // Validation
@@ -84,6 +169,21 @@ class Document extends Media
     public function redirectOnUpdate($cms_medium_id) 
     {
         return redirect()->route("admin.media.index")->withSuccess("Document successfully saved!");
+    }
+    
+    //
+    // Getters
+    //
+    
+    /**
+     * Return the document path
+     * 
+     * @param  string   $filename   Omit for the path only
+     * @return string
+     */
+    public function getDocumentPath($filename = null)
+    {
+        return $this->uploadedFile->path . "/original/" . $filename;
     }
     
 }

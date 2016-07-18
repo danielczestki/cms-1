@@ -210,7 +210,7 @@ class Media
      */
     public function getOriginalPath($file = false)
     {
-        return $this->uploadedFile->path . "/" . "/original/" . ($file ? $this->uploadedFile->file : null);
+        return $this->uploadedFile->path . "/original/" . ($file ? $this->uploadedFile->file : null);
     }
     
     /**

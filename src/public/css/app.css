@@ -1269,6 +1269,10 @@ textarea {
   width: 75%;
   padding-left: 12px;
 }
+.Form__field small {
+  font-size: 0.8em;
+  color: #a9a9a9;
+}
 .Form__input,
 .Form__select,
 .Form__textarea {
@@ -1861,8 +1865,22 @@ body.MediaLibrary .MediaListing__item-delete-leave {
   opacity: 0;
 }
 body.MediaLibrary .MediaListing__main {
+  font-size: 12px;
   display: block;
   position: relative;
+}
+body.MediaLibrary .MediaListing__main--document .MediaListing__slot,
+body.MediaLibrary .MediaListing__main--embed .MediaListing__slot {
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  background: #f4f4f4;
+  text-align: center;
+  text-shadow: 1px 1px 0 #fff;
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: 2;
 }
 body.MediaLibrary .MediaListing__icon {
   width: 30px;
@@ -1872,7 +1890,7 @@ body.MediaLibrary .MediaListing__icon {
   color: #fff;
   font-size: 18px;
   position: absolute;
-  z-index: 2;
+  z-index: 5;
 }
 body.MediaLibrary .MediaListing__icon--type {
   background: #ff5339;
@@ -1887,12 +1905,14 @@ body.MediaLibrary .MediaListing__icon--edit {
 body.MediaLibrary .MediaListing__icon--edit:hover {
   background: #1f81db;
 }
-body.MediaLibrary .MediaListing__icon--focal {
+body.MediaLibrary .MediaListing__icon--focal,
+body.MediaLibrary .MediaListing__icon--preview {
   background: #00ac71;
   left: 0;
   bottom: 0;
 }
-body.MediaLibrary .MediaListing__icon--focal:hover {
+body.MediaLibrary .MediaListing__icon--focal:hover,
+body.MediaLibrary .MediaListing__icon--preview:hover {
   background: #009b66;
 }
 body.MediaLibrary .MediaListing__icon--deleting,
@@ -1913,6 +1933,18 @@ body.MediaLibrary .MediaListing__icon--delete:hover {
 body.MediaLibrary .MediaListing__image {
   width: 100%;
   height: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+body.MediaLibrary .MediaListing__filetype {
+  margin-bottom: 6px;
+  font-size: 26px;
+  color: #ff5339;
+}
+body.MediaLibrary .MediaListing__sub {
+  font-size: 11px;
+  color: #a9a9a9;
   display: block;
 }
 body.MediaLibrary .MediaNoresults {
@@ -2058,6 +2090,9 @@ body.MediaLibrary .MediaFocal__info {
     height: 155px;
     padding-top: 12px;
   }
+  body.MediaLibrary .MediaListing__item {
+    width: 33.3333%;
+  }
   body.MediaLibrary .MediaMain {
     height: calc(100% - 155px);
   }
@@ -2076,7 +2111,7 @@ body.MediaLibrary .MediaFocal__info {
     line-height: 30px;
   }
   body.MediaLibrary .MediaListing__item {
-    width: 33.3333%;
+    width: 50%;
   }
   body.MediaLibrary .MediaTypes__type {
     width: auto;
