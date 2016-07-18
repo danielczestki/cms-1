@@ -52,6 +52,14 @@ class CmsMedium extends Model
         return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumDocument');
     }
     
+    /**
+     * Get the embed record associated with the medium.
+     */
+    public function embed()
+    {
+        return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumEmbed');
+    }
+    
     
     
     /**
@@ -78,6 +86,7 @@ class CmsMedium extends Model
             DB::table("cms_mediables")->where("media_id", $record->id)->delete();
             if ($mapping = $record->image) $mapping->delete();
             if ($mapping = $record->document) $mapping->delete();
+            if ($mapping = $record->embed) $mapping->delete();
         });
     }
     

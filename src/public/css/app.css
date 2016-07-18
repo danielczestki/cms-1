@@ -1875,6 +1875,7 @@ body.MediaLibrary .MediaListing__main--embed .MediaListing__slot {
   height: 100%;
   padding: 0 8px;
   background: #f4f4f4;
+  border-right: solid 1px #e8e8e8;
   text-align: center;
   text-shadow: 1px 1px 0 #fff;
   left: 0;

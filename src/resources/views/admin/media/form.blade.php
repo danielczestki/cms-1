@@ -43,25 +43,38 @@
                     "value" => $preview
                 ]) }}
             @endif
-            {{ CmsForm::file([
-                "name" => "file",
-                "label" => "Upload " . strtolower($mediatype["label"]),
-                "required" => true,
-                "mediatype" => $mediakey
-            ]) }}
+            @if (in_array($mediakey, ["image", "video", "document"]))
+                {{ CmsForm::file([
+                    "name" => "file",
+                    "label" => "Upload " . strtolower($mediatype["label"]),
+                    "required" => true,
+                    "mediatype" => $mediakey
+                ]) }}
+            @endif
+            @if (in_array($mediakey, ["embed"]))
+                {{ CmsForm::textarea([
+                    "name" => "embed_code",
+                    "label" => "Embed code",
+                    "required" => true,
+                    "maxlength" => 2000,
+                    "placeholder" => '<iframe width="560" height="315" src="https://www.youtube.com/embed/6UQijb6ETIA"></iframe>',
+                    "info" => "Embed HTML code from source",
+                    "value" => $formtype == "edit" ? $resource->embed->embed_code : null
+                ]) }}
+            @endif
             
             @if ($formtype == "edit") 
                 {{ CmsForm::buttons([
-                    "save_label" => $resource->type == "image" ? "Next Step" : "Finish",
+                    "save_label" => $mediakey == "image" ? "Next Step" : "Finish",
                     "save_icon" => "arrow-right",
-                    "hide_save_exit" => $resource->type != "image" ? true : false,
+                    "hide_save_exit" => $mediakey != "image" ? true : false,
                     "save_exit_label" => "Set Focal",
                     "save_exit_icon" => "crosshairs",
                     "save_exit_link" => route("admin.media.focal", $resource->id),
                 ]) }}
             @else
                 {{ CmsForm::buttons([
-                    "save_label" => "Next Step",
+                    "save_label" => $mediakey == "image" ? "Next Step" : "Finish",
                     "save_icon" => "arrow-right",
                     "hide_save_exit" => true
                 ]) }}

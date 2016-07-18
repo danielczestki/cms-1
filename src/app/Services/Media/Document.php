@@ -79,7 +79,7 @@ class Document extends Media
     // 
     
     /**
-     * Store the image
+     * Store the document
      * 
      * @return App\Cms\CmsMedium
      */
