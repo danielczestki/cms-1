@@ -108,6 +108,7 @@ class Migrations extends Commands
         $classname = $this->buildClassname($filename);
         $tablename = $this->getTablename($this->getFilename($filename));
         $schema = $this->buildSchema($yaml);
+        //$schema.= $this->buildRelations($yaml);
         $migration = str_ireplace(["{classname}", "{tablename}", "{schema}"], [$classname, $tablename, $schema], $stub);
         // save the file
         $migrationname = "{$this->getFileDate()}_{$this->getFileNumber($number)}_{$this->getFilePrefix()}{$tablename}{$this->getFileSuffix()}";
@@ -131,6 +132,24 @@ class Migrations extends Commands
                 $result .= $this->buildColumn($column, $data);
             }
         }
+        return $result;
+    }
+
+    /**
+     * Build the relations for the migration file
+     * 
+     * @param  Symfony\Component\Yaml\Parser $yaml
+     * @return string
+     */
+    private function buildRelations($yaml)
+    {
+        $result = "";
+        /*
+        if (isset($yaml["relations"])) {
+            $relations = $yaml["relations"];
+            //print_r($relations);
+        }
+        */
         return $result;
     }
     
