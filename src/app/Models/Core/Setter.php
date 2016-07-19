@@ -3,6 +3,7 @@
 namespace Thinmartian\Cms\App\Models\Core;
 
 use Symfony\Component\Yaml\Parser;
+use Thinmartian\Cms\App\Services\Cms;
 
 trait Setter
 {
@@ -16,11 +17,25 @@ trait Setter
         $arr = [];
         $fields = $this->getYamlFields();
         foreach ($fields as $idx => $data) {
-            if (array_key_exists("persist", $data) and ! $data["persist"]) {} else {
+            if ($this->allowedColumn($data)) {
                 $arr[] = $idx;
             }
         }
         $this->fillable($arr);
+    }
+    
+    /**
+     * Is this column allowed in the fillable
+     * 
+     * @param  array $data Array of data from yaml
+     * @return boolean
+     */
+    private function allowedColumn($data)
+    {
+        $cms = new Cms;
+        if (array_key_exists("persist", $data) and ! $data["persist"]) return false;
+        if (in_array($data["type"], $cms->getIgnoredFieldTypes())) return false;
+        return true;
     }
     
     /**

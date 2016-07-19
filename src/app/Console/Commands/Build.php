@@ -82,7 +82,7 @@ class Build extends Command
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
-        mkdir(storage_path("app/cms/temp"), 0777, true);
+        if (! file_exists(storage_path("app/cms/temp"))) mkdir(storage_path("app/cms/temp"), 0777, true);
         usleep(400000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
@@ -115,7 +115,7 @@ class Build extends Command
         $bar->finish();
         
         $this->comment("Optimising application...");
-        exec("composer dump -o");
+        exec("composer dump");
         $this->artisan->call("optimize");
     }
     

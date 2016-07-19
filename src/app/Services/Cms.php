@@ -72,6 +72,16 @@ class Cms {
     ];
     
     /**
+     * The following field types (YAML fields.type) will be ignored from 
+     * persistence layers. E.g. 'media' type
+     * 
+     * @var array
+     */
+    protected $ignoredFieldTypes = [
+        "media"
+    ];
+    
+    /**
      * Return the protected files
      * 
      * @return array
@@ -112,6 +122,16 @@ class Cms {
     public function getProtectedMigrations($includeFiles = true)
     {
         return $includeFiles ? array_merge($this->getProtectedFiles(), $this->protectedMigrations) : $this->protectedMigrations;
+    }
+    
+    /**
+     * Return the ignore field types
+     * 
+     * @return array
+     */
+    public function getIgnoredFieldTypes()
+    {
+        return $this->ignoredFieldTypes;
     }
     
 }

@@ -279,6 +279,30 @@ class CmsFormBuilder {
     }
     
     //
+    // MEDIA
+    // 
+    
+    /**
+     * Render a media picker field
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function media($data, $resource = null)
+    {
+        $data["resource"] = $resource;
+        if ($resource) {
+            // We have a resource, so return the existing media(s)
+            $data["existing"] = $resource->media($data["name"])->get();
+        } else {
+            // Must be a create form, so just return a empy collection to prevent errors
+            $data["existing"] = new \Illuminate\Database\Eloquent\Collection;
+        }
+        // Return the form field
+        return $this->render(view("cms::html.form.media", $this->buildData($data)));
+    }
+    
+    //
     // BUTTONS
     // 
     

@@ -1616,12 +1616,142 @@ a:visited:hover {
   margin: 0;
   border: 0;
 }
+.MediaListing {
+  width: 100%;
+  min-height: 100%;
+}
+.MediaListing__item {
+  width: 20%;
+  float: left;
+}
+.MediaListing__item-delete-transition {
+  transition: opacity 0.4s;
+  opacity: 1;
+}
+.MediaListing__item-delete-enter {
+  opacity: 1;
+}
+.MediaListing__item-delete-leave {
+  opacity: 0;
+}
+.MediaListing__main {
+  font-size: 12px;
+  display: block;
+  position: relative;
+}
+.MediaListing__main--document .MediaListing__slot,
+.MediaListing__main--embed .MediaListing__slot {
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  background: #f4f4f4;
+  border-right: solid 1px #e8e8e8;
+  text-align: center;
+  text-shadow: 1px 1px 0 #fff;
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: 2;
+}
+.MediaListing__icon {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  font-size: 18px;
+  position: absolute;
+  z-index: 5;
+}
+.MediaListing__icon--type {
+  background: #ff5339;
+  right: 0;
+  bottom: 0;
+}
+.MediaListing__icon--edit {
+  background: #348fe2;
+  left: 0;
+  top: 0;
+}
+.MediaListing__icon--edit:hover {
+  background: #1f81db;
+}
+.MediaListing__icon--focal,
+.MediaListing__icon--preview {
+  background: #00ac71;
+  left: 0;
+  bottom: 0;
+}
+.MediaListing__icon--focal:hover,
+.MediaListing__icon--preview:hover {
+  background: #009b66;
+}
+.MediaListing__icon--deleting,
+.MediaListing__icon--delete {
+  background: #d70202;
+  right: 0;
+  top: 0;
+}
+.MediaListing__icon--delete,
+.MediaListing__icon--edit,
+.MediaListing__icon--focal {
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.MediaListing__icon--delete:hover {
+  background: #c10202;
+}
+.MediaListing__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.MediaListing__filetype {
+  margin-bottom: 6px;
+  font-size: 26px;
+  color: #ff5339;
+}
+.MediaListing__sub {
+  font-size: 11px;
+  color: #a9a9a9;
+  display: block;
+}
+@media (min-width: 1200px) {
+  .MediaListing__item {
+    width: 16.6666%;
+  }
+}
+@media (min-width: 1600px) {
+  .MediaListing__item {
+    width: 14.2857%;
+  }
+}
+@media (min-width: 1800px) {
+  .MediaListing__item {
+    width: 12.5%;
+  }
+}
+@media (max-width: 1023px) {
+  .MediaListing__item {
+    width: 25%;
+  }
+}
 @media (max-width: 767px) {
+  .MediaListing__item {
+    width: 33.3333%;
+  }
+}
+@media (max-width: 479px) {
   .Media__window {
     left: 12px;
     right: 12px;
     top: 12px;
     bottom: 12px;
+  }
+  .MediaListing__item {
+    width: 50%;
   }
 }
 .Paging {
@@ -1846,108 +1976,6 @@ body.MediaLibrary .MediaMain--pad {
   padding: 12px;
   background: #efefef;
 }
-body.MediaLibrary .MediaListing {
-  width: 100%;
-  min-height: 100%;
-}
-body.MediaLibrary .MediaListing__item {
-  width: 20%;
-  float: left;
-}
-body.MediaLibrary .MediaListing__item-delete-transition {
-  transition: opacity 0.4s;
-  opacity: 1;
-}
-body.MediaLibrary .MediaListing__item-delete-enter {
-  opacity: 1;
-}
-body.MediaLibrary .MediaListing__item-delete-leave {
-  opacity: 0;
-}
-body.MediaLibrary .MediaListing__main {
-  font-size: 12px;
-  display: block;
-  position: relative;
-}
-body.MediaLibrary .MediaListing__main--document .MediaListing__slot,
-body.MediaLibrary .MediaListing__main--embed .MediaListing__slot {
-  width: 100%;
-  height: 100%;
-  padding: 0 8px;
-  background: #f4f4f4;
-  border-right: solid 1px #e8e8e8;
-  text-align: center;
-  text-shadow: 1px 1px 0 #fff;
-  left: 0;
-  top: 0;
-  position: absolute;
-  z-index: 2;
-}
-body.MediaLibrary .MediaListing__icon {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  color: #fff;
-  font-size: 18px;
-  position: absolute;
-  z-index: 5;
-}
-body.MediaLibrary .MediaListing__icon--type {
-  background: #ff5339;
-  right: 0;
-  bottom: 0;
-}
-body.MediaLibrary .MediaListing__icon--edit {
-  background: #348fe2;
-  left: 0;
-  top: 0;
-}
-body.MediaLibrary .MediaListing__icon--edit:hover {
-  background: #1f81db;
-}
-body.MediaLibrary .MediaListing__icon--focal,
-body.MediaLibrary .MediaListing__icon--preview {
-  background: #00ac71;
-  left: 0;
-  bottom: 0;
-}
-body.MediaLibrary .MediaListing__icon--focal:hover,
-body.MediaLibrary .MediaListing__icon--preview:hover {
-  background: #009b66;
-}
-body.MediaLibrary .MediaListing__icon--deleting,
-body.MediaLibrary .MediaListing__icon--delete {
-  background: #d70202;
-  right: 0;
-  top: 0;
-}
-body.MediaLibrary .MediaListing__icon--delete,
-body.MediaLibrary .MediaListing__icon--edit,
-body.MediaLibrary .MediaListing__icon--focal {
-  transition: background 0.2s;
-  cursor: pointer;
-}
-body.MediaLibrary .MediaListing__icon--delete:hover {
-  background: #c10202;
-}
-body.MediaLibrary .MediaListing__image {
-  width: 100%;
-  height: auto;
-  display: block;
-  position: relative;
-  z-index: 1;
-}
-body.MediaLibrary .MediaListing__filetype {
-  margin-bottom: 6px;
-  font-size: 26px;
-  color: #ff5339;
-}
-body.MediaLibrary .MediaListing__sub {
-  font-size: 11px;
-  color: #a9a9a9;
-  display: block;
-}
 body.MediaLibrary .MediaNoresults {
   height: 100%;
   padding: 0 12px;
@@ -2055,25 +2083,7 @@ body.MediaLibrary .MediaFocal__info {
   margin: 0 0 0 60%;
   padding: 24px;
 }
-@media (min-width: 1200px) {
-  body.MediaLibrary .MediaListing__item {
-    width: 16.6666%;
-  }
-}
-@media (min-width: 1600px) {
-  body.MediaLibrary .MediaListing__item {
-    width: 14.2857%;
-  }
-}
-@media (min-width: 1800px) {
-  body.MediaLibrary .MediaListing__item {
-    width: 12.5%;
-  }
-}
 @media (max-width: 1023px) {
-  body.MediaLibrary .MediaListing__item {
-    width: 25%;
-  }
   body.MediaLibrary .MediaTypes {
     display: block;
   }
@@ -2091,9 +2101,6 @@ body.MediaLibrary .MediaFocal__info {
     height: 155px;
     padding-top: 12px;
   }
-  body.MediaLibrary .MediaListing__item {
-    width: 33.3333%;
-  }
   body.MediaLibrary .MediaMain {
     height: calc(100% - 155px);
   }
@@ -2110,9 +2117,6 @@ body.MediaLibrary .MediaFocal__info {
   body.MediaLibrary .MediaNoresults__title {
     font-size: 20px;
     line-height: 30px;
-  }
-  body.MediaLibrary .MediaListing__item {
-    width: 50%;
   }
   body.MediaLibrary .MediaTypes__type {
     width: auto;

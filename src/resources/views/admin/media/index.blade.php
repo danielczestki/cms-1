@@ -29,7 +29,22 @@
              <ul class="MediaListing">
                 @foreach ($listing as $record)
                     <li class="MediaListing__item">
-                        @include("cms::admin.partials.media.thumb", ["media" => $record])
+                        <?php
+                            if ($record->type == "document") {
+                                $preview = CmsDocument::get($record->id);        
+                            } else if ($record->type == "embed") {
+                                $preview = CmsEmbed::url($record);       
+                            } else {
+                                $preview = null;
+                            }
+                        ?>
+                        @include("cms::admin.partials.media.thumb", [
+                            "media" => $record,
+                            "edit_url" => route('admin.media.edit', $record->id),
+                            "delete_url" => route('admin.media.destroy', $record->id),
+                            "focal_url" => route('admin.media.focal', $record->id),
+                            "preview_url" => $preview,
+                        ])
                     </li>
                 @endforeach
             </ul>

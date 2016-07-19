@@ -2,7 +2,7 @@
 
 namespace Thinmartian\Cms\App\Http\Controllers\Core;
 
-use CmsForm;
+use CmsForm, DB;
 use App\Cms\CmsMedium;
 use App\Http\Controllers\Controller as BaseController;
 use Thinmartian\Cms\App\Http\Requests\Core\MediaRequest;

@@ -1,18 +1,9 @@
-<?php
-    if ($media->type == "document") {
-        $preview = CmsDocument::get($media->id);        
-    } else if ($media->type == "embed") {
-        $preview = CmsEmbed::url($media);       
-    } else {
-        $preview = null;
-    }
-?>
 <mediathumb
     csrf="{{ csrf_token() }}"
-    edit-url="{{ route('admin.media.edit', $media->id) }}"
-    delete-url="{{ route('admin.media.destroy', $media->id) }}"
-    focal-url="{{ route('admin.media.focal', $media->id) }}"
-    preview-url="{{ $preview }}"
+    edit-url="{{ $edit_url }}"
+    delete-url="{{ $delete_url }}"
+    focal-url="{{ $focal_url }}"
+    preview-url="{{ $preview_url }}"
     icon="{{ CmsImage::getIconByType($media->type) }}"
     type="{{ $media->type }}"
 >
