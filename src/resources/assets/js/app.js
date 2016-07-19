@@ -13,7 +13,7 @@ Vue.component("mediathumb", require("./components/Mediathumb/Mediathumb"));
  */
 if (document.getElementById("app")) {
   
-  new Vue({
+  window.vueApp = new Vue({
     el: "#app",
     data: {
       nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method

@@ -1,9 +1,21 @@
+<div>
+<!-- Existing media items -->
+<ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">
+    <li class="MediaListing__item" v-for="media in existing">
+        <div class="MediaListing__main MediaListing__main--{{ media.type }}" v-if="! media.removed" transition="MediaListing__item-delete">
+            <input type="hidden" name="cmsmedia[{{ name }}][{{ $index }}]" value="{{ media.cms_medium_id }}" />
+            <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>
+            <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>
+            <partial :name="media.type"></partial>
+        </div>
+    </li>
+</ul>
 
-<!-- Exisiting media items --->
-<ul><li>img</li></ul> 
-
-<!-- Select media button --->
-<button type="button" class="Button Button--small Button--orange Button--icon" @click="select">
-    <i class="Button__icon fa fa-photo"></i>
-    {{ label }}
-</button>
+<!-- Select media button -->
+<p>
+    <button type="button" class="Button Button--small Button--orange Button--icon" @click="pick">
+        <i class="Button__icon fa fa-photo"></i>
+        {{ label }}
+    </button>
+</p>
+</div>

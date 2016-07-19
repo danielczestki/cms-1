@@ -2,7 +2,7 @@
 
 namespace Thinmartian\Cms\App\Services\Resource;
 
-use CmsYaml;
+use CmsYaml, DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +31,8 @@ trait Form
             if (array_key_exists($column, $form)) $this->model->$column = $form[$column];
         }
         $this->model->save();
+        // media
+        $this->saveMedia($this->model);
         return $this->model;
     }
     
@@ -47,7 +49,30 @@ trait Form
             if (array_key_exists($column, $form)) $resource->$column = $form[$column];
         }
         $resource->save();
+        // media
+        $this->saveMedia($resource);
         return $resource;
+    }
+    
+    /**
+     * Deal with saving the media data
+     * 
+     * @param  Illuminate\Database\Eloquent\Model $resource
+     */
+    protected function saveMedia($resource)
+    {
+        if (! request()->has("cmsmedia")) return false;
+        $class = get_class($resource);        
+        foreach (request()->get("cmsmedia") as $mediable_category => $media) {
+            // Empty first for sync
+            DB::table("cms_mediables")->where("mediable_id", $resource->id)->where("mediable_type", $class)->where("mediable_category", $mediable_category)->delete();
+            // Now sync again
+            if (empty($media)) continue;
+            foreach ($media as $position => $cms_medium_id) {
+                $resource->media()->attach($cms_medium_id, ["mediable_category" => $mediable_category, "position" => $position]);
+            }
+        }
+        return true;
     }
     
     /**

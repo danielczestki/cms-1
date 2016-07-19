@@ -27366,7 +27366,7 @@ _vue2.default.component("mediathumb", require("./components/Mediathumb/Mediathum
  */
 if (document.getElementById("app")) {
 
-  new _vue2.default({
+  window.vueApp = new _vue2.default({
     el: "#app",
     data: {
       nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method
@@ -27405,7 +27405,7 @@ if (document.getElementById("app")) {
   });
 }
 
-},{"./components/Alert/Alert":10,"./components/Form/Fileupload/Fileupload":12,"./components/Form/Mediaselect/Mediaselect":14,"./components/Mediadialog/Mediadialog":16,"./components/Mediathumb/Mediathumb":20,"vue":7,"vue-resource":6}],9:[function(require,module,exports){
+},{"./components/Alert/Alert":10,"./components/Form/Fileupload/Fileupload":12,"./components/Form/Mediaselect/Mediaselect":14,"./components/Mediadialog/Mediadialog":20,"./components/Mediathumb/Mediathumb":24,"vue":7,"vue-resource":6}],9:[function(require,module,exports){
 module.exports = '<div class="Alert Alert--{{ type }}" v-show="visible">\n    <slot></slot>\n    <i class="Alert__close fa fa-times" v-on:click="close"></i>\n</div>';
 },{}],10:[function(require,module,exports){
 "use strict";
@@ -27500,13 +27500,15 @@ module.exports = {
 };
 
 },{"./Fileupload.html":11}],13:[function(require,module,exports){
-module.exports = '\n<!-- Exisiting media items --->\n<ul><li>img</li></ul> \n\n<!-- Select media button --->\n<button type="button" class="Button Button--small Button--orange Button--icon" @click="select">\n    <i class="Button__icon fa fa-photo"></i>\n    {{ label }}\n</button>';
+module.exports = '<div>\n<!-- Existing media items -->\n<ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n    <li class="MediaListing__item" v-for="media in existing">\n        <div class="MediaListing__main MediaListing__main--{{ media.type }}" v-if="! media.removed" transition="MediaListing__item-delete">\n            <input type="hidden" name="cmsmedia[{{ name }}][{{ $index }}]" value="{{ media.cms_medium_id }}" />\n            <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n            <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n            <partial :name="media.type"></partial>\n        </div>\n    </li>\n</ul>\n\n<!-- Select media button -->\n<p>\n    <button type="button" class="Button Button--small Button--orange Button--icon" @click="pick">\n        <i class="Button__icon fa fa-photo"></i>\n        {{ label }}\n    </button>\n</p>\n</div>';
 },{}],14:[function(require,module,exports){
 "use strict";
 
 module.exports = {
 
   props: {
+    media_click: { required: true },
+    name: { reuqired: true },
     label: { required: true },
     existing: {
       coerce: function coerce(val) {
@@ -27517,20 +27519,37 @@ module.exports = {
 
   template: require("./Mediaselect.html"),
 
-  methods: {
-    select: function select() {
-      console.log("pressed select media...");
-    }
+  partials: {
+    image: require("./image.html"),
+    video: require("./video.html"),
+    document: require("./document.html"),
+    embed: require("./embed.html")
   },
 
-  ready: function ready() {
-    console.log(this.existing);
+  methods: {
+    pick: function pick() {
+      this.media_click();
+    },
+    remove: function remove(index) {
+      var media = this.existing[index];
+      media.removed = true;
+      return true;
+    }
   }
+
 };
 
-},{"./Mediaselect.html":13}],15:[function(require,module,exports){
-module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window">\n        <a href="#" class="Media__close" v-on:click.prevent="toggle"><i class="fa fa-times"></i></a>\n        <iframe :src="_src" class="Media__iframe" seamless></iframe>\n    </div>\n</div>';
+},{"./Mediaselect.html":13,"./document.html":15,"./embed.html":16,"./image.html":17,"./video.html":18}],15:[function(require,module,exports){
+module.exports = '<img src="/vendor/cms/img/dotpix.gif" class="MediaListing__image">\n<div class="MediaListing__slot Utility--valign-middle"><span>\n    <p class="MediaListing__filetype"><i class="fa fa-{{ media.document.fileicon }}"></i></p>\n    {{ media.title }}\n    <small class="MediaListing__sub Utility--text-truncate" title="{{ media.original_name }}">{{ media.original_name }}</small>\n</span></div>';
 },{}],16:[function(require,module,exports){
+module.exports = '<img src="/vendor/cms/img/dotpix.gif" class="MediaListing__image">\n<div class="MediaListing__slot Utility--valign-middle"><span>\n    <p class="MediaListing__filetype"><i class="fa fa-youtube"></i></p>\n    {{ media.title }}\n    <small class="MediaListing__sub Utility--text-truncate">{{ media.embed.domain }}</small>\n</span></div>';
+},{}],17:[function(require,module,exports){
+module.exports = '<img :src="media.image.thumbnail" class="MediaListing__image">';
+},{}],18:[function(require,module,exports){
+module.exports = 'VIDEO !!!!';
+},{}],19:[function(require,module,exports){
+module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window">\n        <a href="#" class="Media__close" v-on:click.prevent="toggle"><i class="fa fa-times"></i></a>\n        <iframe :src="_src" class="Media__iframe" seamless></iframe>\n    </div>\n</div>';
+},{}],20:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -27552,9 +27571,9 @@ module.exports = {
 
 };
 
-},{"./Mediadialog.html":15}],17:[function(require,module,exports){
+},{"./Mediadialog.html":19}],21:[function(require,module,exports){
 module.exports = '<input type="hidden" name="focal" v-model="section" />\n<div class="MediaFocal">\n    <div class="MediaFocal__focus">\n        <div class="MediaFocal__sections">\n            <table>\n                <tr>\n                    <td v-on:click="select(\'top-left\')" :class="{\'MediaFocal--selected\': section == \'top-left\'}">Top left</td>\n                    <td v-on:click="select(\'top\')" :class="{\'MediaFocal--selected\': section == \'top\'}">Top</td>\n                    <td v-on:click="select(\'top-right\')" :class="{\'MediaFocal--selected\': section == \'top-right\'}">Top right</td>\n                </tr>\n                <tr>\n                    <td v-on:click="select(\'left\')" :class="{\'MediaFocal--selected\': section == \'left\'}">Left</td>\n                    <td v-on:click="select(\'center\')" :class="{\'MediaFocal--selected\': section == \'center\'}">Center</td>\n                    <td v-on:click="select(\'right\')" :class="{\'MediaFocal--selected\': section == \'right\'}">Right</td>\n                </tr>\n                <tr>\n                    <td v-on:click="select(\'bottom-left\')" :class="{\'MediaFocal--selected\': section == \'bottom-left\'}">Bottom left</td>\n                    <td v-on:click="select(\'bottom\')" :class="{\'MediaFocal--selected\': section == \'bottom\'}">Bottom</td>\n                    <td v-on:click="select(\'bottom-right\')" :class="{\'MediaFocal--selected\': section == \'bottom-right\'}">Bottom right</td>\n                </tr>\n            </table>\n        </div>\n        <img :src="image" class="MediaFocal__image">\n    </div>\n    <div class="MediaFocal__info">\n        Set the main focal point for this image by clicking the sector on the image. When cropping of the image occurs, the main focal point will be set to this region.\n    </div>\n</div>';
-},{}],18:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -27569,9 +27588,9 @@ module.exports = {
 
 };
 
-},{"./Mediafocus.html":17}],19:[function(require,module,exports){
+},{"./Mediafocus.html":21}],23:[function(require,module,exports){
 module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <slot></slot>\n</div>';
-},{}],20:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -27610,7 +27629,7 @@ module.exports = {
 
 };
 
-},{"./Mediathumb.html":19}],21:[function(require,module,exports){
+},{"./Mediathumb.html":23}],25:[function(require,module,exports){
 "use strict";
 
 require("./plugins/ui");
@@ -27619,7 +27638,7 @@ require("./app");
 
 require("./media");
 
-},{"./app":8,"./media":22,"./plugins/ui":23}],22:[function(require,module,exports){
+},{"./app":8,"./media":26,"./plugins/ui":27}],26:[function(require,module,exports){
 "use strict";
 
 var _vue = require("vue");
@@ -27641,7 +27660,7 @@ if (document.getElementById("media")) {
   });
 }
 
-},{"./components/Mediafocus/Mediafocus":18,"vue":7}],23:[function(require,module,exports){
+},{"./components/Mediafocus/Mediafocus":22,"vue":7}],27:[function(require,module,exports){
 "use strict";
 
 var _jquery = require("jquery");
@@ -27729,7 +27748,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   });
 })();
 
-},{"../vendor/jquery-slimscroll.js":24,"jquery":1,"nprogress":3,"pikaday-time":4}],24:[function(require,module,exports){
+},{"../vendor/jquery-slimscroll.js":28,"jquery":1,"nprogress":3,"pikaday-time":4}],28:[function(require,module,exports){
 'use strict';
 
 /*! Copyright (c) 2011 Piotr Rochala (http://rocha.la)
@@ -28198,6 +28217,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   });
 });
 
-},{"jquery":1}]},{},[21]);
+},{"jquery":1}]},{},[25]);
 
 //# sourceMappingURL=index.js.map
