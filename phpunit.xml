@@ -16,5 +16,8 @@
             <directory suffix=".php">./tests/</directory>
             <exclude>./tests/_old</exclude>
         </testsuite>
+        <php>
+            <const name="PHPUNIT_IS_RUNNING" value="true"/>
+        </php>
     </testsuites>
 </phpunit>
