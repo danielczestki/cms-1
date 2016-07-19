@@ -28,7 +28,10 @@ class Model extends BaseModel
      */
     public function media($type = "media", $orderColumn = "position", $orderDir = "asc")
     {
-        return $this->morphToMany("App\Cms\CmsMedium", "mediable", "cms_mediables", "mediable_id", "media_id")->withPivot(["mediable_type", "mediable_category"])->wherePivot("mediable_category", $type)->orderBy($orderColumn, $orderDir);
+        return $this->morphToMany("App\Cms\CmsMedium", "mediable", "cms_mediables", "mediable_id", "media_id")
+            ->withPivot(["mediable_type", "mediable_category", "position"])
+            ->wherePivot("mediable_category", $type)
+            ->orderBy($orderColumn, $orderDir);
     }    
     
 }

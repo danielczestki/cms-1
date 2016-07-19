@@ -5,6 +5,7 @@ Vue.use(VueResource);
 // Global components (likely form elements)
 Vue.component("alert", require("./components/Alert/Alert"));
 Vue.component("fileupload", require("./components/Form/Fileupload/Fileupload"));
+Vue.component("mediaselect", require("./components/Form/Mediaselect/Mediaselect"));
 Vue.component("mediathumb", require("./components/Mediathumb/Mediathumb"));
 
 /**
@@ -21,7 +22,7 @@ if (document.getElementById("app")) {
       media_open: false, // is the media dialog open or not?
     },
     components: {
-      mediadialog: require("./components/Mediadialog/Mediadialog"), // media dialog popup (the iframe basically)
+      mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
     },
     methods: {
       // Reveal/hide the primary nav on clicking a toggle button

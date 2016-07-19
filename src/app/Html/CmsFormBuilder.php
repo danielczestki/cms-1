@@ -3,7 +3,7 @@
 namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
-use CmsImage;
+use CmsImage, CmsDocument, CmsEmbed;
 
 class CmsFormBuilder {
     
@@ -291,16 +291,59 @@ class CmsFormBuilder {
     public function media($data, $resource = null)
     {
         $data["resource"] = $resource;
-        if ($resource) {
-            // We have a resource, so return the existing media(s)
-            $data["existing"] = $resource->media($data["name"])->get();
-        } else {
-            // Must be a create form, so just return a empy collection to prevent errors
-            $data["existing"] = new \Illuminate\Database\Eloquent\Collection;
-        }
+        $data["existing"] = $this->existingMedia($data, $resource);
         // Return the form field
         return $this->render(view("cms::html.form.media", $this->buildData($data)));
     }
+    
+    /**
+     * Builds a clean array of all thedata needed for the vue component
+     * 
+     * @param  array  $data
+     * @param  model  $resource 
+     * @return array
+     */
+    private function existingMedia($data, $resource)
+    {
+        $result = [];
+        // No resource means a creeate form, so just return an empty array
+        if (! $resource) return $result;
+        // Fetch the media (if any) and continue...
+        $collection = $resource->media($data["name"])->get();
+        if (! $collection->count()) return $result;
+        // Loop the media and build the array
+        foreach ($collection as $media) {
+            // Add default/global data
+            $result[$media->pivot->position] = [
+                "cms_medium_id" => $media->id,
+                "type" => $media->type,
+                "title" => $media->title,
+                "filename" => $media->filename,
+                "extension" => $media->extension,
+                "original_name" => $media->original_name,
+                "pivot" => [
+                    "mediable_type" => $media->pivot->mediable_type,
+                    "mediable_category" => $media->pivot->mediable_category,
+                    "position" => $media->pivot->position,
+                ]
+            ];
+            // Image data (if applicable)
+            if ($media->type == "image") {
+                $result[$media->pivot->position]["image"] = $media->image->toArray() + ["thumbnail" => CmsImage::get($media->id, 600, 600)];
+            }
+            // document data (if applicable)
+            if ($media->type == "document") {
+                $result[$media->pivot->position]["document"] = $media->document->toArray() + ["icon" => CmsDocument::icon($media)];
+            }
+            // embed data (if applicable)
+            if ($media->type == "embed") {
+                $result[$media->pivot->position]["embed"] = $media->embed->toArray() + ["domain" => CmsEmbed::domain($media)];
+            }
+        }
+        // Return the new array
+        return $result;
+    }
+    
     
     //
     // BUTTONS
