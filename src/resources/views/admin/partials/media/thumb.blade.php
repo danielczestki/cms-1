@@ -6,6 +6,7 @@
     delete-url="{{ $delete_url }}"
     focal-url="{{ $focal_url }}"
     preview-url="{{ $preview_url }}"
+    id="{{ $media->id }}"
     icon="{{ CmsImage::getIconByType($media->type) }}"
     type="{{ $media->type }}"
 >

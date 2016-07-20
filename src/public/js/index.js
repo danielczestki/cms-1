@@ -27504,7 +27504,7 @@ module.exports = {
 };
 
 },{"./Fileupload.html":11}],13:[function(require,module,exports){
-module.exports = '<div>\n<!-- Existing media items -->\n<ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n    <li class="MediaListing__item" v-for="media in existing">\n        <div class="MediaListing__main MediaListing__main--{{ media.type }}" v-if="! media.removed" transition="MediaListing__item-delete">\n            <input type="hidden" name="cmsmedia[{{ name }}][{{ $index }}]" value="{{ media.cms_medium_id }}" />\n            <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n            <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n            <partial :name="media.type"></partial>\n        </div>\n    </li>\n</ul>\n\n<!-- Select media button -->\n<p>\n    <button type="button" class="Button Button--small Button--orange Button--icon" @click="pick">\n        <i class="Button__icon fa fa-photo"></i>\n        {{ label }}\n    </button>\n</p>\n</div>';
+module.exports = '<div>\n    <!-- Existing media items -->\n    <ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n        <li class="MediaListing__item" v-for="media in existing" v-if="! media.removed">\n            <div class="MediaListing__main MediaListing__main--{{ media.type }}" transition="MediaListing__item-delete">\n                <input type="hidden" name="cmsmedia[{{ name }}][{{ $index }}]" value="{{ media.cms_medium_id }}" />\n                <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n                <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n                <partial :name="media.type"></partial>\n            </div>\n        </li>\n    </ul>\n\n    <!-- Select media button -->\n    <p>\n        <button type="button" class="Button Button--small Button--orange Button--icon" @click="pick">\n            <i class="Button__icon fa fa-photo"></i>\n            {{ label }}\n        </button>\n    </p>\n</div>';
 },{}],14:[function(require,module,exports){
 "use strict";
 
@@ -27544,10 +27544,19 @@ module.exports = {
     add: function add(data) {
       this.existing.push(data);
       this.media_click(false);
-      //console.log(data);
+    },
+    ids: function ids() {
+      var result = [];
+      this.existing.forEach(function (data) {
+        if (!data.removed) result.push(data.cms_medium_id);
+      });
+      return result;
     }
-  }
+  },
 
+  ready: function ready() {
+    console.log(this.ids());
+  }
 };
 
 },{"./Mediaselect.html":13,"./document.html":15,"./embed.html":16,"./image.html":17,"./video.html":18}],15:[function(require,module,exports){
@@ -27600,7 +27609,7 @@ module.exports = {
 };
 
 },{"./Mediafocus.html":21}],23:[function(require,module,exports){
-module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <!-- Might add a media_selectable to the app and if true allow clicks, else no -->\n    <a href="#" class="MediaListing__selectable" v-on:click.prevent="select">\n        <slot></slot>\n    </a>\n</div>';
+module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-show="!deleted" transition="MediaListing__item-delete" style="display: none">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <!-- Might add a media_selectable to the app and if true allow clicks, else no -->\n    <a href="#" class="MediaListing__selectable" v-on:click.prevent="select">\n        <slot></slot>\n    </a>\n</div>';
 },{}],24:[function(require,module,exports){
 "use strict";
 
@@ -27627,18 +27636,26 @@ module.exports = {
   data: function data() {
     return {
       deleting: false,
-      deleted: false
+      deleted: true
     };
   },
 
   computed: {
     focused: function focused() {
       return this.parentVue.$data.media_focus;
+    },
+    media: function media() {
+      return this.parentVue.$refs[this.focused];
+    }
+  },
+  watch: {
+    parentVue: function parentVue(val, oldVal) {
+      if (val) this.update();
     }
   },
   methods: {
     select: function select() {
-      this.parentVue.$refs[this.focused].add(this.mediadata);
+      this.media.add(this.mediadata);
     },
     delete: function _delete() {
       var _this = this;
@@ -27656,6 +27673,10 @@ module.exports = {
           _this.deleting = false;
         }
       });
+    },
+    update: function update() {
+      var currentIds = this.media.ids();
+      if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }
   }
 

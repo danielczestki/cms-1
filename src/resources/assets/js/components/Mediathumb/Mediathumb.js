@@ -22,17 +22,25 @@ module.exports = {
   data() {
     return {
       deleting: false,
-      deleted: false
+      deleted: true
     }
   },
   computed: {
     focused() {
       return this.parentVue.$data.media_focus;
+    },
+    media() {
+      return this.parentVue.$refs[this.focused];
     }
-  },  
+  },
+  watch: {
+    parentVue(val, oldVal) {
+      if (val) this.update();
+    }
+  },
   methods: {
     select() {
-      this.parentVue.$refs[this.focused].add(this.mediadata);
+      this.media.add(this.mediadata);
     },
     delete() {
       if (! confirm("Are you sure you want to permanently delete this media record?")) return false;
@@ -48,6 +56,10 @@ module.exports = {
           this.deleting = false;
         }
       });
+    },
+    update() {
+      let currentIds = this.media.ids();
+      if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }
   }
   

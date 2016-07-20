@@ -34,8 +34,20 @@ module.exports = {
     add(data) {
       this.existing.push(data);
       this.media_click(false);
-      //console.log(data);
+    },
+    ids() {
+      let result = [];
+      this.existing.forEach((data) => {
+        if (! data.removed) result.push(data.cms_medium_id)
+      });
+      return result;
     }
+  },
+  
+  
+  
+  ready() {
+    console.log(this.ids());
   }
   
 }

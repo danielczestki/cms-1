@@ -61,11 +61,12 @@ trait Form
      */
     protected function saveMedia($resource)
     {
-        if (! request()->has("cmsmedia")) return false;
-        $class = get_class($resource);        
+        $class = get_class($resource);   
+        // Empty first
+        DB::table("cms_mediables")->where("mediable_id", $resource->id)->where("mediable_type", $class)->delete();
+        // If we don't have a media field, just abort now
+        if (! request()->has("cmsmedia")) return false;     
         foreach (request()->get("cmsmedia") as $mediable_category => $media) {
-            // Empty first for sync
-            DB::table("cms_mediables")->where("mediable_id", $resource->id)->where("mediable_type", $class)->where("mediable_category", $mediable_category)->delete();
             // Now sync again
             if (empty($media)) continue;
             foreach ($media as $position => $cms_medium_id) {
