@@ -5,5 +5,8 @@
     <a href="{{ focalUrl }}" v-if="focalUrl && type == 'image'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>
     <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>
     <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>
-    <slot></slot>
+    <!-- Might add a media_selectable to the app and if true allow clicks, else no -->
+    <a href="#" class="MediaListing__selectable" v-on:click.prevent="select">
+        <slot></slot>
+    </a>
 </div>

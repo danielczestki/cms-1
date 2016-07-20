@@ -1,7 +1,23 @@
 
 module.exports = {
   
-  props: ["csrf", "editUrl", "deleteUrl", "focalUrl", "previewUrl", "id", "icon", "type"],
+  props: {
+    parentVue: { required: true },
+    mediadata: {
+      required: true,
+      coerce: function (val) {
+        return JSON.parse(val)
+      }
+    },
+    csrf: { required: true },
+    editUrl: {},
+    deleteUrl: {},
+    focalUrl: {},
+    previewUrl: {},
+    id: {},
+    icon: {},
+    type: {}
+  },
   template: require("./Mediathumb.html"),
   data() {
     return {
@@ -9,9 +25,14 @@ module.exports = {
       deleted: false
     }
   },
+  computed: {
+    focused() {
+      return this.parentVue.$data.media_focus;
+    }
+  },  
   methods: {
-    click() {
-      console.log("clicked");
+    select() {
+      this.parentVue.$refs[this.focused].add(this.mediadata);
     },
     delete() {
       if (! confirm("Are you sure you want to permanently delete this media record?")) return false;

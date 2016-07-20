@@ -314,37 +314,38 @@ class CmsFormBuilder {
         // Loop the media and build the array
         $idx = 0;        
         foreach ($collection as $media) {
-            // Add default/global data
-            $result[$idx] = [
-                "cms_medium_id" => $media->id,
-                "type" => $media->type,
-                "title" => $media->title,
-                "icon" => CmsImage::getMediaTypes($media->type . ".icon"), 
-                "filename" => $media->filename,
-                "extension" => $media->extension,
-                "original_name" => $media->original_name,
-                "removed" => false, // for vue
-                "pivot" => [
-                    "mediable_type" => $media->pivot->mediable_type,
-                    "mediable_category" => $media->pivot->mediable_category,
-                    "position" => $media->pivot->position,
-                ]
-            ];
-            // Image data (if applicable)
-            if ($media->type == "image") {
-                $result[$idx]["image"] = $media->image->toArray() + ["thumbnail" => CmsImage::get($media->id, 600, 600)];
-            }
-            // document data (if applicable)
-            if ($media->type == "document") {
-                $result[$idx]["document"] = $media->document->toArray() + ["fileicon" => CmsDocument::icon($media)];
-            }
-            // embed data (if applicable)
-            if ($media->type == "embed") {
-                $result[$idx]["embed"] = $media->embed->toArray() + ["domain" => CmsEmbed::domain($media)];
-            }
+            $result[$idx] = $this->mediaArray($media);
             $idx++;
         }
         // Return the new array
+        return $result;
+    }
+    
+    public function mediaArray($media)
+    {
+        // Add default/global data
+        $result = [
+            "cms_medium_id" => $media->id,
+            "type" => $media->type,
+            "title" => $media->title,
+            "icon" => CmsImage::getMediaTypes($media->type . ".icon"), 
+            "filename" => $media->filename,
+            "extension" => $media->extension,
+            "original_name" => $media->original_name,
+            "removed" => false, // for vue
+        ];
+        // Image data (if applicable)
+        if ($media->type == "image") {
+            $result["image"] = $media->image->toArray() + ["thumbnail" => CmsImage::get($media->id, 600, 600)];
+        }
+        // document data (if applicable)
+        if ($media->type == "document") {
+            $result["document"] = $media->document->toArray() + ["fileicon" => CmsDocument::icon($media)];
+        }
+        // embed data (if applicable)
+        if ($media->type == "embed") {
+            $result["embed"] = $media->embed->toArray() + ["domain" => CmsEmbed::domain($media)];
+        }
         return $result;
     }
     

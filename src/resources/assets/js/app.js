@@ -20,6 +20,7 @@ if (document.getElementById("app")) {
       nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
       nav_open: false, // is the nav open or not
       media_open: false, // is the media dialog open or not?
+      media_focus: null,
     },
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
@@ -42,8 +43,8 @@ if (document.getElementById("app")) {
           this.nav_open = true;
         }, 1000)
       },
-      media_click() {
-        this.media_open = ! this.media_open;
+      media_click(state = null) {
+        this.media_open = state ? state : !this.media_open;
       }
     }
   });

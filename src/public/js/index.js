@@ -27372,7 +27372,9 @@ if (document.getElementById("app")) {
       nav_clicked: false, // changed only if a toggle button is clicked to lock the hover method
       nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
       nav_open: false, // is the nav open or not
-      media_open: false },
+      media_open: false, // is the media dialog open or not?
+      media_focus: null
+    },
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
     },
@@ -27399,7 +27401,9 @@ if (document.getElementById("app")) {
         }, 1000);
       },
       media_click: function media_click() {
-        this.media_open = !this.media_open;
+        var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+        this.media_open = state ? state : !this.media_open;
       }
     }
   });
@@ -27507,8 +27511,9 @@ module.exports = '<div>\n<!-- Existing media items -->\n<ul class="MediaListing 
 module.exports = {
 
   props: {
+    media_focus: { required: true },
     media_click: { required: true },
-    name: { reuqired: true },
+    name: { required: true },
     label: { required: true },
     existing: {
       coerce: function coerce(val) {
@@ -27528,12 +27533,18 @@ module.exports = {
 
   methods: {
     pick: function pick() {
+      this.media_focus = this.name;
       this.media_click();
     },
     remove: function remove(index) {
       var media = this.existing[index];
       media.removed = true;
       return true;
+    },
+    add: function add(data) {
+      this.existing.push(data);
+      this.media_click(false);
+      //console.log(data);
     }
   }
 
@@ -27589,13 +27600,29 @@ module.exports = {
 };
 
 },{"./Mediafocus.html":21}],23:[function(require,module,exports){
-module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <slot></slot>\n</div>';
+module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-if="!deleted" transition="MediaListing__item-delete">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <!-- Might add a media_selectable to the app and if true allow clicks, else no -->\n    <a href="#" class="MediaListing__selectable" v-on:click.prevent="select">\n        <slot></slot>\n    </a>\n</div>';
 },{}],24:[function(require,module,exports){
 "use strict";
 
 module.exports = {
 
-  props: ["csrf", "editUrl", "deleteUrl", "focalUrl", "previewUrl", "id", "icon", "type"],
+  props: {
+    parentVue: { required: true },
+    mediadata: {
+      required: true,
+      coerce: function coerce(val) {
+        return JSON.parse(val);
+      }
+    },
+    csrf: { required: true },
+    editUrl: {},
+    deleteUrl: {},
+    focalUrl: {},
+    previewUrl: {},
+    id: {},
+    icon: {},
+    type: {}
+  },
   template: require("./Mediathumb.html"),
   data: function data() {
     return {
@@ -27604,9 +27631,14 @@ module.exports = {
     };
   },
 
+  computed: {
+    focused: function focused() {
+      return this.parentVue.$data.media_focus;
+    }
+  },
   methods: {
-    click: function click() {
-      console.log("clicked");
+    select: function select() {
+      this.parentVue.$refs[this.focused].add(this.mediadata);
     },
     delete: function _delete() {
       var _this = this;
@@ -27654,8 +27686,14 @@ if (document.getElementById("media")) {
 
   new _vue2.default({
     el: "#media",
+    data: {
+      parentVue: null
+    },
     components: {
       mediafocus: require("./components/Mediafocus/Mediafocus")
+    },
+    ready: function ready() {
+      this.parentVue = parent.vueApp;
     }
   });
 }

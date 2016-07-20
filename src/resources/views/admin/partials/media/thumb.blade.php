@@ -1,4 +1,6 @@
 <mediathumb
+    :parent-vue="parentVue"
+    mediadata="{{ json_encode(CmsForm::mediaArray($media)) }}"
     csrf="{{ csrf_token() }}"
     edit-url="{{ $edit_url }}"
     delete-url="{{ $delete_url }}"
@@ -7,6 +9,7 @@
     icon="{{ CmsImage::getIconByType($media->type) }}"
     type="{{ $media->type }}"
 >
+
     @if ($media->type == "image")
         <img src="{{ CmsImage::get($media->id, 600, 600) }}" class="MediaListing__image">
     @elseif ($media->type == "video")

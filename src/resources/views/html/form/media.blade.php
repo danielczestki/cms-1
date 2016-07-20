@@ -4,7 +4,7 @@
         @include("cms::html.form._error")   
         
         
-        <mediaselect v-ref:{{ $name }} :media_click.sync="media_click" name="{{ $name }}" label="{{ $label }}" existing="{{ json_encode($existing) }}"></mediaselect>
+        <mediaselect v-ref:{{ $name }} :media_focus.sync="media_focus" :media_click.sync="media_click" name="{{ $name }}" label="{{ $label }}" existing="{{ json_encode($existing) }}"></mediaselect>
         
         
         @include("cms::html.form._info")

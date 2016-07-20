@@ -1,8 +1,9 @@
 module.exports = {
   
   props: {
+    media_focus: {required: true},
     media_click: {required: true},
-    name: {reuqired: true},
+    name: {required: true},
     label: { required: true },
     existing: {
       coerce: function (val) {
@@ -22,12 +23,18 @@ module.exports = {
   
   methods: {
     pick() {
+      this.media_focus = this.name;
       this.media_click();
     },
     remove(index) {
       let media = this.existing[index];
       media.removed = true;
       return true;
+    },
+    add(data) {
+      this.existing.push(data);
+      this.media_click(false);
+      //console.log(data);
     }
   }
   
