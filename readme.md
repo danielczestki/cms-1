@@ -156,4 +156,189 @@ If, for whatever reason you want to reset the entire CMS back to pre-install sta
 
 ## YAML Definition API
 
-Coming soon!
+*TODO, THIS IS A DUMPING GROUND RIGHT NOW AND IT FAR FROM COMPLETE*
+
+### fields
+
+Define the fields for the form.
+
+	fields:
+		fieldname:
+			[options]
+
+----------
+
+The following options are global for all field types:
+
+**type**   
+`string` | *required*  
+The type of field (all documented below).
+
+**label**   
+`string` | *required*  
+The label for the field.
+
+**value**   
+`string` | *optional*  
+Set a default value on the field
+
+**placeholder**   
+`string` | *optional*  
+Set a placeholder on the field (if the field type accepts it)
+
+**persist**   
+`boolean` | *optional* | default: `false`   
+Should this field be persisted to the database. If false, this field will not be in the migration and will not be stored (ideal for password_confirmation fields for example).
+
+**validationOnCreate**   
+`string` | *optional*   
+Standard laravel piped validation rules. These rules will be applied on `create` only.
+
+**validationOnUpdate**   
+`string` | *optional*   
+Standard laravel piped validation rules. These rules will be applied on `update` only.
+
+**info**   
+`string` | *optional*   
+Display a small info tip next to the field.
+
+**infoUpdate**   
+`string` | *optional*   
+Display a small info tip next to the field only on the `edit` screen.
+
+**class**   
+`string` | *optional*   
+Add a custom css class(es) to the field.
+
+**style**   
+`string` | *optional*   
+Add a custom css `style` attribute to the field.
+
+**data-***   
+`string` | *optional*   
+Add a custom `data-*` attribute to the field.
+
+
+----------
+
+
+###`text`
+
+*No special options.*
+
+###`email`
+
+*No special options.*
+
+###`password`
+
+*No special options.*
+
+###`hidden`
+
+*No special options.*
+
+###`number`
+
+**min**   
+`integer` | *optional*  
+The minimum number allowed.
+
+###`textarea`
+
+**rows**   
+`integer` | *optional*  
+Set the `rows` height of the `textarea`.
+
+###`wysiwyg`
+
+**rows**   
+`integer` | *optional*  
+Set the `rows` height of the `wysiwyg`.
+
+###`select`
+
+**options**   
+`object` | *required*  
+Key - value pair of the select options.
+
+    category:
+		type: "select"
+    	label: "Select a category"
+    	options: 
+      		first: "First Category"
+      		second: "Second Category"
+
+###`checkbox`
+
+*Same definition as `select`.*
+
+###`radio`
+
+*Same definition as `select`.*
+
+###`boolean`
+
+*No special options.*
+
+###`date`
+
+*No special options.*
+
+###`datetime`
+
+*No special options.*
+
+###`media`
+   
+**limit**   
+`integer` | *optional*  
+Limit the amount of media items allowed. Set to `0` for infinite.
+
+**allowed**   
+`array` | *optional*    
+Restrict to certain media types. Remove for all types.
+
+    media:
+		type: "media"
+		label: "Upload media"
+		limit: 1
+		allowed:
+			- image
+			- document
+
+----------
+
+Example
+
+    fields:
+		firstname:
+			type: "text"
+			label: "Title"
+			persist: true
+			validationOnCreate: "required|max:20"
+			validationOnUpdate: "required|max:20"
+		usertype:
+			type: "select"
+			label: "User type"
+			persist: true
+			options:
+				standard: "Standard user"
+				admin: "Administrator"
+		email:
+			type: "email"
+			label: "Email address"
+			persist: true
+			validationOnCreate: "required|email|max:255|unique:cms_tablename"
+			validationOnUpdate: "required|email|max:255|unique:cms_tablename,email,{id}"
+		password:
+			type: "password"
+			label: "Password"
+			persist: true
+			validationOnCreate: "required|min:6|confirmed"
+			validationOnUpdate: "confirmed"
+		password_confirmation:
+			type: "password"
+			label: "Confirm password"
+			persist: false
+			validationOnCreate: "required"
