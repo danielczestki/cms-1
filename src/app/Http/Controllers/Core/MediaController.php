@@ -36,7 +36,9 @@ class MediaController extends BaseController
         $this->middleware("cms.media.allowed", ["only" => ["create"]]);
         view()->share("controller", "MediaController");
         view()->share("filters", []);
+        view()->share("allowed", $this->getAllowed());
         $this->setMedia(); // try to set the media object
+        $this->setAllowed();
     }
     
     /**
@@ -46,7 +48,7 @@ class MediaController extends BaseController
      */
     public function index()
     {
-        $listing = CmsMedium::orderBy("created_at", "desc")->get();
+        $listing = CmsMedium::whereIn("type", $this->getAllowed())->orderBy("created_at", "desc")->get();
         return view("cms::admin.media.index", compact("listing"));
     }
     
@@ -230,6 +232,42 @@ class MediaController extends BaseController
             return $this->media;
         }
         return null;
+    }
+    
+    /**
+     * Get the allowed types for this request
+     * 
+     * @return array
+     */
+    public function getAllowed()
+    {
+        return request()->session()->get("allowed");
+    }
+    
+    /**
+     * Upon load we should have a ?allowed params, store this for ALL pages
+     * requests as it needs to travel
+     */
+    private function setAllowed()
+    {
+        if ($string = request()->get("allowed")) {
+            $this->setAllowedSession($string);
+        } else if (request()->session()->has("allowed")) {
+            request()->session()->keep(["allowed"]);
+        } else {
+            $this->setAllowedSession("image,video,document,embed");
+        }
+    }
+    
+    /**
+     * Set the session for the allowed array
+     * 
+     * @param string $string
+     */
+    private function setAllowedSession($string)
+    {
+        $allowed = explode(",", $string);
+        request()->session()->flash("allowed", $allowed);
     }
     
 }

@@ -47,7 +47,7 @@ module.exports = {
     pick() {
       if (this.disabled) return false;
       this.media_focus = this.name;
-      this.media_click();
+      this.media_click(true, this.allowed);
     },
     remove(index) {
       let media = this.existing[index];

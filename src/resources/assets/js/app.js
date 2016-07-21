@@ -21,6 +21,7 @@ if (document.getElementById("app")) {
       nav_open: false, // is the nav open or not
       media_open: false, // is the media dialog open or not?
       media_focus: null,
+      media_allowed: null
     },
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
@@ -43,7 +44,8 @@ if (document.getElementById("app")) {
           this.nav_open = true;
         }, 1000)
       },
-      media_click(state = null) {
+      media_click(state = null, allowed = []) {
+        this.media_allowed = allowed.join(",");
         this.media_open = state ? state : !this.media_open;
       }
     }

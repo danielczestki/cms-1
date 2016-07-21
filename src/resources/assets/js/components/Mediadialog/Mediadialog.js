@@ -1,10 +1,10 @@
 module.exports = {
   
-  props: ["open", "src"],
+  props: ["media_allowed", "open", "src"],
   template: require("./Mediadialog.html"),
   computed: {
     _src() {
-      return this.open ? this.src : "about:blank";
+      return this.open ? this.src + "?allowed=" + this.media_allowed : "about:blank";
     }
   },
   methods: {

@@ -27373,7 +27373,8 @@ if (document.getElementById("app")) {
       nav_timeout: null, // the timeout event on hovering to show/hide the nav automatically
       nav_open: false, // is the nav open or not
       media_open: false, // is the media dialog open or not?
-      media_focus: null
+      media_focus: null,
+      media_allowed: null
     },
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
@@ -27402,7 +27403,9 @@ if (document.getElementById("app")) {
       },
       media_click: function media_click() {
         var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+        var allowed = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
+        this.media_allowed = allowed.join(",");
         this.media_open = state ? state : !this.media_open;
       }
     }
@@ -27557,7 +27560,7 @@ module.exports = {
     pick: function pick() {
       if (this.disabled) return false;
       this.media_focus = this.name;
-      this.media_click();
+      this.media_click(true, this.allowed);
     },
     remove: function remove(index) {
       var media = this.existing[index];
@@ -27593,11 +27596,11 @@ module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window
 
 module.exports = {
 
-  props: ["open", "src"],
+  props: ["media_allowed", "open", "src"],
   template: require("./Mediadialog.html"),
   computed: {
     _src: function _src() {
-      return this.open ? this.src : "about:blank";
+      return this.open ? this.src + "?allowed=" + this.media_allowed : "about:blank";
     }
   },
   methods: {

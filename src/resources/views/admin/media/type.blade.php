@@ -28,10 +28,9 @@
     <!-- Form -->
     <main class="MediaMain MediaMain--pad">
         <div class="Box"><div class="Form Utility--text-center">
-            
             <ul class="MediaTypes">
                 @foreach ($media->getMediaTypes() as $medianame => $mediatype)
-                    @if ($mediatype["enabled"])
+                    @if ($mediatype["enabled"] and in_array($medianame, $allowed))
                         <li class="MediaTypes__type"><a href="{{ route('admin.media.create', ['type' => $medianame]) }}" class="MediaTypes__link">
                             <i class="fa fa-{{ $mediatype['icon'] }}"></i>
                             <span class="MediaTypes__title">{{ $mediatype["label"] }}</span>
