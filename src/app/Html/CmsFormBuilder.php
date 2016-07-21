@@ -13,7 +13,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options", "prefix", "suffix"];
+    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options", "prefix", "suffix", "limit", "allowed"];
     
     //
     // FORM
@@ -292,6 +292,18 @@ class CmsFormBuilder {
     {
         $data["resource"] = $resource;
         $data["existing"] = $this->existingMedia($data, $resource);
+        
+        $_info = isset($data["info"]) ? $data["info"] : "";
+        if (isset($data["limit"])) {
+            $data["info"] = "Maximum of {$data['limit']} allowed.";
+        }
+        if (isset($data["allowed"])) {
+            $data["info"] .= " Accepted types: " . implode(", ", $data["allowed"]) .".";
+        }
+        if (isset($data["info"])) {
+            $data["info"] .= " " . $_info;
+        }
+        
         // Return the form field
         return $this->render(view("cms::html.form.media", $this->buildData($data)));
     }

@@ -2,7 +2,7 @@
 meta:
   title: "Media Library"
   records_per_page: 10
-  show_in_nav: true
+  show_in_nav: false
   icon: "picture-o"
   
 # Media is a core module of the Thin Martian CMS.

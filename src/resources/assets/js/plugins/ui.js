@@ -40,7 +40,8 @@ import NProgress from "nprogress";
       paste_word_valid_elements: "b,strong,i,em,h1,h2,a",
       paste_webkit_styles: "color font-size",
       paste_retain_style_properties: "color font-size",
-      contextmenu: "cut copy paste | bold italic | link image inserttable"
+      contextmenu: "cut copy paste | bold italic | link image inserttable",
+      convert_urls: false
     });
   }
   

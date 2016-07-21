@@ -27504,7 +27504,7 @@ module.exports = {
 };
 
 },{"./Fileupload.html":11}],13:[function(require,module,exports){
-module.exports = '<div>\n    <!-- Existing media items -->\n    <ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n        <li class="MediaListing__item" v-for="media in existing" v-if="! media.removed">\n            <div class="MediaListing__main MediaListing__main--{{ media.type }}" transition="MediaListing__item-delete">\n                <input type="hidden" name="cmsmedia[{{ name }}][{{ $index }}]" value="{{ media.cms_medium_id }}" />\n                <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n                <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n                <partial :name="media.type"></partial>\n            </div>\n        </li>\n    </ul>\n\n    <!-- Select media button -->\n    <p>\n        <button type="button" class="Button Button--small Button--orange Button--icon" @click="pick">\n            <i class="Button__icon fa fa-photo"></i>\n            {{ label }}\n        </button>\n    </p>\n</div>';
+module.exports = '<div>\n    <!-- Existing media items -->\n    <ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n        <li class="MediaListing__item" v-for="media in existing" v-if="! media.removed">\n            <div class="MediaListing__main MediaListing__main--{{ media.type }}" transition="MediaListing__item-delete">\n                <input type="hidden" name="cmsmedia[{{ name }}][{{ $index }}]" value="{{ media.cms_medium_id }}" />\n                <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n                <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n                <partial :name="media.type"></partial>\n            </div>\n        </li>\n    </ul>\n\n    <!-- Select media button -->\n    <p>\n        <button type="button" class="Button Button--small Button--orange Button--icon" v-on:click="pick" :class="{\'Button--disabled\': disabled}">\n            <i class="Button__icon fa fa-photo"></i>\n            {{ label }}\n        </button>\n    </p>\n</div>';
 },{}],14:[function(require,module,exports){
 "use strict";
 
@@ -27515,6 +27515,15 @@ module.exports = {
     media_click: { required: true },
     name: { required: true },
     label: { required: true },
+    limit: {
+      required: true,
+      default: 0 },
+    allowed: {
+      coerce: function coerce(val) {
+        if (!val) return ["image", "video", "document", "embed"];
+        return JSON.parse(val);
+      }
+    },
     existing: {
       coerce: function coerce(val) {
         return JSON.parse(val);
@@ -27523,6 +27532,19 @@ module.exports = {
   },
 
   template: require("./Mediaselect.html"),
+
+  computed: {
+    count: function count() {
+      var count = 0;
+      this.existing.forEach(function (data) {
+        if (!data.removed) count++;
+      });
+      return count;
+    },
+    disabled: function disabled() {
+      return this.limit == 0 ? false : this.count >= this.limit;
+    }
+  },
 
   partials: {
     image: require("./image.html"),
@@ -27533,6 +27555,7 @@ module.exports = {
 
   methods: {
     pick: function pick() {
+      if (this.disabled) return false;
       this.media_focus = this.name;
       this.media_click();
     },
@@ -27552,10 +27575,6 @@ module.exports = {
       });
       return result;
     }
-  },
-
-  ready: function ready() {
-    console.log(this.ids());
   }
 };
 
@@ -27777,7 +27796,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       paste_word_valid_elements: "b,strong,i,em,h1,h2,a",
       paste_webkit_styles: "color font-size",
       paste_retain_style_properties: "color font-size",
-      contextmenu: "cut copy paste | bold italic | link image inserttable"
+      contextmenu: "cut copy paste | bold italic | link image inserttable",
+      convert_urls: false
     });
   }
 

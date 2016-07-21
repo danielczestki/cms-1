@@ -13,7 +13,7 @@
 
     <!-- Select media button -->
     <p>
-        <button type="button" class="Button Button--small Button--orange Button--icon" @click="pick">
+        <button type="button" class="Button Button--small Button--orange Button--icon" v-on:click="pick" :class="{'Button--disabled': disabled}">
             <i class="Button__icon fa fa-photo"></i>
             {{ label }}
         </button>

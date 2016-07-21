@@ -5,6 +5,15 @@ module.exports = {
     media_click: {required: true},
     name: {required: true},
     label: { required: true },
+    limit: {
+      required: true,
+      default: 0 },
+    allowed: {
+      coerce: function (val) {
+        if (! val) return ["image", "video", "document", "embed"];
+        return JSON.parse(val)
+      }
+    },
     existing: {
       coerce: function (val) {
         return JSON.parse(val)
@@ -13,6 +22,19 @@ module.exports = {
   },
   
   template: require("./Mediaselect.html"),
+  
+  computed: {
+    count() {
+      let count = 0;
+      this.existing.forEach((data) => {
+         if (! data.removed) count++;
+      });
+      return count;
+    },
+    disabled() {
+      return this.limit == 0 ? false : (this.count >= this.limit);
+    }
+  },
   
   partials: {
     image: require("./image.html"),
@@ -23,6 +45,7 @@ module.exports = {
   
   methods: {
     pick() {
+      if (this.disabled) return false;
       this.media_focus = this.name;
       this.media_click();
     },
@@ -42,12 +65,5 @@ module.exports = {
       });
       return result;
     }
-  },
-  
-  
-  
-  ready() {
-    console.log(this.ids());
-  }
-  
+  }  
 }

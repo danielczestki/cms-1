@@ -92,6 +92,13 @@
         color: #fff !important
         &:hover, .Button__icon
             background: darken($Color__grey--2, 10%)
+    &--disabled
+        background: $Color__grey--2
+        color: #fff !important
+        cursor: default
+        opacity: .4
+        &:hover, .Button__icon
+            background: $Color__grey--2 !important
     
 // fix Firefox's padding inside certain form elements
 .btn::-moz-focus-inner, button::-moz-focus-inner, input::-moz-focus-inner
