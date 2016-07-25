@@ -1,5 +1,6 @@
 <div>
     <!-- Existing media items -->
+    <input type="hidden" name="{{ name }}" v-model="required" />
     <ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">
         <li class="MediaListing__item" v-dragable-for="media in existing" v-if="! media.removed">
             <div class="MediaListing__main MediaListing__main--{{ media.type }}" transition="MediaListing__item-delete">

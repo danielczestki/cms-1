@@ -37,6 +37,9 @@ module.exports = {
     },
     disabled() {
       return this.limit == 0 ? false : (this.count >= this.limit);
+    },
+    required() {
+      return this.count ? 1 : null;
     }
   },
   

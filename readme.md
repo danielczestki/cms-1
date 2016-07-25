@@ -293,10 +293,10 @@ Key - value pair of the select options.
    
 **limit**   
 `integer` | *optional*  
-Limit the amount of media items allowed. Set to `0` for infinite.
+Limit the amount of media items allowed. Remove for infinite.
 
 **allowed**   
-`array` | *optional*    
+`array['image', 'video', 'document', 'embed']` | *optional*    
 Restrict to certain media types. Remove for all types.
 
     media:
@@ -342,3 +342,12 @@ Example
 			label: "Confirm password"
 			persist: false
 			validationOnCreate: "required"
+		photo:
+			type: "media"
+			label: "Select photo"
+			allowed:
+				- image
+			limit: 1
+		media:
+			type: media
+			label: "Select media"

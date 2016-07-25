@@ -45240,7 +45240,7 @@ module.exports = {
 };
 
 },{"./Fileupload.html":14}],16:[function(require,module,exports){
-module.exports = '<div>\n    <!-- Existing media items -->\n    <ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n        <li class="MediaListing__item" v-dragable-for="media in existing" v-if="! media.removed">\n            <div class="MediaListing__main MediaListing__main--{{ media.type }}" transition="MediaListing__item-delete">\n                <input type="hidden" name="cmsmedia[{{ name }}][]" value="{{ media.cms_medium_id }}" />\n                <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n                <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n                <partial :name="media.type"></partial>\n            </div>\n        </li>\n    </ul>\n\n    <!-- Select media button -->\n    <p>\n        <button type="button" class="Button Button--small Button--orange Button--icon" v-on:click="pick" :class="{\'Button--disabled\': disabled}">\n            <i class="Button__icon fa fa-photo"></i>\n            {{ label }}\n        </button>\n    </p>\n</div>';
+module.exports = '<div>\n    <!-- Existing media items -->\n    <input type="hidden" name="{{ name }}" v-model="required" />\n    <ul class="MediaListing Utility--clearfix Utility--margin-24" v-show="existing.length">\n        <li class="MediaListing__item" v-dragable-for="media in existing" v-if="! media.removed">\n            <div class="MediaListing__main MediaListing__main--{{ media.type }}" transition="MediaListing__item-delete">\n                <input type="hidden" name="cmsmedia[{{ name }}][]" value="{{ media.cms_medium_id }}" />\n                <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ media.icon }}" title="Media type: {{ media.type }}"></i>\n                <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-on:click.stop="remove($index)" title="Delete this {{ media.type }}?"></i>\n                <partial :name="media.type"></partial>\n            </div>\n        </li>\n    </ul>\n\n    <!-- Select media button -->\n    <p>\n        <button type="button" class="Button Button--small Button--orange Button--icon" v-on:click="pick" :class="{\'Button--disabled\': disabled}">\n            <i class="Button__icon fa fa-photo"></i>\n            {{ label }}\n        </button>\n    </p>\n</div>';
 },{}],17:[function(require,module,exports){
 "use strict";
 
@@ -45291,6 +45291,9 @@ module.exports = {
     },
     disabled: function disabled() {
       return this.limit == 0 ? false : this.count >= this.limit;
+    },
+    required: function required() {
+      return this.count ? 1 : null;
     }
   },
 
