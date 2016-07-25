@@ -65,7 +65,10 @@ trait Form
         // Empty first
         DB::table("cms_mediables")->where("mediable_id", $resource->id)->where("mediable_type", $class)->delete();
         // If we don't have a media field, just abort now
-        if (! request()->has("cmsmedia")) return false;     
+        if (! request()->has("cmsmedia")) return false;    
+        
+        //de(request()->get("cmsmedia"));
+         
         foreach (request()->get("cmsmedia") as $mediable_category => $media) {
             // Now sync again
             if (empty($media)) continue;

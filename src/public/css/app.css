@@ -1637,6 +1637,10 @@ a:visited:hover {
   width: 100%;
   min-height: 100%;
 }
+.MediaListing .sortable-ghost {
+  background-color: #000;
+  opacity: 0.4;
+}
 .MediaListing__item {
   width: 20%;
   float: left;

@@ -315,19 +315,26 @@ class CmsFormBuilder {
      * @param  model  $resource 
      * @return array
      */
-    private function existingMedia($data, $resource)
+    private function existingMedia($data, $resource = null)
     {
         $result = [];
         // No resource means a creeate form, so just return an empty array
-        if (! $resource) return $result;
+        //if (! $resource) return $result;
         // Fetch the media (if any) and continue...
-        $collection = $resource->media($data["name"])->get();
+        if ($old = request()->old("cmsmedia.{$data['name']}")) {
+            // Any in the old input?
+            $collection = \App\Cms\CmsMedium::whereIn("id", $old)->get();
+        } else if ($resource) {
+            // Any saved to it already?
+            $collection = $resource->media($data["name"])->get(); 
+        } else {
+            // None, just return empty
+            return $result;
+        }
         if (! $collection->count()) return $result;
-        // Loop the media and build the array
-        $idx = 0;        
+        // Loop the media and build the array      
         foreach ($collection as $media) {
-            $result[$idx] = $this->mediaArray($media);
-            $idx++;
+            $result[] = $this->mediaArray($media);
         }
         // Return the new array
         return $result;

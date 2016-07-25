@@ -1,3 +1,7 @@
+import Vue from "vue";
+import VueDragableFor from "vuedragablefor";
+Vue.use(VueDragableFor);
+
 module.exports = {
   
   props: {
