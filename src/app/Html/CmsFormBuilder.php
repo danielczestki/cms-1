@@ -3,7 +3,7 @@
 namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
-use CmsImage, CmsDocument, CmsEmbed;
+use CmsImage, CmsVideo, CmsDocument, CmsEmbed;
 
 class CmsFormBuilder {
     
@@ -356,6 +356,10 @@ class CmsFormBuilder {
         // Image data (if applicable)
         if ($media->type == "image") {
             $result["image"] = $media->image->toArray() + ["thumbnail" => CmsImage::get($media->id, 600, 600)];
+        }
+        // video data (if applicable)
+        if ($media->type == "video") {
+            $result["video"] = $media->video->toArray() + ["thumbnail" => CmsVideo::thumbnail($media->id)];
         }
         // document data (if applicable)
         if ($media->type == "document") {

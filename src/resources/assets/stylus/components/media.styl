@@ -49,11 +49,23 @@
             opacity: 1
         &-delete-leave
             opacity: 0
+    &__cover-thumb
+        width: 100%
+        height: 100%
+        background-position: 50% 50%
+        background-size: cover
+        background-repeat: no-repeat
+        left: 0
+        top: 0
+        position: absolute
+        z-index: 1
     &__main
+        max-width: 400px
+        max-height: 400px
         font-size: 12px
         display: block
         position: relative
-        &--document, &--embed
+        &--document, &--embed, &--video
             .MediaListing__slot
                 width: 100%
                 height: 100%

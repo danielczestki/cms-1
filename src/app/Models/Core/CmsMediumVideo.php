@@ -58,6 +58,17 @@ class CmsMediumVideo extends BaseModel
     }
     
     /**
+     * Ensure the job status is lowercase
+     * 
+     * @param  string $value
+     * @return string
+     */
+    public function getJobStatusAttribute($value)
+    {
+        return strtolower($value);
+    }
+    
+    /**
      * Boot methods
      * 
      * @return void

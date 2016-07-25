@@ -1,1 +1,11 @@
-VIDEO !!!!
+<img src="/vendor/cms/img/dotpix.gif" class="MediaListing__image">
+<div v-if="media.video.thumbnail">
+    <div class="MediaListing__cover-thumb" :style="{'background-image': 'url('+ media.video.thumbnail +')'}"></div>
+</div>
+<div v-else>
+    <div class="MediaListing__slot Utility--valign-middle"><span>
+        <p class="MediaListing__filetype"><i class="fa fa-hourglass-half"></i></p>
+        {{ media.title }}
+        <small class="MediaListing__sub Utility--text-truncate">Encoding...</small>
+    </span></div>
+</div>

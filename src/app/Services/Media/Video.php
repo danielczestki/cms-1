@@ -20,6 +20,71 @@ class Video extends Media
     const PIPELINE = "cms_video_pipeline";
     
     //
+    // Output
+    //  
+    
+    /**
+     * Fetch the URL to the video or false if still encoding
+     * 
+     * @param  integer  $cms_medium_id  The cms_medium_id we are getting
+     * @return mixed
+     */
+    public function get($cms_medium_id)
+    {
+        // Set and check
+        $this->setCmsMedium($cms_medium_id);
+        if ($this->cmsMedium->type != "video") return false;
+        if ($this->getStatus()) {
+            // It's ready
+            return "/path/to/video";
+        } else {
+            // Still waiting...
+            return false;
+        }
+    }
+    
+    /**
+     * Fetch the URL to the video thumb or false if still encoding
+     * 
+     * @param  integer  $cms_medium_id  The cms_medium_id we are getting
+     * @return mixed
+     */
+    public function thumbnail($cms_medium_id)
+    {
+        // Set and check
+        $this->setCmsMedium($cms_medium_id);
+        if ($this->cmsMedium->type != "video") return false;
+        if ($this->getStatus()) {
+            // It's ready
+            return $this->getPublicUrl("cms/media/{$this->cmsMedium->id}/encoded/{$this->cmsMedium->filename}-00001.png");
+        } else {
+            // Still wating...
+            return false;
+        }
+    }
+    
+    /**
+     * Determine if the video is processed yet
+     * @return boolean
+     */
+    private function getStatus()
+    {
+        // First, we check the DB for it's status
+        if (in_array($this->cmsMedium->video->job_status, ["submitted", "progressing"])) {
+            // Still processing, make a call to Amazon and see where we are at?
+            $this->setElastic();
+            $job = $this->elastic->readJob(["Id" => $this->cmsMedium->video->job_id]);
+            $status = $job->get("Job")["Status"];
+            $this->cmsMedium->video->job_status = $status;
+            $this->cmsMedium->video->save();
+            return strtolower($status) == "complete";
+        } else {
+            // All done, move on
+            return true;
+        }
+    }
+    
+    //
     // CRUD
     // 
     

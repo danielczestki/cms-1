@@ -1655,13 +1655,27 @@ a:visited:hover {
 .MediaListing__item-delete-leave {
   opacity: 0;
 }
+.MediaListing__cover-thumb {
+  width: 100%;
+  height: 100%;
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: 1;
+}
 .MediaListing__main {
+  max-width: 400px;
+  max-height: 400px;
   font-size: 12px;
   display: block;
   position: relative;
 }
 .MediaListing__main--document .MediaListing__slot,
-.MediaListing__main--embed .MediaListing__slot {
+.MediaListing__main--embed .MediaListing__slot,
+.MediaListing__main--video .MediaListing__slot {
   width: 100%;
   height: 100%;
   padding: 0 8px;

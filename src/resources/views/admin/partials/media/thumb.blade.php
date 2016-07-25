@@ -14,7 +14,16 @@
     @if ($media->type == "image")
         <img src="{{ CmsImage::get($media->id, 600, 600) }}" class="MediaListing__image">
     @elseif ($media->type == "video")
-        VIDEO
+        <img src="{{ asset('vendor/cms/img/dotpix.gif') }}" class="MediaListing__image">
+        @if ($video = CmsVideo::get($media->id))
+            <div class="MediaListing__cover-thumb" style="background-image: url({{ CmsVideo::thumbnail($media->id) }})"></div>
+        @else
+            <div class="MediaListing__slot Utility--valign-middle"><span>
+                <p class="MediaListing__filetype"><i class="fa fa-hourglass-half"></i></p>
+                {{ $media->title }}
+                <small class="MediaListing__sub Utility--text-truncate">Encoding...</small>
+            </span></div>
+        @endif
     @elseif ($media->type == "document")
         <img src="{{ asset('vendor/cms/img/dotpix.gif') }}" class="MediaListing__image">
         <div class="MediaListing__slot Utility--valign-middle"><span>
