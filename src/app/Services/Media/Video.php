@@ -29,14 +29,14 @@ class Video extends Media
      * @param  integer  $cms_medium_id  The cms_medium_id we are getting
      * @return mixed
      */
-    public function get($cms_medium_id)
+    public function get($cms_medium_id = null)
     {
         // Set and check
-        $this->setCmsMedium($cms_medium_id);
+        if ($cms_medium_id) $this->setCmsMedium($cms_medium_id);
         if ($this->cmsMedium->type != "video") return false;
         if ($this->getStatus()) {
             // It's ready
-            return "/path/to/video";
+            return $this->getPublicUrl("cms/media/{$this->cmsMedium->id}/encoded/{$this->cmsMedium->filename}.{$this->cmsMedium->extension}");
         } else {
             // Still waiting...
             return false;
@@ -49,10 +49,10 @@ class Video extends Media
      * @param  integer  $cms_medium_id  The cms_medium_id we are getting
      * @return mixed
      */
-    public function thumbnail($cms_medium_id)
+    public function thumbnail($cms_medium_id = null)
     {
         // Set and check
-        $this->setCmsMedium($cms_medium_id);
+        if ($cms_medium_id) $this->setCmsMedium($cms_medium_id);
         if ($this->cmsMedium->type != "video") return false;
         if ($this->getStatus()) {
             // It's ready
@@ -84,6 +84,17 @@ class Video extends Media
         }
     }
     
+    /**
+     * Return a preview of the item for listing across the place
+     * 
+     * @return string
+     */
+    public function preview()
+    {
+        $src = $this->get();
+        return $src ? '<video src="'. $src .'" width="320" height="240" controls preload></video>' : "This video is still encoding...";
+    }
+    
     //
     // CRUD
     // 
@@ -112,6 +123,32 @@ class Video extends Media
         }
         // Return the model back to the controller
         return $this->cmsMedium;    
+    }
+    
+    /**
+     * Update the embed
+     * 
+     * @return App\Cms\CmsMedium
+     */
+    public function update()
+    {
+        // update the parent media item first
+        $this->updateCmsMedium();
+        if ($this->input->file) {
+            // lets upload the raw file
+            $this->upload();
+            // delete the cloud directory first, transcoder won't overwrite
+            \Storage::disk($this->uploadedFile->disk)->deleteDirectory("cms/media/{$this->cmsMedium->id}/encoded/");
+            // encode the video
+            $job = $this->encode();
+            $this->cmsMedium->video->job_status = $job->get("Job")["Status"];
+            $this->cmsMedium->video->job_id = $job->get("Job")["Id"];
+            $this->cmsMedium->video->arn = $job->get("Job")["Arn"];
+            $this->cmsMedium->video->pipeline_id = $job->get("Job")["PipelineId"];
+            $this->cmsMedium->video->save();
+        }
+        // Return the model back to the controller
+        return $this->cmsMedium; 
     }
     
     
