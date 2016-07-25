@@ -51,6 +51,10 @@ Once all setup, you can change the `media_disk` config entry in `config/cms/cms.
 
 Finally, ensure you set your `media_cloud_url` to the endpoint of your cloud storage, this endpoint will be used to server the media files back to the user.
 
+## media video
+
+Thin Martian CMS can upload and encode many video filetypes ready for the web, it does this using [Amazon Elastic Transcoder](https://aws.amazon.com/elastictranscoder/). To use Elastic Transcoder, you will require a Amazon S3 account, and the `media_disk` setting (in `config/cms/cms.php`) must be set to `s3`. Once you have setup your s3 account to work with Thin Martian CMS (above) then no further changes are required, the "video" option should appear as an allowed media type.
+
 
 ## Resetting the CMS
 

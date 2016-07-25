@@ -113,7 +113,7 @@ return [
     */
     
     "media_allow_image" => true,
-    "media_allow_video" => false,
+    "media_allow_video" => true,
     "media_allow_document" => true,
     "media_allow_embed" => true,
    
@@ -128,5 +128,37 @@ return [
     */
     
     "media_image_quality" => 100,
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Media Elastic Transcoder Pipeline ID
+    |--------------------------------------------------------------------------
+    |
+    | This value is only required if you require video uploads in the media
+    | library, if not leave this at null. Generate a new pipeline in your AWS
+    | console. Login, select Elastic Transcoder > Creae New Pipeline, fill in
+    | the form and the last page will show you the Pipeline ID
+    | (e.g. 1469462371357-w92h52)
+    |
+    | Notes: Ensure your pipeline sets correct permissions for all jobs that
+    | pass through it (e.g. ALL users need at least open/download permissions).
+    |
+    */
+   
+    "media_pipeline_id" => "1469462371357-w92h52",
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Media Elastic Transcoder Preset ID
+    |--------------------------------------------------------------------------
+    |
+    | This value is only required if you require video uploads in the media
+    | library, if not leave this as is. By default we use Amazons Generic 1080p
+    | preset which is fine in most cases. If you want to supply your own preset
+    | then do so here, but in most cases this should be fine.
+    |
+    */
+   
+    "media_preset_id" => "1351620000001-000001",
    
 ];

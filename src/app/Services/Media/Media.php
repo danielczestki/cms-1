@@ -47,7 +47,7 @@ class Media
         "video" => [
             "label" => "Video",
             "icon" => "film",
-            "accepted" => ["mp4", "mov", "wmv", "m4v", "avi"]
+            "accepted" => ["mp4", "mov", "qt", "wmv", "asf", "m4v", "m4a", "avi", "3gp", "flv", "aac"]
         ],
         "document" => [
             "label" => "Document",
@@ -233,6 +233,10 @@ class Media
     {
         foreach ($this->mediaTypes as $name => $type) {
             $this->mediaTypes[$name]["enabled"] = config("cms.cms.media_allow_". $name, true);
+            // kill video if they don't have their disk as s3
+            if ($name == "video" and config("cms.cms.media_disk") != "s3") {
+                $this->mediaTypes[$name]["enabled"] = false;
+            }
         }
         return $medianame ? array_get($this->mediaTypes, $medianame) : $this->mediaTypes;
     }
@@ -308,6 +312,14 @@ class Media
         $this->uploadedFile->originalMime = $this->cmsMedium->original_mime;
         $this->uploadedFile->originalFilesize = $this->cmsMedium->original_filesize;
         $this->uploadedFile->uploaded = $this->cmsMedium->uploaded;
+    }
+    
+    /**
+     * Set the ACL to public for a file
+     */
+    protected function setPublic($file) 
+    {
+        Storage::setVisibility($file, "public");
     }
     
 }

@@ -45,6 +45,14 @@ class CmsMedium extends Model
     }
     
     /**
+     * Get the video record associated with the medium.
+     */
+    public function video()
+    {
+        return $this->hasOne('Thinmartian\Cms\App\Models\Core\CmsMediumVideo');
+    }
+    
+    /**
      * Get the document record associated with the medium.
      */
     public function document()
