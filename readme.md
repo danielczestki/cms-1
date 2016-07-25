@@ -348,6 +348,7 @@ Example
 			allowed:
 				- image
 			limit: 1
+			validationOnCreate: required
 		media:
 			type: media
 			label: "Select media"
