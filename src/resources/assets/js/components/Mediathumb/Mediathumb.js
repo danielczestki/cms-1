@@ -22,8 +22,7 @@ module.exports = {
   data() {
     return {
       deleting: false,
-      //deleted: true
-      deleted: false
+      deleted: true
     }
   },
   computed: {
@@ -60,7 +59,7 @@ module.exports = {
     },
     update() {
       let currentIds = this.media.ids();
-      //if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
+      if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }
   }
   

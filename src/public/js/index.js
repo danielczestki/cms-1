@@ -45379,7 +45379,7 @@ module.exports = {
 };
 
 },{"./Mediafocus.html":24}],26:[function(require,module,exports){
-module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-show="!deleted" transition="MediaListing__item-delete"><!-- style="display: none" -->\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <!-- Might add a media_selectable to the app and if true allow clicks, else no -->\n    <a href="#" class="MediaListing__selectable" v-on:click.prevent="select">\n        <slot></slot>\n    </a>\n</div>';
+module.exports = '<div class="MediaListing__main MediaListing__main--{{ type }}" v-show="!deleted" transition="MediaListing__item-delete" style="display: none">\n    <a href="{{ editUrl }}" v-if="editUrl"><i class="MediaListing__icon MediaListing__icon--edit fa fa-pencil" title="Edit"></i></a>\n    <i class="MediaListing__icon MediaListing__icon--type fa fa-{{ icon }}" title="Media type: {{ type }}"></i>\n    <i class="MediaListing__icon MediaListing__icon--delete fa fa-trash" v-if="deleteUrl && ! deleting" v-on:click.stop="delete" title="Delete this {{ type }}?"></i>\n    <a href="{{ focalUrl }}" v-if="focalUrl && type == \'image\'"><i class="MediaListing__icon MediaListing__icon--focal fa fa-crosshairs" title="Set focal point"></i></a>\n    <a href="{{ previewUrl }}" target="_blank" v-if="previewUrl"><i class="MediaListing__icon MediaListing__icon--preview fa fa-search" title="Preview media"></i></a>\n    <div class="MediaListing__icon MediaListing__icon--deleting" v-if="deleting" title="Deleting, please wait..."><i class="fa fa-spinner fa-spin"></i></div>\n    <!-- Might add a media_selectable to the app and if true allow clicks, else no -->\n    <a href="#" class="MediaListing__selectable" v-on:click.prevent="select">\n        <slot></slot>\n    </a>\n</div>';
 },{}],27:[function(require,module,exports){
 "use strict";
 
@@ -45406,8 +45406,7 @@ module.exports = {
   data: function data() {
     return {
       deleting: false,
-      //deleted: true
-      deleted: false
+      deleted: true
     };
   },
 
@@ -45447,7 +45446,7 @@ module.exports = {
     },
     update: function update() {
       var currentIds = this.media.ids();
-      //if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
+      if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }
   }
 
