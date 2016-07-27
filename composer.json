@@ -11,7 +11,7 @@
         }
     ],
     "config": {
-        "discard-changes": false,
+        "discard-changes": false
     },
     "require": {
         "php": ">=5.6",
