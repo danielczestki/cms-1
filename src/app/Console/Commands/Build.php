@@ -54,6 +54,9 @@ class Build extends Command
     {
         $bar = $this->setupBar();
         
+        // build the directories first, to ensure correct perms
+        $this->createDirectories();
+        
         $bar->setMessage("<comment>Copying YAML definitions to app...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
@@ -82,7 +85,6 @@ class Build extends Command
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
-        if (! file_exists(storage_path("app/cms/temp"))) mkdir(storage_path("app/cms/temp"), 0777, true);
         usleep(400000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
@@ -123,6 +125,21 @@ class Build extends Command
         $this->comment("Optimising application...");
         exec("composer dump");
         $this->artisan->call("optimize");
+    }
+    
+    /**
+     * Build the directories first, so they get the correct perms
+     */
+    private function createDirectories()
+    {
+        if (! file_exists(app_path("Cms"))) mkdir(app_path("Cms"), 0777);
+        if (! file_exists(app_path("Cms/Definitions"))) mkdir(app_path("Cms/Definitions"), 0777);
+        if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
+        if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
+        
+        if (! file_exists(storage_path("app/cms"))) mkdir(storage_path("app/cms"), 0777, true);
+        if (! file_exists(storage_path("app/cms/temp"))) mkdir(storage_path("app/cms/temp"), 0777, true);
+        if (! file_exists(storage_path("app/cms/media"))) mkdir(storage_path("app/cms/media"), 0777, true);
     }
     
     /**

@@ -62,7 +62,7 @@ If, for whatever reason you want to reset the entire CMS back to pre-install sta
 
     php artisan cms:destroy
 
-**IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions.
+**IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions. You should never run this command in production!
 
 
 ## YAML Definition API
