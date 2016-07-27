@@ -10,9 +10,6 @@
             "email": "hello@thinmartian.com"
         }
     ],
-    "config": {
-        "discard-changes": "stash"
-    },
     "require": {
         "php": ">=5.6",
         "laravel/framework": "^5.2",
