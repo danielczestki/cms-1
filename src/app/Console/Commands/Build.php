@@ -108,6 +108,12 @@ class Build extends Command
         } else {
             $bar->setMessage("<comment>Admin user already exists</comment>");
         }
+        
+        // Remove the .gitignore in the app/Cms folder
+        if (file_exists(app_path("Cms/.gitignore"))) {
+            unlink(app_path("Cms/.gitignore"));
+        }
+        
         $bar->advance();
         usleep(600000);
         
