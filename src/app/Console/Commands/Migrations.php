@@ -197,6 +197,9 @@ class Migrations extends Commands
             case "number" :
                 $str .= $this->buildNumber($column, $data);
             break;
+            case "relation" :
+                $str .= $this->buildNumber($column, $data);
+            break;
             default :
                 $str .= $this->buildText($column, $data);
             break;                
