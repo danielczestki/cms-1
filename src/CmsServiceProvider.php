@@ -79,8 +79,6 @@ class CmsServiceProvider extends ServiceProvider
         $this->publishConfig();
         $this->publishAssets();
         $this->publishMigrations();
-        $this->publishModels();
-        $this->publishControllers();
         $this->browserActions();
     }
 
@@ -199,30 +197,6 @@ class CmsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__."/database/migrations" => database_path("migrations"),
         ], "migrations");
-    }
-    
-    /**
-     * Publish the models
-     * 
-     * @return void
-     */
-    private function publishModels()
-    {
-        $this->publishes([
-            __DIR__."/app/Models/Custom" => app_path("Cms"),
-        ], "models");
-    }
-    
-    /**
-     * Publish the controllers
-     * 
-     * @return void
-     */
-    private function publishControllers()
-    {
-        $this->publishes([
-            __DIR__."/app/Http/Controllers/Custom" => app_path("Cms/Http/Controllers"),
-        ], "controllers");
     }
     
     /**

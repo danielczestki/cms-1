@@ -66,6 +66,12 @@ class Build extends Command
         usleep(400000);
         
         $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
+        $bar->setMessage("<comment>Publishing core files...</comment>");
+        $bar->advance();
+        $this->artisan->call("vendor:publish", [
+            "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
+            "--tag" => ["migrations"]
+        ]);
         $bar->advance();
         $this->artisan->call("cms:migrations");
         usleep(400000);
@@ -133,6 +139,7 @@ class Build extends Command
     private function createDirectories()
     {
         if (! file_exists(app_path("Cms"))) mkdir(app_path("Cms"), 0777);
+        if (! file_exists(app_path("Cms/System"))) mkdir(app_path("Cms/System"), 0777);
         if (! file_exists(app_path("Cms/Definitions"))) mkdir(app_path("Cms/Definitions"), 0777);
         if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
         if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
