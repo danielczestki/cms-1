@@ -1,5 +1,10 @@
 *
 !.gitignore
-!CmsUser.php
 !Model.php
 !Setter.php
+!CmsUser.php
+!CmsMedium.php
+!CmsMediumImage.php
+!CmsMediumVideo.php
+!CmsMediumDocument.php
+!CmsMediumEmbed.php

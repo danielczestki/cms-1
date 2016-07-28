@@ -1,0 +1,148 @@
+body.MediaLibrary
+    background: #fff
+    
+    #media 
+        height: 100vh
+        
+    $title_height = 115px
+    .Title
+        height: $title_height
+        padding-top: 32px
+        padding-bottom: 0
+        padding-left: 18px
+        padding-right: 18px
+        background: $Color__grey--1
+        &--sub .Title__buttons
+            padding-top: 16px
+    .MediaMain
+        width: 100%
+        height: "calc(100% - %s)" % $title_height
+        overflow: auto
+        overflow-x: hidden
+        -webkit-overflow-scrolling: touch
+        &--pad 
+            padding: 12px
+            background: $Color__grey--1
+    .MediaNoresults
+        height: 100%
+        padding: 0 12px
+        text-align: center
+        &__title
+            font-size: 30px
+            font-weight: 300
+            line-height: 40px
+    .MediaTypes
+        display: inline-block
+        &__type
+            width: 180px
+            height: 180px
+            margin: 6px
+            text-align: center
+            display: inline-block
+        &__link
+            transition: background .2s
+            height: 100%
+            background: $Color__orange--1
+            font-size: 50px
+            line-height: 160px
+            color: #fff
+            display: block
+            position: relative
+            &:hover
+                background: $Color__blue--1
+        &__title
+            width: 100%
+            text-align: center
+            font-size: 22px
+            font-weight: 300
+            line-height: normal
+            bottom: 18px
+            left: 0
+            position: absolute
+            display: block
+    .MediaFocal
+        lost-utility: clearfix
+        &__focus
+            width: 60%
+            float: left 
+            position: relative
+        &__image
+            width: 100%
+            height: auto
+            display: block
+        &__sections
+            width: 100%
+            left: 0
+            top: 0
+            bottom: 0
+            position: absolute
+            z-index: 1
+            table
+                width: 100%
+                height: 100%
+                td
+                    transition: all .2s
+                    width: 33.3333%
+                    height: 33.3333%
+                    background: rgba(#000, .5)
+                    text-align: center
+                    vertical-align: middle
+                    font-size: 14px
+                    color: rgba(#fff .8)
+                    border-bottom: solid 1px #fff
+                    border-right: solid 1px #fff
+                    cursor: pointer
+                    &:last-child
+                        border-right: 0
+                    &:hover, &.MediaFocal--selected
+                        background: transparent
+                        color: #fff
+                        text-shadow: 1px 1px 1px #000
+                tr:last-child td
+                    border-bottom: 0
+        &__info
+            margin: 0 0 0 60%
+            padding: 24px
+        
+    //
+    // Responsive
+    //
+    
+    +respond(all-devices)
+        .MediaTypes
+            display: block
+            &__type
+                width: calc(25% - 12px)
+                height: 170px
+                float: left
+            &__link
+                line-height: 150px
+    +respond(all-phones)
+        $title_height = 155px
+        .Title 
+            height: $title_height
+            padding-top: 12px
+        .MediaMain
+            height: "calc(100% - %s)" % $title_height
+        .MediaFocal
+            &__focus
+                width: auto
+                float: none
+            &__info
+                margin: 0
+                padding: 12px
+    +respond(phone-portrait)
+        .MediaNoresults
+            &__title
+                font-size: 20px
+                line-height: 30px
+        .MediaTypes
+            &__type
+                width: auto
+                height: 150px
+                margin-left: 0
+                margin-right: 0
+                display: block
+                float: none
+            &__link
+                line-height: 120px

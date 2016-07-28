@@ -8,11 +8,19 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Collective\Html\HtmlServiceProvider;
+
 use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
+use Thinmartian\Cms\App\Http\Middleware\ValidMediaType;
+use Thinmartian\Cms\App\Http\Middleware\AllowedMediaType;
+use Thinmartian\Cms\App\Http\Middleware\IsMediaType;
+
 use Thinmartian\Cms\App\Html\CmsFormBuilder;
 use Thinmartian\Cms\App\Services\Definitions\Yaml as CmsYamlService;
-use Thinmartian\Cms\App\Services\Media\Media as CmsMediaService;
+use Thinmartian\Cms\App\Services\Media\Image as CmsImageService;
+use Thinmartian\Cms\App\Services\Media\Video as CmsVideoService;
+use Thinmartian\Cms\App\Services\Media\Document as CmsDocumentService;
+use Thinmartian\Cms\App\Services\Media\Embed as CmsEmbedService;
 
 
 class CmsServiceProvider extends ServiceProvider
@@ -125,6 +133,9 @@ class CmsServiceProvider extends ServiceProvider
     {
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
+        $router->middleware("cms.media.valid", ValidMediaType::class);
+        $router->middleware("cms.media.allowed", AllowedMediaType::class);
+        $router->middleware("cms.media.is", IsMediaType::class);
     }
     
     /**
@@ -316,11 +327,30 @@ class CmsServiceProvider extends ServiceProvider
      */
     private function registerMedia()
     {
-        $this->app->singleton("cmsmedia", function ($app) {
-            return new CmsMediaService;
+        // Image
+        $this->app->singleton("cmsimage", function ($app) {
+            return new CmsImageService;
         });
-        $this->app->alias("cmsmedia", CmsMediaService::class);
-        $this->loader->alias("CmsMedia", "Thinmartian\Cms\App\Facades\CmsMediaFacade");
+        $this->app->alias("cmsimage", CmsImageService::class);
+        $this->loader->alias("CmsImage", "Thinmartian\Cms\App\Facades\CmsImageFacade");
+        // Video
+        $this->app->singleton("cmsvideo", function ($app) {
+            return new CmsVideoService;
+        });
+        $this->app->alias("cmsvideo", CmsVideoService::class);
+        $this->loader->alias("CmsVideo", "Thinmartian\Cms\App\Facades\CmsVideoFacade");
+        // Document
+        $this->app->singleton("cmsdocument", function ($app) {
+            return new CmsDocumentService;
+        });
+        $this->app->alias("cmsdocument", CmsDocumentService::class);
+        $this->loader->alias("CmsDocument", "Thinmartian\Cms\App\Facades\CmsDocumentFacade");
+        // Embed
+        $this->app->singleton("cmsembed", function ($app) {
+            return new CmsEmbedService;
+        });
+        $this->app->alias("cmsembed", CmsEmbedService::class);
+        $this->loader->alias("CmsEmbed", "Thinmartian\Cms\App\Facades\CmsEmbedFacade");
     }
     
 }

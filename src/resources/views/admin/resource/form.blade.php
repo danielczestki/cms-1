@@ -26,7 +26,8 @@
     <!-- Form -->
     {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)
-            {{ CmsForm::$data["type"]($data) }}
+            <?php $_field = $data["type"]; ?>
+            {{ CmsForm::$_field($data, @$resource) }}
         @endforeach
         {{ CmsForm::buttons() }}
     {{ CmsForm::close() }}

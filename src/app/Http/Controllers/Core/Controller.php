@@ -46,23 +46,17 @@ abstract class Controller extends BaseController
     /**
      * constructor
      */
-    public function __construct(ResourceInput $input)
+    public function __construct()
     {
         $this->controller = $this->name . "Controller";
         CmsYaml::setFile($this->name);
         $this->setModel();
-        $this->input = $input;
-        $this->sharedVars();
+        $this->input = new ResourceInput;
         
+        //$record = \App::make("App\Cms\CmsPlayground")->find(1);
+        //de($record->media);
         
-        
-        
-        \CmsMedia::make(public_path("foo.jpg"))->resize(300, 200)->save(public_path("foo2.jpg"));
-        de("done");
-        
-        
-        
-        
+        $this->sharedVars();        
     }
     
     /**

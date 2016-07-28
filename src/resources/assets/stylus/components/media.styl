@@ -1,0 +1,164 @@
+
+.Media
+    width: 100%
+    background: rgba(#000, .7)
+    top: 0
+    left: 0
+    bottom: 0
+    position: fixed
+    
+    &__window
+        $gutter = 30px
+        background: #fff
+        left: $gutter
+        right: $gutter
+        top: $gutter
+        bottom: $gutter
+        position: absolute
+    &__close
+        width: 35px
+        height: 35px
+        background: $Color__orange--1
+        text-align: center
+        color: #fff !important
+        text-decoration: none !important
+        font-size: 22px
+        line-height: 32px
+        right: 0
+        top: 0
+        position: absolute
+    &__iframe
+        width: 100%
+        height: 100%
+        margin: 0
+        border: 0
+        
+.MediaListing
+    width: 100%
+    min-height: 100%
+    .sortable-ghost
+        background-color: #000
+        opacity: .4
+    &__item
+        width: 20%
+        float: left
+        &-delete-transition
+            transition: opacity .4s
+            opacity: 1
+        &-delete-enter
+            opacity: 1
+        &-delete-leave
+            opacity: 0
+    &__cover-thumb
+        width: 100%
+        height: 100%
+        max-width: 400px
+        max-height: 400px
+        background-position: 50% 50%
+        background-size: cover
+        background-repeat: no-repeat
+        left: 0
+        top: 0
+        position: absolute
+        z-index: 1
+    &__main
+        max-width: 400px
+        max-height: 400px
+        font-size: 12px
+        display: block
+        position: relative
+        &--document, &--embed, &--video
+            .MediaListing__slot
+                width: 100%
+                height: 100%
+                padding: 0 8px
+                background: $Color__grey--5
+                border-right: solid 1px darken($Color__grey--5, 5%)
+                color: #000 !important
+                text-align: center
+                text-shadow: 1px 1px 0 #fff
+                left: 0
+                top: 0
+                position: absolute
+                z-index: 2
+    &__icon
+        width: 30px
+        height: 30px
+        text-align: center
+        line-height: 30px
+        color: #fff
+        font-size: 18px
+        position: absolute
+        z-index: 5
+        &--type 
+            background: $Color__orange--1
+            right: 0
+            bottom: 0
+        &--edit
+            background: $Color__blue--4
+            left: 0
+            top: 0
+            &:hover
+                background: darken($Color__blue--4, 10%)
+        &--focal, &--preview
+            background: $Color__green--1
+            left: 0
+            bottom: 0
+            &:hover
+                background: darken($Color__green--1, 10%)
+        &--deleting, &--delete
+            background: $Color__red--4
+            right: 0
+            top: 0
+        &--delete, &--edit, &--focal
+            transition: background .2s
+            cursor: pointer
+        &--delete
+            &:hover
+                background: darken($Color__red--4, 10%)
+    &__image
+        width: 100%
+        height: auto
+        display: block
+        position: relative
+        z-index: 1
+    &__filetype
+        margin-bottom: 6px
+        font-size: 26px
+        color: $Color__orange--1 !important
+    &__sub
+        font-size: 11px 
+        color: $Color__grey--3 !important
+        display: block
+    &__selectable
+        text-decoration: none !important
+    
+//
+// Responsive
+//
+
++respond(large-screen)
+    .MediaListing__item
+        width: 16.6666%
++respond(huge-screen)
+    .MediaListing__item
+        width: 14.2857%
++respond(massive-screen)
+    .MediaListing__item
+        width: 12.5%
++respond(all-devices)
+    .MediaListing__item
+        width: 25%
++respond(all-phones)
+    .MediaListing__item
+        width: 33.3333%
++respond(phone-portrait)
+    .Media
+        &__window
+            $gutter = 12px
+            left: $gutter
+            right: $gutter
+            top: $gutter
+            bottom: $gutter
+    .MediaListing__item
+        width: 50%

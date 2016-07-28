@@ -121,9 +121,9 @@
     
     <!-- Paging -->
     @if ($listing->hasPages())
-    <div class="Box Paging">
-        {!! $listing->appends($filters)->links() !!}
-    </div>
+        <div class="Box Paging">
+            {!! $listing->appends($filters)->links() !!}
+        </div>
     @endif
     
 @endsection

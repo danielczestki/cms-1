@@ -32,6 +32,7 @@ class Cms {
      */
     protected $protectedControllers = [
         "Controller.php",
+        "MediaController.php",
         "AuthController.php",
         "PasswordController.php"
     ];
@@ -43,11 +44,16 @@ class Cms {
      * @var array
      */
     protected $protectedModels = [
-       "CmsUser.php",
-       "Model.php",
-       "Setter.php" 
+        "CmsUser.php",
+        "CmsMedium.php",
+        "CmsMediumImage.php",
+        "CmsMediumVideo.php",
+        "CmsMediumDocument.php",
+        "CmsMediumEmbed.php",
+        "Model.php",
+        "Setter.php" 
     ];
-    
+
     /**
      * Protected migrations (we do not alter or delete these in code)
      * Only within the Package
@@ -56,9 +62,24 @@ class Cms {
      */
     protected $protectedMigrations = [
        "2016_05_16_000000_create_cms_users_table.php",
-       "2016_05_16_100000_create_cms_password_resets_table.php"
+       "2016_05_16_100000_create_cms_password_resets_table.php",
+       "2016_05_16_200000_create_cms_media_table.php",
+       "2016_05_16_300000_create_cms_mediables_table.php",
+       "2016_05_16_400000_create_cms_media_images_table.php",
+       "2016_05_16_500000_create_cms_media_videos_table.php",
+       "2016_05_16_600000_create_cms_media_documents_table.php",
+       "2016_05_16_700000_create_cms_media_embeds_table.php",
     ];
     
+    /**
+     * The following field types (YAML fields.type) will be ignored from 
+     * persistence layers. E.g. 'media' type
+     * 
+     * @var array
+     */
+    protected $ignoredFieldTypes = [
+        "media"
+    ];
     
     /**
      * Return the protected files
@@ -101,6 +122,16 @@ class Cms {
     public function getProtectedMigrations($includeFiles = true)
     {
         return $includeFiles ? array_merge($this->getProtectedFiles(), $this->protectedMigrations) : $this->protectedMigrations;
+    }
+    
+    /**
+     * Return the ignore field types
+     * 
+     * @return array
+     */
+    public function getIgnoredFieldTypes()
+    {
+        return $this->ignoredFieldTypes;
     }
     
 }

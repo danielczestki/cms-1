@@ -59,6 +59,9 @@ textarea
     &__field
         width: 75%
         padding-left: 12px
+        small 
+            font-size: .8em
+            color: $Color__grey--3
     &__input, &__select, &__textarea
         transition: border-color .2s ease-in
         width: 100%
@@ -101,6 +104,61 @@ textarea
             font-size: 14px
             padding-left: 10px
             padding-right: 10px
+    &__file 
+        position: relative
+        &-placeholder, &-preview
+            height: 60px
+        &-button 
+            width: 125px
+            float: left 
+        &-placeholder 
+            width: calc(100% - 125px - 60px)
+            padding: 0 12px
+            border-top: solid 1px #e8e8e8
+            border-bottom: solid 1px #e8e8e8
+            line-height: 65px
+            cursor: pointer
+            float: left 
+            &--full 
+                width: calc(100% - 125px)
+                border-right: solid 1px #e8e8e8
+            &--empty
+                color: $Color__grey--3
+        &-preview
+            width: 60px
+            height: 60px
+            text-align: center
+            background-color: #e8e8e8
+            background-repeat: no-repeat
+            background-position: 50% 50%
+            background-size: cover
+            top: 0
+            right: 0
+            position: absolute
+            z-index: 1
+            &:before
+                content: "preview"
+                width: 100%
+                padding: 1px 0
+                font-size: 8px 
+                text-align: center
+                background: rgba($Color__grey--4, .8)
+                left: 0
+                bottom: 0
+                position: absolute
+        &-spinner
+            margin-top: 20px
+            color: $Color__grey--3
+        &-clear 
+            transition: color .2s
+            color: $Color__grey--4
+            font-size: 12px
+            right: -6px
+            top: -12px
+            position: relative
+            cursor: pointer
+            &:hover
+                color: $Color__red--1
     &__required
         color: $Color__red--1
         font-family: "Droid Sans Mono"
@@ -128,12 +186,12 @@ textarea
         font-weight: 600
         .fa
             color: $Color__red--2
-    &__radios .Form__info, &__radios .Form__error, &__checkboxes .Form__info, &__checkboxes .Form__error
+    &__radios .Form__info, &__radios .Form__error, &__checkboxes .Form__info, &__checkboxes .Form__error, &__field--simple-info .Form__info, &__field--simple-info  .Form__error
         border: 0
         background: none
-    &__radios .Form__info, &__checkboxes .Form__info
+    &__radios .Form__info, &__checkboxes .Form__info, &__field--simple-info .Form__info
         padding: 8px 0 0
-    &__radios .Form__error, &__checkboxes .Form__error
+    &__radios .Form__error, &__checkboxes .Form__error, &__field--simple-info .Form__error
         padding: 0 0 8px
     &__buttons
         float: left
@@ -199,6 +257,13 @@ textarea
             width: auto !important
             float: none !important
             display: block !important
+        &__buttons, &__cancel 
+            float: none
+            .Button
+                width: 100%
+        &__buttons
+            .Button 
+                margin-bottom: 8px
             
             
             

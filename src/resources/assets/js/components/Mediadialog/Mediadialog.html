@@ -1,0 +1,6 @@
+<div class="Media" v-if="open">
+    <div class="Media__window">
+        <a href="#" class="Media__close" v-on:click.prevent="toggle"><i class="fa fa-times"></i></a>
+        <iframe :src="_src" class="Media__iframe" seamless></iframe>
+    </div>
+</div>

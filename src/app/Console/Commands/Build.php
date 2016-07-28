@@ -54,6 +54,9 @@ class Build extends Command
     {
         $bar = $this->setupBar();
         
+        // build the directories first, to ensure correct perms
+        $this->createDirectories();
+        
         $bar->setMessage("<comment>Copying YAML definitions to app...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
@@ -96,7 +99,6 @@ class Build extends Command
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
         $this->artisan->call("migrate");
-        usleep(200000);
         
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
@@ -108,14 +110,36 @@ class Build extends Command
         } else {
             $bar->setMessage("<comment>Admin user already exists</comment>");
         }
+        
+        // Remove the .gitignore in the app/Cms folder
+        if (file_exists(app_path("Cms/.gitignore"))) {
+            unlink(app_path("Cms/.gitignore"));
+        }
+        
         $bar->advance();
         usleep(600000);
         
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
         
-        $this->comment("Dumping composer...");
-        exec('composer dump -o');
+        $this->comment("Optimising application...");
+        exec("composer dump");
+        $this->artisan->call("optimize");
+    }
+    
+    /**
+     * Build the directories first, so they get the correct perms
+     */
+    private function createDirectories()
+    {
+        if (! file_exists(app_path("Cms"))) mkdir(app_path("Cms"), 0777);
+        if (! file_exists(app_path("Cms/Definitions"))) mkdir(app_path("Cms/Definitions"), 0777);
+        if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
+        if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
+        
+        if (! file_exists(storage_path("app/cms"))) mkdir(storage_path("app/cms"), 0777, true);
+        if (! file_exists(storage_path("app/cms/temp"))) mkdir(storage_path("app/cms/temp"), 0777, true);
+        if (! file_exists(storage_path("app/cms/media"))) mkdir(storage_path("app/cms/media"), 0777, true);
     }
     
     /**
@@ -126,9 +150,9 @@ class Build extends Command
     private function requestAdmin()
     {
         $credentials = [];
-        $credentials["firstname"] = $this->ask("What is you first name?");
-        $credentials["surname"] = $this->ask("What is your surname?");
-        $credentials["email"] = $this->ask("What is your email address?");
+        $credentials["firstname"] = $this->ask("What is you first name?", "Steve");
+        $credentials["surname"] = $this->ask("What is your surname?", "McKeogh");
+        $credentials["email"] = $this->ask("What is your email address?", "steve@codegent.com");
         $credentials["password"] = $this->secret("Enter a password");
         $credentials["password_confirmation"] = $this->secret("Confirm your password");
         $credentials["password_confirmed"] = false;

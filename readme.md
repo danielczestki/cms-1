@@ -8,7 +8,16 @@ Thin Martian CMS platform built on the Laravel PHP Framework
 
 ----------
 
-## Install
+## Setup and Installation
+
+### System Requirements
+
+- PHP 5.6+ (we use variadic functions)
+- Laravel 5.2+
+- Database (Any Laravel supported database)
+- PHP GD library
+
+### Install
 
 > **TO DO: Package isn't currently on packagist, so use a `repositories: [{ type: 'vcs', url: 'path/to/git' }]` in your `composer.json` for now.**
 
@@ -30,7 +39,235 @@ Finally, open up a terminal and `cd` to the root of your Laravel install and run
 
 Allow the CMS to install and follow any prompts, then open up a browser, navigate to your Laravel app and go to `/admin` (e.g. `http://localhost/admin`) and you are set to go.
 
-## Development
+## Configuration
+
+Running `php artisan cms:build` will copy the Thin Martian CMS config file over to your app (`config/cms/cms.php`). Each value in the config is fully documented and no further instruction is required. But there are a few things to note.
+
+### media config
+
+Out the box, Thin Martian can upload media (images, documents etc) locally or in the cloud. This feature utilises  Laravel's [Filesystem / Cloud Storage](https://laravel.com/docs/filesystem) API. Therefore, if you wish to store files in cloud storage you will need to add a few dependencies to your app first as described in the Laravel documentation https://laravel.com/docs/5.2/filesystem#configuration.
+
+Once all setup, you can change the `media_disk` config entry in `config/cms/cms.php` to match your `filesystem` entry that you wish to use as your default disk for media uploads.
+
+Finally, ensure you set your `media_cloud_url` to the endpoint of your cloud storage, this endpoint will be used to server the media files back to the user.
+
+## media video
+
+Thin Martian CMS can upload and encode many video filetypes ready for the web, it does this using [Amazon Elastic Transcoder](https://aws.amazon.com/elastictranscoder/). To use Elastic Transcoder, you will require a Amazon S3 account, and the `media_disk` setting (in `config/cms/cms.php`) must be set to `s3`. Once you have setup your s3 account to work with Thin Martian CMS (above) then no further changes are required, the "video" option should appear as an allowed media type.
+
+
+## Resetting the CMS
+
+If, for whatever reason you want to reset the entire CMS back to pre-install state you can do this by running:
+
+    php artisan cms:destroy
+
+**IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions. You should never run this command in production!
+
+
+## YAML Definition API
+
+*TODO, THIS IS A DUMPING GROUND RIGHT NOW AND IT FAR FROM COMPLETE*
+
+### fields
+
+Define the fields for the form.
+
+	fields:
+		fieldname:
+			[options]
+
+----------
+
+The following options are global for all field types:
+
+**type**   
+`string` | *required*  
+The type of field (all documented below).
+
+**label**   
+`string` | *required*  
+The label for the field.
+
+**value**   
+`string` | *optional*  
+Set a default value on the field
+
+**placeholder**   
+`string` | *optional*  
+Set a placeholder on the field (if the field type accepts it)
+
+**persist**   
+`boolean` | *optional* | default: `false`   
+Should this field be persisted to the database. If false, this field will not be in the migration and will not be stored (ideal for password_confirmation fields for example).
+
+**validationOnCreate**   
+`string` | *optional*   
+Standard laravel piped validation rules. These rules will be applied on `create` only.
+
+**validationOnUpdate**   
+`string` | *optional*   
+Standard laravel piped validation rules. These rules will be applied on `update` only.
+
+**info**   
+`string` | *optional*   
+Display a small info tip next to the field.
+
+**infoUpdate**   
+`string` | *optional*   
+Display a small info tip next to the field only on the `edit` screen.
+
+**class**   
+`string` | *optional*   
+Add a custom css class(es) to the field.
+
+**style**   
+`string` | *optional*   
+Add a custom css `style` attribute to the field.
+
+**data-***   
+`string` | *optional*   
+Add a custom `data-*` attribute to the field.
+
+
+----------
+
+
+###`text`
+
+*No special options.*
+
+###`email`
+
+*No special options.*
+
+###`password`
+
+*No special options.*
+
+###`hidden`
+
+*No special options.*
+
+###`number`
+
+**min**   
+`integer` | *optional*  
+The minimum number allowed.
+
+###`textarea`
+
+**rows**   
+`integer` | *optional*  
+Set the `rows` height of the `textarea`.
+
+###`wysiwyg`
+
+**rows**   
+`integer` | *optional*  
+Set the `rows` height of the `wysiwyg`.
+
+###`select`
+
+**options**   
+`object` | *required*  
+Key - value pair of the select options.
+
+    category:
+		type: "select"
+    	label: "Select a category"
+    	options: 
+      		first: "First Category"
+      		second: "Second Category"
+
+###`checkbox`
+
+*Same definition as `select`.*
+
+###`radio`
+
+*Same definition as `select`.*
+
+###`boolean`
+
+*No special options.*
+
+###`date`
+
+*No special options.*
+
+###`datetime`
+
+*No special options.*
+
+###`media`
+   
+**limit**   
+`integer` | *optional*  
+Limit the amount of media items allowed. Remove for infinite.
+
+**allowed**   
+`array['image', 'video', 'document', 'embed']` | *optional*    
+Restrict to certain media types. Remove for all types.
+
+    media:
+		type: "media"
+		label: "Upload media"
+		limit: 1
+		allowed:
+			- image
+			- document
+
+Example
+
+    fields:
+		firstname:
+			type: "text"
+			label: "Title"
+			persist: true
+			validationOnCreate: "required|max:20"
+			validationOnUpdate: "required|max:20"
+		usertype:
+			type: "select"
+			label: "User type"
+			persist: true
+			options:
+				standard: "Standard user"
+				admin: "Administrator"
+		email:
+			type: "email"
+			label: "Email address"
+			persist: true
+			validationOnCreate: "required|email|max:255|unique:cms_tablename"
+			validationOnUpdate: "required|email|max:255|unique:cms_tablename,email,{id}"
+		password:
+			type: "password"
+			label: "Password"
+			persist: true
+			validationOnCreate: "required|min:6|confirmed"
+			validationOnUpdate: "confirmed"
+		password_confirmation:
+			type: "password"
+			label: "Confirm password"
+			persist: false
+			validationOnCreate: "required"
+		photo:
+			type: "media"
+			label: "Select photo"
+			allowed:
+				- image
+			limit: 1
+			validationOnCreate: required
+		media:
+			type: media
+			label: "Select media"
+			
+
+
+----------
+
+
+## Contributing
 
 Follow these instructions to setup the Thin Martian CMS for development locally.
 
@@ -61,6 +298,7 @@ Easy, from the `packages/thinmartian/cms` directory run
 And 
 
 	npm install
+
 
 ### Edit the root `composer.json`
 
@@ -134,16 +372,3 @@ If you get a phpunit error then:
 1. Install phpunit globally as per the PHPUnit website instructions
 2. Or, add `vendor/bin/phpunit` to your `$PATH`
 3. Or, call `./vendor/bin/phpunit` instead of just `phpunit`
-
-## Resetting the CMS
-
-If, for whatever reason you want to reset the entire CMS back to pre-install state you can do this by running:
-
-    php artisan cms:destroy
-
-**IMPORTANT**: This will delete **EVERYTHING** related to your Thin Martian CMS install. It will delete all generated content (models, controllers, migrations etc), drop all your generated database tables and delete all your custom `.yaml` definitions.
-
-
-## YAML Definition API
-
-Coming soon!

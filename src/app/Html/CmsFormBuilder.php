@@ -3,6 +3,7 @@
 namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
+use CmsImage, CmsVideo, CmsDocument, CmsEmbed;
 
 class CmsFormBuilder {
     
@@ -12,7 +13,7 @@ class CmsFormBuilder {
      * 
      * @var array
      */
-    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options", "prefix", "suffix"];
+    protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options", "prefix", "suffix", "limit", "allowed"];
     
     //
     // FORM
@@ -117,6 +118,26 @@ class CmsFormBuilder {
     public function hidden($data = [])
     {
        return $this->render(view("cms::html.form.hidden", $data)); 
+    }
+    
+    /**
+     * Render a input[type=file]
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function file($data = [])
+    {
+        $data["type"] = "file";
+        if (isset($data["mediatype"])) {
+            if ($accepted = CmsImage::getMediaTypes($data["mediatype"] . ".accepted")) {
+                array_walk($accepted, function(&$item, $key) {
+                    $item = "." . $item;
+                });
+                $data["accept"] = implode(",", $accepted);
+            }
+        }
+        return $this->input($data, "file");
     }
     
     /**
@@ -258,6 +279,101 @@ class CmsFormBuilder {
     }
     
     //
+    // MEDIA
+    // 
+    
+    /**
+     * Render a media picker field
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function media($data, $resource = null)
+    {
+        $data["resource"] = $resource;
+        $data["existing"] = $this->existingMedia($data, $resource);
+        
+        $_info = isset($data["info"]) ? $data["info"] : "";
+        if (isset($data["limit"])) {
+            $data["info"] = "Maximum of {$data['limit']} allowed.";
+        }
+        if (isset($data["allowed"])) {
+            $data["info"] .= " Accepted types: " . implode(", ", $data["allowed"]) .".";
+        }
+        if (isset($data["info"])) {
+            $data["info"] .= " " . $_info;
+        }
+        
+        // Return the form field
+        return $this->render(view("cms::html.form.media", $this->buildData($data)));
+    }
+    
+    /**
+     * Builds a clean array of all thedata needed for the vue component
+     * 
+     * @param  array  $data
+     * @param  model  $resource 
+     * @return array
+     */
+    private function existingMedia($data, $resource = null)
+    {
+        $result = [];
+        // No resource means a creeate form, so just return an empty array
+        //if (! $resource) return $result;
+        // Fetch the media (if any) and continue...
+        if ($old = request()->old("cmsmedia.{$data['name']}")) {
+            // Any in the old input?
+            $collection = \App\Cms\CmsMedium::whereIn("id", $old)->get();
+        } else if ($resource) {
+            // Any saved to it already?
+            $collection = $resource->media($data["name"])->get(); 
+        } else {
+            // None, just return empty
+            return $result;
+        }
+        if (! $collection->count()) return $result;
+        // Loop the media and build the array      
+        foreach ($collection as $media) {
+            $result[] = $this->mediaArray($media);
+        }
+        // Return the new array
+        return $result;
+    }
+    
+    public function mediaArray($media)
+    {
+        // Add default/global data
+        $result = [
+            "cms_medium_id" => $media->id,
+            "type" => $media->type,
+            "title" => $media->title,
+            "icon" => CmsImage::getMediaTypes($media->type . ".icon"), 
+            "filename" => $media->filename,
+            "extension" => $media->extension,
+            "original_name" => $media->original_name,
+            "removed" => false, // for vue
+        ];
+        // Image data (if applicable)
+        if ($media->type == "image") {
+            $result["image"] = $media->image->toArray() + ["thumbnail" => CmsImage::get($media->id, 600, 600)];
+        }
+        // video data (if applicable)
+        if ($media->type == "video") {
+            $result["video"] = $media->video->toArray() + ["thumbnail" => CmsVideo::thumbnail($media->id)];
+        }
+        // document data (if applicable)
+        if ($media->type == "document") {
+            $result["document"] = $media->document->toArray() + ["fileicon" => CmsDocument::icon($media)];
+        }
+        // embed data (if applicable)
+        if ($media->type == "embed") {
+            $result["embed"] = $media->embed->toArray() + ["domain" => CmsEmbed::domain($media)];
+        }
+        return $result;
+    }
+    
+    
+    //
     // BUTTONS
     // 
     
@@ -297,6 +413,17 @@ class CmsFormBuilder {
     //
     // TITLES AND STRINGS
     // 
+    
+    /**
+     * Static field (no inputs)
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function content($data)
+    {
+        return $this->render(view("cms::html.form.content", $data)); 
+    }
     
     /**
      * Return the subtitle for the page
@@ -373,8 +500,8 @@ class CmsFormBuilder {
     {
         $data["class"] = @$data["class"] . " Form__control";
         $data["additional"] = array_except($data, $this->attributeSchema);
-        $data["additional"]["maxlength"] = $this->getMaxLength($data);
-        $data["required"] = $this->isRequired($data);
+        $data["additional"]["maxlength"] = (isset($data["maxlength"]) and $data["maxlength"]) ? $data["maxlength"] : $this->getMaxLength($data);
+        $data["required"] = (isset($data["required"]) and $data["required"]) ? true : $this->isRequired($data);
         $data["additional"]["id"] = "f-{$data['name']}";
         if ($type == "number") {
             unset($data["additional"]["maxlength"]);

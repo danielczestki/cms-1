@@ -54,7 +54,7 @@ listing:
     label: "Email"
     sortable: true
   
-# Searchable columns in the cMS listing (must be database columns, no accessors allowed)
+# Searchable columns in the CMS listing (must be database columns, no accessors allowed)
 searchable:
   - email
   - concat(firstname, ' ', surname)

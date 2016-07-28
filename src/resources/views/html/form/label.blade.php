@@ -1,1 +1,1 @@
-<label for="f-{{ $name }}" class="Form__label">{!! $label !!}{!! $required ? "<span class=\"Form__required\">*</span>" : null !!}</label>
+<label for="f-{{ @$name }}" class="Form__label">{!! $label !!}{!! @$required ? "<span class=\"Form__required\">*</span>" : null !!}</label>

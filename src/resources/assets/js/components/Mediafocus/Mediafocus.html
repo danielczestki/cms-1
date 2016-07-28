@@ -1,0 +1,28 @@
+<input type="hidden" name="focal" v-model="section" />
+<div class="MediaFocal">
+    <div class="MediaFocal__focus">
+        <div class="MediaFocal__sections">
+            <table>
+                <tr>
+                    <td v-on:click="select('top-left')" :class="{'MediaFocal--selected': section == 'top-left'}">Top left</td>
+                    <td v-on:click="select('top')" :class="{'MediaFocal--selected': section == 'top'}">Top</td>
+                    <td v-on:click="select('top-right')" :class="{'MediaFocal--selected': section == 'top-right'}">Top right</td>
+                </tr>
+                <tr>
+                    <td v-on:click="select('left')" :class="{'MediaFocal--selected': section == 'left'}">Left</td>
+                    <td v-on:click="select('center')" :class="{'MediaFocal--selected': section == 'center'}">Center</td>
+                    <td v-on:click="select('right')" :class="{'MediaFocal--selected': section == 'right'}">Right</td>
+                </tr>
+                <tr>
+                    <td v-on:click="select('bottom-left')" :class="{'MediaFocal--selected': section == 'bottom-left'}">Bottom left</td>
+                    <td v-on:click="select('bottom')" :class="{'MediaFocal--selected': section == 'bottom'}">Bottom</td>
+                    <td v-on:click="select('bottom-right')" :class="{'MediaFocal--selected': section == 'bottom-right'}">Bottom right</td>
+                </tr>
+            </table>
+        </div>
+        <img :src="image" class="MediaFocal__image">
+    </div>
+    <div class="MediaFocal__info">
+        Set the main focal point for this image by clicking the sector on the image. When cropping of the image occurs, the main focal point will be set to this region.
+    </div>
+</div>

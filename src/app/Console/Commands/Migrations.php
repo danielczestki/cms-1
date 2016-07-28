@@ -83,9 +83,7 @@ class Migrations extends Commands
         } else {
             $this->comment("No migrations to generate");            
         }
-        
     }
-    
     
     //
     // MIGRATION
@@ -127,10 +125,7 @@ class Migrations extends Commands
         $result = "";
         $fields = $yaml["fields"];
         foreach ($fields as $column => $data) {
-            if (array_key_exists("persist", $data) and ! $data["persist"]) {} else {
-                // persist either isn't there or is true, add it
-                $result .= $this->buildColumn($column, $data);
-            }
+            if ($this->allowedColumn($data)) $result .= $this->buildColumn($column, $data);
         }
         return $result;
     }
@@ -151,6 +146,19 @@ class Migrations extends Commands
         }
         */
         return $result;
+    }
+    
+    /**
+     * Is this column allowed in the migration
+     * 
+     * @param  array $data Array of data from yaml
+     * @return boolean
+     */
+    private function allowedColumn($data)
+    {
+        if (array_key_exists("persist", $data) and ! $data["persist"]) return false;
+        if (in_array($data["type"], $this->cms->getIgnoredFieldTypes())) return false;
+        return true;
     }
     
     /**
