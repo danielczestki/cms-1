@@ -14,8 +14,7 @@ class Build extends Command
      *
      * @var string
      */
-    protected $signature = 'cms:build
-                            {--system : Rebuild the app/Cms/System folder}';
+    protected $signature = 'cms:build';
 
     /**
      * The console command description.
@@ -56,11 +55,9 @@ class Build extends Command
     {
         $bar = $this->setupBar();
         
-        // System calls, delete the folder so we can rebuild it
-        if ($this->option("system")) {
-            $fs = new Filesystem();
-            $fs->remove(app_path("Cms/System"));
-        }
+        // delete the System folder so we can rebuild it
+        $fs = new Filesystem();
+        $fs->remove(app_path("Cms/System"));
         
         // build the directories first, to ensure correct perms
         $this->createDirectories();
@@ -71,7 +68,7 @@ class Build extends Command
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
             "--tag" => ["definitions"]
         ]);
-        if (! $this->option("system")) usleep(200000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
         $bar->setMessage("<comment>Publishing core files...</comment>");
@@ -82,17 +79,17 @@ class Build extends Command
         ]);
         $bar->advance();
         $this->artisan->call("cms:migrations");
-        if (! $this->option("system")) usleep(200000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Generating models from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:models");
-        if (! $this->option("system")) usleep(200000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Generating controllers from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:controllers");
-        if (! $this->option("system")) usleep(200000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
@@ -100,7 +97,7 @@ class Build extends Command
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
         $this->deleteUnused();
-        if (! $this->option("system")) usleep(200000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
         $bar->advance();
@@ -109,7 +106,7 @@ class Build extends Command
             "--tag" => ["assets"],
             "--force" => true
         ]);
-        if (! $this->option("system")) usleep(200000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
@@ -117,7 +114,7 @@ class Build extends Command
         
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
-        if (! $this->option("system")) usleep(700000);
+        usleep(700000);
         if (! $this->db->table("cms_users")->count()) {
             $this->question("Please enter your CMS admin details");
             $this->requestAdmin();
@@ -132,14 +129,14 @@ class Build extends Command
         }
         
         $bar->advance();
-        if (! $this->option("system")) usleep(400000);
+        usleep(400000);
         
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
         
         $this->comment("Optimising application...");
         exec("composer dump");
-        if (! $this->option("system")) $this->artisan->call("optimize");
+        $this->artisan->call("optimize");
     }
     
     /**
