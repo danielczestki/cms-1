@@ -62,7 +62,7 @@ class Models extends Commands
     public function __construct()
     {
         parent::__construct();
-        $this->corePath = realpath(__DIR__ . "/../../Models/Core/");
+        $this->corePath = app_path("Cms/System");
         $this->customPath = app_path("Cms");
         $this->stubCorePath = realpath(__DIR__ . "/stubs/model_core.stub");
         $this->stubCustomPath = realpath(__DIR__ . "/stubs/model_custom.stub");

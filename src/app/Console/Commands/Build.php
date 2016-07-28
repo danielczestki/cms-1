@@ -91,6 +91,7 @@ class Build extends Command
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
+        $this->deleteUnused();
         usleep(400000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
@@ -134,13 +135,27 @@ class Build extends Command
     }
     
     /**
+     * When laravel does a vendor:publish we just copy all files across
+     * but some of these are not used in the new location, they are called
+     * from the vendor folder, so just delete these copied ones to stop
+     * people getting confused.
+     */
+    private function deleteUnused()
+    {
+        if (file_exists(app_path("Cms/System/Http/Controllers/Controller.php"))) unlink(app_path("Cms/System/Http/Controllers/Controller.php"));
+        if (file_exists(app_path("Cms/System/Model.php"))) unlink(app_path("Cms/System/Model.php"));
+        if (file_exists(app_path("Cms/System/Setter.php"))) unlink(app_path("Cms/System/Setter.php"));
+    }
+    
+    /**
      * Build the directories first, so they get the correct perms
      */
     private function createDirectories()
     {
         if (! file_exists(app_path("Cms"))) mkdir(app_path("Cms"), 0777);
-        if (! file_exists(app_path("Cms/System"))) mkdir(app_path("Cms/System"), 0777);
         if (! file_exists(app_path("Cms/Definitions"))) mkdir(app_path("Cms/Definitions"), 0777);
+        if (! file_exists(app_path("Cms/System"))) mkdir(app_path("Cms/System"), 0777);
+        if (! file_exists(app_path("Cms/System/Http/Controllers"))) mkdir(app_path("Cms/System/Http/Controllers"), 0777, true);
         if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
         if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
         

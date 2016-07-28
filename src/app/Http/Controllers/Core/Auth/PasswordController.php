@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartian\Cms\App\Http\Controllers\Core\Auth;
+namespace App\Cms\System\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;

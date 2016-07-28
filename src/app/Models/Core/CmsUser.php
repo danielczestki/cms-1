@@ -1,9 +1,9 @@
 <?php
 
-namespace Thinmartian\Cms\App\Models\Core;
+namespace App\Cms\System;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Thinmartian\Cms\App\Models\Core\Setter;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class CmsUser extends Authenticatable
 {

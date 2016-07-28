@@ -57,7 +57,7 @@ class Controllers extends Commands
     public function __construct()
     {
         parent::__construct();
-        $this->corePath = realpath(__DIR__ . "/../../Http/Controllers/Core/");
+        $this->corePath = app_path("Cms/System/Http/Controllers");
         $this->customPath = app_path("Cms/Http/Controllers");
         $this->stubCorePath = realpath(__DIR__ . "/stubs/controller_core.stub");
         $this->stubCustomPath = realpath(__DIR__ . "/stubs/controller_custom.stub");

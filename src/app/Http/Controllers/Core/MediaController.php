@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartian\Cms\App\Http\Controllers\Core;
+namespace App\Cms\System\Http\Controllers;
 
 use CmsForm, DB;
 use App\Cms\CmsMedium;

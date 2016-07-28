@@ -1,8 +1,9 @@
 <?php
 
-namespace Thinmartian\Cms\App\Models\Core;
+namespace App\Cms\System;
 
 use DB, Storage;
+use Thinmartian\Cms\App\Models\Core\Model;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CmsMedium extends Model

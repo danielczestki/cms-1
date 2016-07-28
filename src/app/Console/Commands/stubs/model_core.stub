@@ -1,6 +1,8 @@
 <?php
 
-namespace Thinmartian\Cms\App\Models\Core;
+namespace App\Cms\System;
+
+use Thinmartian\Cms\App\Models\Core\Model;
 
 class {classname} extends Model
 {

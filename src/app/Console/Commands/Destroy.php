@@ -93,10 +93,6 @@ class Destroy extends Command
             $this->destroyAssetsFolder();
             //  Delete the public config folder
             $this->destroyConfigFolder();
-            //  Delete all models
-            $this->destroyModels();
-            //  Delete all controllers
-            $this->destroyControllers();
             //  Delete all migrations
             $this->destroyMigrations();
             //  Drop DB tables and clean migrations table
@@ -145,41 +141,6 @@ class Destroy extends Command
     protected function destroyConfigFolder()
     {
         $this->filesystem->remove(config_path("cms"));
-    }
-        
-    /**
-     * Deletes the Package/Models
-     * 
-     * @return void
-     */
-    protected function destroyModels()
-    {
-        $core = $this->srcpath . "/app/Models/Core";
-        $coreProtected = $this->cms->getProtectedModels();
-        // core
-        foreach($this->finder->create()->files()->in($core) as $filepath => $file) {
-            if (! $this->ignore($coreProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
-    }
-    
-    /**
-     * Deletes the Package/Controllers
-     * 
-     * @return void
-     */
-    protected function destroyControllers()
-    {
-        $core = $this->srcpath . "/app/Http/Controllers/Core";
-        $coreProtected = $this->cms->getProtectedControllers();
-        $customProtected = $this->cms->getProtectedFiles();
-        // core
-        foreach($this->finder->create()->files()->in($core) as $filepath => $file) {
-            if (! $this->ignore($coreProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
     }
     
     /**
