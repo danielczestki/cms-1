@@ -153,12 +153,6 @@ class Destroy extends Command
         //$package = $this->srcpath . "/database/migrations";
         $app = database_path("migrations");
         $packageProtected = $this->cms->getProtectedMigrations();
-        // package
-        /*foreach($this->finder->create()->files()->in($package) as $filepath => $file) {
-            if (! $this->ignore($packageProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }*/
         // app (different as we do a match as we have no idea whats in here)
         foreach($this->finder->create()->files()->in($app) as $filepath => $file) {
             if (str_contains($file->getFilename(), "_cms_")) {

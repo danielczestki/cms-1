@@ -33,8 +33,3 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     });
     
 });
-
-// Media urls
-Route::group(["prefix" => "cms/media", "namespace" => "Thinmartian\Cms\App\Http\Controllers"], function () {
-    Route::get("{cms_medium_id}/image/{filename}-{width}x{height}-{focal}.{extension}", ["uses" => "CmsController@image"]);
-});

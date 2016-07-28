@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\System;
+namespace Thinmartian\Cms\App\Models\Core;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
 

@@ -5,6 +5,7 @@ namespace Thinmartian\Cms\App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\DatabaseManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Build extends Command
 {
@@ -13,7 +14,8 @@ class Build extends Command
      *
      * @var string
      */
-    protected $signature = 'cms:build';
+    protected $signature = 'cms:build
+                            {--system : Rebuild the app/Cms/System folder}';
 
     /**
      * The console command description.
@@ -54,6 +56,12 @@ class Build extends Command
     {
         $bar = $this->setupBar();
         
+        // System calls, delete the folder so we can rebuild it
+        if ($this->option("system")) {
+            $fs = new Filesystem();
+            $fs->remove(app_path("Cms/System"));
+        }
+        
         // build the directories first, to ensure correct perms
         $this->createDirectories();
         
@@ -63,7 +71,7 @@ class Build extends Command
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
             "--tag" => ["definitions"]
         ]);
-        usleep(400000);
+        if (! $this->option("system")) usleep(200000);
         
         $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
         $bar->setMessage("<comment>Publishing core files...</comment>");
@@ -74,17 +82,17 @@ class Build extends Command
         ]);
         $bar->advance();
         $this->artisan->call("cms:migrations");
-        usleep(400000);
+        if (! $this->option("system")) usleep(200000);
         
         $bar->setMessage("<comment>Generating models from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:models");
-        usleep(400000);
+        if (! $this->option("system")) usleep(200000);
         
         $bar->setMessage("<comment>Generating controllers from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:controllers");
-        usleep(400000);
+        if (! $this->option("system")) usleep(200000);
         
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
@@ -92,7 +100,7 @@ class Build extends Command
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
         $this->deleteUnused();
-        usleep(400000);
+        if (! $this->option("system")) usleep(200000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
         $bar->advance();
@@ -101,7 +109,7 @@ class Build extends Command
             "--tag" => ["assets"],
             "--force" => true
         ]);
-        usleep(400000);
+        if (! $this->option("system")) usleep(200000);
         
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
@@ -109,7 +117,7 @@ class Build extends Command
         
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
-        usleep(700000);
+        if (! $this->option("system")) usleep(700000);
         if (! $this->db->table("cms_users")->count()) {
             $this->question("Please enter your CMS admin details");
             $this->requestAdmin();
@@ -124,14 +132,14 @@ class Build extends Command
         }
         
         $bar->advance();
-        usleep(600000);
+        if (! $this->option("system")) usleep(400000);
         
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
         
         $this->comment("Optimising application...");
         exec("composer dump");
-        $this->artisan->call("optimize");
+        if (! $this->option("system")) $this->artisan->call("optimize");
     }
     
     /**
@@ -143,8 +151,16 @@ class Build extends Command
     private function deleteUnused()
     {
         if (file_exists(app_path("Cms/System/Http/Controllers/Controller.php"))) unlink(app_path("Cms/System/Http/Controllers/Controller.php"));
+        if (file_exists(app_path("Cms/System/Http/Controllers/Auth"))) {
+            $fs = new Filesystem();
+            $fs->remove(app_path("Cms/System/Http/Controllers/Auth"));
+        }
         if (file_exists(app_path("Cms/System/Model.php"))) unlink(app_path("Cms/System/Model.php"));
         if (file_exists(app_path("Cms/System/Setter.php"))) unlink(app_path("Cms/System/Setter.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumImage.php"))) unlink(app_path("Cms/System/CmsMediumImage.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumVideo.php"))) unlink(app_path("Cms/System/CmsMediumVideo.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumDocument.php"))) unlink(app_path("Cms/System/CmsMediumDocument.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumEmbed.php"))) unlink(app_path("Cms/System/CmsMediumEmbed.php"));
     }
     
     /**
