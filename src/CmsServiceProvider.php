@@ -91,9 +91,7 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (defined('PHPUNIT_IS_RUNNING') == 1) {
-            define("CMSVERSION", self::CMSVERSION);
-        }
+        define("CMSVERSION", self::CMSVERSION);
         $this->mergeConfig();
         $this->updateConfig();
         $this->registerYaml();
