@@ -497,10 +497,15 @@ class CmsFormBuilder {
     public function relation($data = []) {
         $relations = [
             'belongsTo' => 'select',
+            'belongsToMany' => 'selectMultiple',
         ];
         if (isset($data['relationType']) && isset($relations[$data['relationType']])) {
-            // we are dealing with a dropdown
-            if ($relations[$data['relationType']] == 'select') {
+            // we are dealing with a select
+            if ($relations[$data['relationType']] == 'select' || $relations[$data['relationType']] == 'selectMultiple') {
+                // many-to-many - use a multiselect
+                if ($relations[$data['relationType']] == 'selectMultiple') {
+                    $data['multiple'] = 'multiple';
+                }
                 // use the name of the item as default
                 $className = $data['name'];
                 // if a classname was provided, use it instead
