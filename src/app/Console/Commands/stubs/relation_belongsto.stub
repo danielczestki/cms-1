@@ -3,6 +3,6 @@
      */
     public function {function}()
     {
-        return $this->belongsTo('App\{model}');
+        return $this->belongsTo('{model}');
     }
     

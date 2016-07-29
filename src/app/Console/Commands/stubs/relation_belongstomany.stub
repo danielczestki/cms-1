@@ -3,6 +3,6 @@
      */
     public function {function}()
     {
-        return $this->belongsToMany('App\{model}');
+        return $this->belongsToMany('{model}');
     }
     

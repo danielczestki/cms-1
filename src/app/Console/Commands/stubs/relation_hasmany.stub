@@ -3,6 +3,6 @@
      */
     public function {function}()
     {
-        return $this->hasMany('App\{model}');
+        return $this->hasMany('{model}');
     }
     

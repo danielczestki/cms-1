@@ -3,6 +3,6 @@
      */
     public function {function}()
     {
-        return $this->hasOne('App\{model}');
+        return $this->hasOne('{model}');
     }
     

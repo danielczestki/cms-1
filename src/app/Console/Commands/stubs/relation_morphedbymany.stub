@@ -3,6 +3,6 @@
      */
     public function {function}()
     {
-        return $this->morphedByMany('App\{model}', '{table}');
+        return $this->morphedByMany('{model}', '{table}');
     }
     

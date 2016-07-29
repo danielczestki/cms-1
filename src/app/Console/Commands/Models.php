@@ -170,7 +170,7 @@ class Models extends Commands
                 // generate a function name
                 $function = strtolower($relation);
                 // model name
-                $model = ucwords($relation);
+                $model = '\Thinmartian\Cms\App\Models\Core\Cms' . ucwords($relation);
                 // table name
                 $table = strtolower($relation) . 'able';
                 // generate string from stub
