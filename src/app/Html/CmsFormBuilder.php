@@ -491,8 +491,8 @@ class CmsFormBuilder {
     /**
      * Show a form field for the relation
      *
-     * @param
-     * @return [type] [description]
+     * @param  array  $data The element attributes
+     * @return string
      */
     public function relation($data = []) {
         $relations = [
