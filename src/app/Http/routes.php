@@ -11,7 +11,6 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     
     // Custom/editable routes (copied over on publish)
     Route::group(["namespace" => "App\Cms\Http\Controllers", "middleware" => ["auth.cms"]], function() {
-        
         // Build routes from the Yaml
         if (file_exists(app_path("Cms/Definitions/"))) {
                 $finder = new Finder();

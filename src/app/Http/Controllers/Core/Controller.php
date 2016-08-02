@@ -55,7 +55,6 @@ abstract class Controller extends BaseController
         
         //$record = \App::make("App\Cms\CmsPlayground")->find(1);
         //de($record->media);
-        
         $this->sharedVars();        
     }
     

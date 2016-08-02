@@ -123,7 +123,7 @@ class Yaml {
             if (! $meta["show_in_nav"]) continue;
             if (! array_key_exists("title", $meta)) continue;
             $filename = $this->getFilename($file);
-            $perms = \Auth::user()->permissions;
+            $perms = \Auth::guard("cms")->user()->permissions;
             if (! empty($perms)) {
                 if (! in_array($filename, $perms)) continue;
             }

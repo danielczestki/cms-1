@@ -20,6 +20,20 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         $app = require __DIR__.'/../../../../bootstrap/app.php';
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
         return $app;
-    }   
+    }  
+    
+    /**
+     * Migrate the DB from the esc package migrations and rollback on destroy
+     */
+    protected function migrate()
+    {
+        $this->artisan('migrate', [
+            '--path' => 'packages/thinmartian/cms/src/database/migrations'
+        ]);
+
+        $this->beforeApplicationDestroyed(function () {
+            $this->artisan('migrate:rollback');
+        });
+    } 
     
 }
