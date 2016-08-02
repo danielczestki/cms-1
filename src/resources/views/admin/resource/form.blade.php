@@ -27,8 +27,11 @@
     {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)
             @if ($controller == "UsersController" and $data["name"] == "permissions")
-                {{-- Special permissions drop for users --}}
-                {{ CmsForm::permissions($data, @$resource) }}
+                @if (Auth::guard("cms")->user()->access_level == "Admin")
+                    {{-- Special permissions drop for users --}}
+                    {{ CmsForm::access_level([], @$resource) }}
+                    {{ CmsForm::permissions($data, @$resource) }}
+                @endif
             @else
                 <?php $_field = $data["type"]; ?>
                 {{ CmsForm::$_field($data, @$resource) }}

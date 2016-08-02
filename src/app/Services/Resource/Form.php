@@ -58,7 +58,8 @@ trait Form
     
     private function special($resource)
     {
-        if (get_class($this->model) == "App\Cms\CmsUser") {
+        if (get_class($this->model) == "App\Cms\CmsUser" and \Auth::guard("cms")->user()->access_level == "Admin") {
+            $resource->access_level = request()->get("access_level", "Standard");
             $resource->permissions = is_array(request()->get("permissions")) ? implode(",", array_filter(request()->get("permissions"))) : null;
         }
     }

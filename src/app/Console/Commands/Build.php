@@ -115,7 +115,7 @@ class Build extends Command
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
         usleep(700000);
-        if (! $this->db->table("cms_users")->count()) {
+        if (! $this->db->table("cms_users")->where("access_level", "Admin")->count()) {
             $this->question("Please enter your CMS admin details");
             $this->requestAdmin();
             $bar->setMessage("<comment>Admin user created successfully</comment>");
@@ -204,7 +204,7 @@ class Build extends Command
         $this->db->table("cms_users")->insert(
             array_merge(
                 array_except($credentials, ["password_confirmed", "password_confirmation"]),
-                ["created_at" => $this->db->raw("now()"), "updated_at" => $this->db->raw("now()")]
+                ["access_level" => "Admin", "created_at" => $this->db->raw("now()"), "updated_at" => $this->db->raw("now()")]
             )
         );
     }

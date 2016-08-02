@@ -171,6 +171,24 @@ class CmsFormBuilder {
     }
     
     /**
+     * Render a access level select
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function access_level($data = [])
+    {
+        $arr = [];
+        $data["class"] = "Form__select";
+        $data["name"] = "access_level";
+        $data["label"] = "Access level";
+        $data["options"] = ["Admin" => "Administrator", "Standard" => "Standard user"];
+        $data["info"] = "Only administrators can change access levels and permissions.";
+        
+        return $this->render(view("cms::html.form.select", $this->buildData($data))); 
+    }
+    
+    /**
      * Render a permissions select
      * 
      * @param  array  $data The element attributes
@@ -181,6 +199,7 @@ class CmsFormBuilder {
         $arr = [];
         $data["class"] = @$data["class"] . " Form__select";
         $data["name"] .= "[]";
+        $data["topper"] = true;
         
         // Fetch the modules
         $defs = CmsYaml::getAllYamls();
