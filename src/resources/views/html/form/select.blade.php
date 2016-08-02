@@ -1,4 +1,4 @@
-<div class="Form__row {{ isset($prefix) ? 'Form--prefixed' : null }} {{ isset($suffix) ? 'Form--suffixed' : null }}">
+<div class="Form__row Form__row--top {{ isset($prefix) ? 'Form--prefixed' : null }} {{ isset($suffix) ? 'Form--suffixed' : null }}">
     @include("cms::html.form.label")
     <div class="Form__field">
         @include("cms::html.form._error")      

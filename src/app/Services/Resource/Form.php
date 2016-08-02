@@ -28,8 +28,9 @@ trait Form
         $form = $input->getInput();
         $fillable = $this->model->getFillable();
         foreach ($fillable as $column) {
-            if (array_key_exists($column, $form)) $this->model->$column = $form[$column];
+            if (array_key_exists($column, $form)) $this->model->$column = is_array($form[$column]) ? null : $form[$column];
         }
+        $this->special($this->model);
         $this->model->save();
         // media
         $this->saveMedia($this->model);
@@ -46,12 +47,20 @@ trait Form
     {
         $form = $input->getInput();
         foreach ($resource->getFillable() as $column) {
-            if (array_key_exists($column, $form)) $resource->$column = $form[$column];
+            if (array_key_exists($column, $form)) $resource->$column = is_array($form[$column]) ? null : $form[$column];
         }
+        $this->special($resource);
         $resource->save();
         // media
         $this->saveMedia($resource);
         return $resource;
+    }
+    
+    private function special($resource)
+    {
+        if (get_class($this->model) == "App\Cms\CmsUser") {
+            $resource->permissions = is_array(request()->get("permissions")) ? implode(",", array_filter(request()->get("permissions"))) : null;
+        }
     }
     
     /**

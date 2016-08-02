@@ -26,8 +26,13 @@
     <!-- Form -->
     {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)
-            <?php $_field = $data["type"]; ?>
-            {{ CmsForm::$_field($data, @$resource) }}
+            @if ($controller == "UsersController" and $data["name"] == "permissions")
+                {{-- Special permissions drop for users --}}
+                {{ CmsForm::permissions($data, @$resource) }}
+            @else
+                <?php $_field = $data["type"]; ?>
+                {{ CmsForm::$_field($data, @$resource) }}
+            @endif
         @endforeach
         {{ CmsForm::buttons() }}
     {{ CmsForm::close() }}

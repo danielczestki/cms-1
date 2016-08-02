@@ -11,8 +11,11 @@
         </div>
     </div>
     
+    {{ CmsForm::error() }}
+    {{ CmsForm::success() }}
+    
     <div class="Box">
-        Quick links to appear here... at some point.
+        Quick links to appear here... at some point.        
     </div>
         
 @endsection

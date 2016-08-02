@@ -11,6 +11,7 @@ use Collective\Html\HtmlServiceProvider;
 
 use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
+use Thinmartian\Cms\App\Http\Middleware\RedirectIfNotPermitted;
 use Thinmartian\Cms\App\Http\Middleware\ValidMediaType;
 use Thinmartian\Cms\App\Http\Middleware\AllowedMediaType;
 use Thinmartian\Cms\App\Http\Middleware\IsMediaType;
@@ -131,6 +132,7 @@ class CmsServiceProvider extends ServiceProvider
     {
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
+        $router->middleware("permitted.cms", RedirectIfNotPermitted::class);
         $router->middleware("cms.media.valid", ValidMediaType::class);
         $router->middleware("cms.media.allowed", AllowedMediaType::class);
         $router->middleware("cms.media.is", IsMediaType::class);

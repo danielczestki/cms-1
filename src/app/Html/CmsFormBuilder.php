@@ -3,7 +3,7 @@
 namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
-use CmsImage, CmsVideo, CmsDocument, CmsEmbed;
+use CmsImage, CmsVideo, CmsDocument, CmsEmbed, CmsYaml;
 
 class CmsFormBuilder {
     
@@ -167,6 +167,37 @@ class CmsFormBuilder {
     {
         $data["class"] = @$data["class"] . " Form__select";
         $data["options"] = ["" => "Please Select..."] + $data["options"];
+        return $this->render(view("cms::html.form.select", $this->buildData($data))); 
+    }
+    
+    /**
+     * Render a permissions select
+     * 
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function permissions($data = [])
+    {
+        $arr = [];
+        $data["class"] = @$data["class"] . " Form__select";
+        $data["name"] .= "[]";
+        
+        // Fetch the modules
+        $defs = CmsYaml::getAllYamls();
+        foreach ($defs as $def) {
+            $yaml = CmsYaml::parseYaml($def->getRealpath());
+            $value = @CmsYaml::getFilename($def);
+            $label = @$yaml["meta"]["title"];
+            $show = @$yaml["meta"]["show_in_nav"];
+            if ($label and $value and $show) {
+                $arr[$value] = $label;
+            }
+        }
+        $size = count($defs) + 1;
+        $data["options"] = ["" => "-- All --"] + $arr;
+        $data["multiple"] = true;
+        $data["size"] = min(6, $size);
+        $data["style"] = "height:auto;" . (isset($data["style"]) ? $data["style"] : null);
         return $this->render(view("cms::html.form.select", $this->buildData($data))); 
     }
     

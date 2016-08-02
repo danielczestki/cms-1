@@ -43,6 +43,10 @@ fields:
     label: "Confirm password"
     persist: false
     validationOnCreate: "required"
+  permissions:
+    label: "Allowed access to"
+    persist: true
+    help: "User will only be allowed access to the selected modules. Leave empty for no restrictions"
  
 # Listing columns for the listing/index page (ID, Date created and Date updated are automatically added)
 listing:

@@ -47,6 +47,18 @@ class CmsUser extends Authenticatable
     }
     
     /**
+     * Return the permissions attribute
+     * 
+     * @param  string $value
+     * @return array
+     */
+    public function getPermissionsAttribute($value)
+    {
+        if (empty($value)) return null;
+        return explode(",", $value);
+    }
+    
+    /**
      * Boot methods
      * 
      * @return void

@@ -34,6 +34,7 @@ trait Setter
     {
         $cms = new Cms;
         if (array_key_exists("persist", $data) and ! $data["persist"]) return false;
+        if (! array_key_exists("type", $data)) return true;
         if (in_array($data["type"], $cms->getIgnoredFieldTypes())) return false;
         return true;
     }

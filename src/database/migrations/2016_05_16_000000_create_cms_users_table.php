@@ -18,6 +18,7 @@ class CreateCmsUsersTable extends Migration
             $table->string('surname', 20);
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('permissions', 4000)->nullable()->comment("Comma list of accessbile modules");
             $table->rememberToken();
             $table->timestamps();
         });
