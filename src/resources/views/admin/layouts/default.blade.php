@@ -42,7 +42,7 @@
     </main>
     
     <!-- Build version -->
-    <div class="Build">Build {{-- CMSVERSION --}}</div>
+    {{-- <div class="Build">Build CMSVERSION</div> --}}
     
     {{-- Output any custom/specific javascripts --}}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
