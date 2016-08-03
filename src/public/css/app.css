@@ -1925,6 +1925,61 @@ a:visited:hover {
     margin: 0 0 12px;
   }
 }
+.Quicklinks {
+  *zoom: 1;
+}
+.Quicklinks:before{
+  content: '';
+  display: table;
+}
+.Quicklinks:after{
+  content: '';
+  display: table;
+  clear: both;
+}
+.Quicklinks__item {
+  width: calc(25% - 6px);
+  height: 250px;
+  margin: 0 6px 6px 0;
+  float: left;
+}
+.Quicklinks__link {
+  transition: background 0.2s;
+  width: 100%;
+  height: 100%;
+  border: solid 1px #dcdcdc;
+  text-align: center;
+  display: block;
+}
+.Quicklinks__link:hover {
+  background: #f4f4f4;
+}
+.Quicklinks__link .fa {
+  margin: 0 0 24px;
+  font-size: 70px;
+}
+.Quicklinks__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+@media (max-width: 1023px) {
+  .Quicklinks__item {
+    width: calc(33.3333% - 6px);
+  }
+}
+@media (max-width: 767px) {
+  .Quicklinks__item {
+    width: calc(50% - 6px);
+  }
+}
+@media (max-width: 479px) {
+  .Quicklinks__item {
+    width: auto;
+    margin-right: 0;
+    float: none;
+  }
+}
 body.Listing .Filters__filter--totals {
   padding-top: 6px;
   float: left;

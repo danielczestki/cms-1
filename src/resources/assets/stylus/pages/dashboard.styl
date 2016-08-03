@@ -1,0 +1,48 @@
+
+.Quicklinks
+    lost-utility: clearfix
+    
+    &__item
+        width: calc(25% - 6px)
+        height: 250px
+        margin: 0 6px 6px 0
+        float: left
+        
+    &__link
+        transition: background .2s
+        width: 100%
+        height: 100%
+        border: solid 1px $Color__grey--4
+        text-align: center
+        display: block
+        &:hover
+            background: $Color__grey--5
+        
+        .fa 
+            margin: 0 0 24px
+            font-size: 70px
+    
+    &__title
+        margin: 0
+        font-size: 20px
+        font-weight: 600
+        
+//
+// Responsive
+//
+
++respond(all-devices)
+    .Quicklinks
+        &__item
+            width: calc(33.3333% - 6px)
++respond(all-phones)
+    .Quicklinks
+        &__item
+            width: calc(50% - 6px)
++respond(phone-portrait)
+    .Quicklinks
+        &__item
+            width: auto
+            margin-right: 0
+            float: none
+            
