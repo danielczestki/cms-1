@@ -63,7 +63,9 @@ class Yaml {
      */
     public function getListing()
     {
-        if (! array_key_exists("listing", $this->yaml)) return null;
+        if (! array_key_exists("listing", $this->yaml)) {
+            exit("<strong>" . basename($this->file) . "</strong> is missing the 'listing' array. Check the readme for more information or refer to one of the default .yaml files for an example.");
+        }
         // bind ID and dates to it, as they must always show
         $listing = array_merge([
             "id" => [
