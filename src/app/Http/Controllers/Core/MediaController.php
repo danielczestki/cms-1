@@ -48,7 +48,11 @@ class MediaController extends BaseController
      */
     public function index()
     {
-        $listing = CmsMedium::whereIn("type", $this->getAllowed())->orderBy("created_at", "desc")->get();
+        $listing = CmsMedium::whereIn("type", $this->getAllowed())->orderBy("created_at", "desc");
+        if ($q = request()->get("q")) {
+            $listing = $listing->where("title", "like", "%{$q}%");
+        }
+        $listing = $listing->get();
         return view("cms::admin.media.index", compact("listing"));
     }
     
