@@ -498,3 +498,24 @@ fields:
     className: 'author' # optional: classname related to this model e.g if the class is CmsAuthor you can put 'author'
     relationField: 'name' # optional: name of field to show in dropdown stuff
 ```
+
+### Versioning
+
+1. composer require mpociot/versionable
+2. php artisan migrate --path=vendor/mpociot/versionable/src/migrations
+3. add 'version: true' to 'meta' section of yaml
+4. TODO: how can we view old versions and restore?
+
+#### Example of excluding a field from versioning
+```
+class User extends Model {
+
+    use Mpociot\Versionable\VersionableTrait;
+
+    /**
+     * @var array
+     */
+    protected $dontVersionFields = [ 'last_login_at' ];
+
+}
+```

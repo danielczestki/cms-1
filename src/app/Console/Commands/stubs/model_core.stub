@@ -6,7 +6,7 @@ use Thinmartian\Cms\App\Models\Core\Model;
 
 class {classname} extends Model
 {
-    
+    {versionable}
     /**
      * Set the YAML config filename
      * 

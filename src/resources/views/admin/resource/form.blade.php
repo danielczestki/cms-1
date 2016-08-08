@@ -39,5 +39,28 @@
         @endforeach
         {{ CmsForm::buttons() }}
     {{ CmsForm::close() }}
+
+    <!-- Article History -->
+    @if (@$resource && $resource->versions && count($resource->versions))
+        <div class="Box Utility--clearfix">
+            <h1>Revisions</h1>
+            <ul>
+                @foreach ($resource->versions as $version)
+                    @if (count($resource->currentVersion()->diff($version)))
+                        <li>
+                            <a href="{!! cmsaction($controller . '@edit', true, array_merge(['id' => $resource->id, 'version_id' => $version->version_id], $filters)) !!}">
+                                {!! $version->created_at->format('l jS \\of F Y h:i:s A') !!}
+                            </a>
+                             - 
+                            @foreach ($resource->currentVersion()->diff($version) as $key=>$item)
+                                @if (is_string($item))
+                                    {!! $key . ': ' . $item !!}
+                                @endif
+                            @endforeach
+                        </li>
+                    @endif
+                @endforeach
+        </div>
+    @endif
     
 @endsection

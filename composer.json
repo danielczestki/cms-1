@@ -15,7 +15,8 @@
         "laravel/framework": "^5.2",
         "laravelcollective/html": "^5.2",
         "symfony/filesystem": "^3.1",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "mpociot/versionable": "~2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.3",
