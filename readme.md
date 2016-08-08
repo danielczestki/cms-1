@@ -372,3 +372,38 @@ If you get a phpunit error then:
 1. Install phpunit globally as per the PHPUnit website instructions
 2. Or, add `vendor/bin/phpunit` to your `$PATH`
 3. Or, call `./vendor/bin/phpunit` instead of just `phpunit`
+
+### Relationships
+
+(unifished documentation - currently 1-2-1, 1-2-many, meny-2-many work)
+
+Eample: Article has 
+
+Add to authors.yaml:
+
+```
+# hasOne/belongsTo, hasMany/belongsTo, belongsToMany/belongsToMany, hasManyThrough, morhpedByMany
+relations:
+  article:
+    type: 'hasOne'
+#  article:
+#    type: 'hasMany'
+#  article:
+#    type: 'belongsToMany'
+#  article:
+#    type: 'hasManyThrough'
+```
+
+Add to articles.yaml:
+
+```
+# Field defs for the create/edit form
+fields:
+  author_id: # singular name
+    type: "relation"
+    label: "Author"
+    persist: true
+    relationType: 'belongsTo' # optional: belongsTo/belongsToMany/hasManyThrough/morhpedByMany
+    className: 'author' # optional: classname related to this model e.g if the class is CmsAuthor you can put 'author'
+    relationField: 'name' # optional: name of field to show in dropdown stuff
+```
