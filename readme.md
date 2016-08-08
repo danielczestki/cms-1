@@ -372,3 +372,24 @@ If you get a phpunit error then:
 1. Install phpunit globally as per the PHPUnit website instructions
 2. Or, add `vendor/bin/phpunit` to your `$PATH`
 3. Or, call `./vendor/bin/phpunit` instead of just `phpunit`
+
+### Versioning
+
+1. composer require mpociot/versionable
+2. php artisan migrate --path=vendor/mpociot/versionable/src/migrations
+3. add 'version: true' to 'meta' section of yaml
+4. TODO: how can we view old versions and restore?
+
+#### Example of excluding a field from versioning
+```
+class User extends Model {
+
+    use Mpociot\Versionable\VersionableTrait;
+
+    /**
+     * @var array
+     */
+    protected $dontVersionFields = [ 'last_login_at' ];
+
+}
+```
