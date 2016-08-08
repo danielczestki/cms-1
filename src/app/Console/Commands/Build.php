@@ -148,6 +148,8 @@ class Build extends Command
     private function deleteUnused()
     {
         if (file_exists(app_path("Cms/System/Http/Controllers/Controller.php"))) unlink(app_path("Cms/System/Http/Controllers/Controller.php"));
+        if (file_exists(app_path("Cms/System/.gitignore"))) unlink(app_path("Cms/System/.gitignore"));
+        if (file_exists(app_path("Cms/System/Http/Controllers/.gitignore"))) unlink(app_path("Cms/System/Http/Controllers/.gitignore"));
         if (file_exists(app_path("Cms/System/Http/Controllers/Auth"))) {
             $fs = new Filesystem();
             $fs->remove(app_path("Cms/System/Http/Controllers/Auth"));
