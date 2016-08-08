@@ -3,6 +3,8 @@
 @section("body_class", "Listing")
 @section("title", $title)
 
+@inject("grid", "Thinmartian\Cms\App\Services\Resource\Grid")
+
 @section("content")
     
     <!-- Title -->
@@ -96,7 +98,7 @@
                                         @if ($i == 2)
                                             <a href="{{ cmsaction($controller . '@edit', true, array_merge(['id' => $record->id], $filters)) }}">
                                         @endif
-                                        {{ $record->$idx }}
+                                        {{ $grid->render($record, $column) }}
                                         @if ($i == 2)
                                             </a>
                                         @endif

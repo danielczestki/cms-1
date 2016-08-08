@@ -61,25 +61,40 @@ class Yaml {
      * 
      * @return array
      */
+    function bla ($item, &$key) {
+        
+    }
     public function getListing()
     {
         if (! array_key_exists("listing", $this->yaml)) {
             exit("<strong>" . basename($this->file) . "</strong> is missing the 'listing' array. Check the readme for more information or refer to one of the default .yaml files for an example.");
         }
+        $fields = $this->getFields();
+        $grid = $this->yaml["listing"];
+        array_walk($grid, function($item, $key) use (&$grid, $fields) {
+            $grid[$key]["name"] = $key;
+            $grid[$key]["type"] = array_get($fields, "{$key}.type", "text");
+        });
         // bind ID and dates to it, as they must always show
         $listing = array_merge([
             "id" => [
                 "label" => "ID",
-                "sortable" => true
+                "sortable" => true,
+                "name" => "id",
+                "type" => "number"
             ]
-        ], $this->yaml["listing"], [
+        ], $grid, [
             "created_at" => [
                 "label" => "Date created",
-                "sortable" => true
+                "sortable" => true,
+                "name" => "created_at",
+                "type" => "datetime"
             ],
             "updated_at" => [
                 "label" => "Date updated",
-                "sortable" => true
+                "sortable" => true,
+                "name" => "updated_at",
+                "type" => "datetime"
             ]
         ]);
         return $listing;

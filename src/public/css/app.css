@@ -2015,6 +2015,32 @@ body.Listing .Noresults__title {
 body.Listing .Noresults__link {
   margin: 0;
 }
+body.Listing .List__column {
+  width: 100%;
+}
+body.Listing .List__column--center {
+  text-align: center;
+}
+body.Listing .List__type--number {
+  padding: 2px 8px;
+  font-family: 'Droid Sans Mono';
+  background: #e3e3e3;
+  color: #7d2727;
+  border-radius: 3px;
+  text-shadow: 1px 1px 0 #fff;
+  font-size: 14px;
+  displaty: inline-block;
+}
+body.Listing .List__type--boolean {
+  font-size: 20px;
+}
+body.Listing .List__type--boolean-1 {
+  color: #5ebd5e;
+}
+body.Listing .List__type--boolean-0 {
+  color: #a9a9a9;
+  opacity: 0.6;
+}
 @media (max-width: 1023px) {
   body.Listing .Filters__search {
     width: 170px;
