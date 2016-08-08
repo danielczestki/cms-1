@@ -5,6 +5,10 @@
 
 @section("content")
     
+    {{ Form::open(["method" => "get", "url" => route("admin.media.index"), "class" => "Search"]) }}
+        {{ Form::text("q", request()->get("q"), ["class" => "Search__field", "placeholder" => "Filter media..."]) }}
+    {{ Form::close() }}
+    
     <!-- Title -->
     <div class="Title Title--sub Utility--clearfix">
         <div class="Title__titles">
@@ -50,11 +54,19 @@
             </ul>
         @else
             <div class="MediaNoresults Utility--valign-middle"><div>
-                <p class="MediaNoresults__title">You haven't uploaded anything yet</p>
-                <a href="{{ route('admin.media.type') }}" class="Button Button--icon Button--small Button--blue">
-                    <i class="Button__icon fa fa-plus-circle"></i>
-                    Upload Media
-                </a>
+                @if (request()->get("q"))
+                    <p class="MediaNoresults__title">Sorry, nothing matched your search</p>
+                    <a href="{{ route('admin.media.index') }}" class="Button Button--icon Button--small Button--green">
+                        <i class="Button__icon fa fa-bars"></i>
+                        All Media
+                    </a>
+                @else
+                    <p class="MediaNoresults__title">You haven't uploaded anything yet</p>
+                    <a href="{{ route('admin.media.type') }}" class="Button Button--icon Button--small Button--blue">
+                        <i class="Button__icon fa fa-plus-circle"></i>
+                        Upload Media
+                    </a>
+                @endif
             </div></div>
         @endif
         

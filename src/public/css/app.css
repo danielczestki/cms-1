@@ -2087,6 +2087,21 @@ body.MediaLibrary .Title {
 body.MediaLibrary .Title--sub .Title__buttons {
   padding-top: 16px;
 }
+body.MediaLibrary .Search {
+  width: 200px;
+  height: 35px;
+  right: 35px;
+  top: 0;
+  position: fixed;
+  z-index: 100;
+}
+body.MediaLibrary .Search__field {
+  width: 100%;
+  height: 100%;
+  padding: 0 6px;
+  border: 0;
+  font-size: 14px;
+}
 body.MediaLibrary .MediaMain {
   width: 100%;
   height: calc(100% - 115px);
@@ -2220,11 +2235,11 @@ body.MediaLibrary .MediaFocal__info {
 }
 @media (max-width: 767px) {
   body.MediaLibrary .Title {
-    height: 155px;
-    padding-top: 12px;
+    height: 190px;
+    padding-top: 47px;
   }
   body.MediaLibrary .MediaMain {
-    height: calc(100% - 155px);
+    height: calc(100% - 190px);
   }
   body.MediaLibrary .MediaFocal__focus {
     width: auto;
