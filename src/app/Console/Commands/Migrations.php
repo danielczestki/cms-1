@@ -102,12 +102,17 @@ class Migrations extends Commands
         // setup
         $fullpath = $this->getFullYamlPath($filename);
         $yaml = $this->yaml->parse(file_get_contents($fullpath));
+
         // build
         $stub = file_get_contents($this->stubPath);
         $classname = $this->buildClassname($filename);
         $tablename = $this->getTablename($this->getFilename($filename));
         $schema = $this->buildSchema($yaml);
         $migration = str_ireplace(["{classname}", "{tablename}", "{schema}"], [$classname, $tablename, $schema], $stub);
+
+        // build any extra tabled needed e.g pivot table
+        $this->buildExtraTables($filename, $number, $yaml);
+
         // save the file
         $migrationname = "{$this->getFileDate()}_{$this->getFileNumber($number)}_{$this->getFilePrefix()}{$tablename}{$this->getFileSuffix()}";
         file_put_contents($this->migrationsPath . "/" . $migrationname, $migration);
@@ -128,6 +133,41 @@ class Migrations extends Commands
             if ($this->allowedColumn($data)) $result .= $this->buildColumn($column, $data);
         }
         return $result;
+    }
+
+    /**
+     * Build the relations for the migration file
+     * 
+     * @param  Symfony\Component\Yaml\Parser $yaml
+     * @return string
+     */
+    private function buildExtraTables($filename, $number, $yaml)
+    {
+        if (isset($yaml["relations"])) {
+            if (count($yaml["relations"])) {
+                foreach ($yaml["relations"] as $class=>$relation) {
+                    if ($relation['type'] == 'belongsToMany') {
+                        // build
+                        $stub = file_get_contents($this->stubPath);
+                        $class1 = substr($this->buildClassname($filename), 0, -1);
+                        $class2 = 'Cms' . ucwords($class);
+                        $tableNameArray = [$class1, $class2];
+                        sort($tableNameArray);
+                        $classname = implode($tableNameArray, '');
+                        $tablename = strtolower(implode($tableNameArray, '_'));
+                        $schema['fields'] = [
+                                            strtolower($class1 . '_id') => ['type'=>'number', 'persist'=> 1],
+                                            strtolower($class2 . '_id') => ['type'=>'number', 'persist'=> 1],
+                                            ];
+                        $schema = $this->buildSchema($schema);
+                        $migration = str_ireplace(["{classname}", "{tablename}", "{schema}"], [$classname, $tablename, $schema], $stub);
+                        // save the file
+                        $migrationname = "{$this->getFileDate()}_{$this->getFileNumber($number)}_{$this->getFilePrefix()}{$tablename}{$this->getFileSuffix()}";
+                        file_put_contents($this->migrationsPath . "/" . $migrationname, $migration);
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -177,6 +217,9 @@ class Migrations extends Commands
                 $str .= $this->buildDate($column, $data);
             break;
             case "number" :
+                $str .= $this->buildNumber($column, $data);
+            break;
+            case "relation" :
                 $str .= $this->buildNumber($column, $data);
             break;
             default :

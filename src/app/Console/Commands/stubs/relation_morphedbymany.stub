@@ -1,0 +1,8 @@
+/**
+     * Get all of the {function} for this model.
+     */
+    public function {function}()
+    {
+        return $this->morphedByMany('{model}', '{table}');
+    }
+    

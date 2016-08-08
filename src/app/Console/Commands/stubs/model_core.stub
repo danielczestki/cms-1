@@ -20,5 +20,6 @@ class {classname} extends Model
      * @var string
      */
     protected $table = "{tablename}";
-    
+
+    {relations}   
 }

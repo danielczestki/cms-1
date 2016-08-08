@@ -534,6 +534,47 @@ class CmsFormBuilder {
         return null;
     }
      
+    //
+    // RELATIONSHIPS
+    //
+    
+    /**
+     * Show a form field for the relation
+     *
+     * @param  array  $data The element attributes
+     * @return string
+     */
+    public function relation($data = []) {
+        $relations = [
+            'belongsTo' => 'select',
+            'belongsToMany' => 'selectMultiple',
+        ];
+        if (isset($data['relationType']) && isset($relations[$data['relationType']])) {
+            // we are dealing with a select
+            if ($relations[$data['relationType']] == 'select' || $relations[$data['relationType']] == 'selectMultiple') {
+                // many-to-many - use a multiselect
+                if ($relations[$data['relationType']] == 'selectMultiple') {
+                    $data['multiple'] = 'multiple';
+                }
+                // use the name of the item as default
+                $className = $data['name'];
+                // if a classname was provided, use it instead
+                if (isset($data['className']) && strlen($data['className'])) {
+                    $className = $data['className'];
+                }
+                // generate class string
+                $class = '\Thinmartian\Cms\App\Models\Core\Cms' . ucwords($className);
+                // does class exist?
+                if (class_exists($class)) {
+                    // grab options
+                    $data['options'] = $class::get()->pluck('name', 'id')->toArray();
+                    // return options
+                    return $this->{$relations['belongsTo']}($data);
+                }
+            }
+        }
+        return null;
+    }
     
     //
     // UTILS AND PRIVATE
