@@ -4,7 +4,7 @@ namespace Thinmartian\Cms\App\Models\Core;
 
 class {classname} extends Model
 {
-    
+    {versionable}
     /**
      * Set the YAML config filename
      * 
