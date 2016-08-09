@@ -22,7 +22,7 @@
     <!-- Status messages -->
     {{ CmsForm::error() }}
     {{ CmsForm::success() }}
-    
+        
     <!-- Form -->
     {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)

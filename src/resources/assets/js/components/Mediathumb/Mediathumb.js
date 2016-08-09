@@ -14,6 +14,7 @@ module.exports = {
     deleteUrl: {},
     focalUrl: {},
     previewUrl: {},
+    tinyHtml: {},
     id: {},
     icon: {},
     type: {},
@@ -42,7 +43,8 @@ module.exports = {
   methods: {
     select() {
       if (this.tiny) {
-        console.log("TINY");
+        parent.insertMediaToTiny("<p>"+ this.tinyHtml +"</p>");
+        this.parentVue.$data.media_open = false;
       } else {
         this.media.add(this.mediadata);
       }

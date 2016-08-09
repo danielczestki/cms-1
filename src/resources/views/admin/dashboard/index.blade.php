@@ -14,8 +14,6 @@
     {{ CmsForm::error() }}
     {{ CmsForm::success() }}
     
-    <a href="" v-on:click.prevent="media_click(true, [], false)">open media</a>
-    
     <div class="Box">
          <ul class="Quicklinks">
             @foreach (CmsYaml::getNav() as $idx => $nav)

@@ -28,12 +28,13 @@ import NProgress from "nprogress";
    * this work automatically. Also we only call tiny if we have a wysiwyg
    * on the page, if not, chances are tinymce isn't even on this page!
    */
+  var currentTiny;
   if ($(".Form__wysiwyg").length) {
     tinymce.init({
       selector: ".Form__wysiwyg",
       statusbar: false,
       menubar: "edit insert table view tools",
-      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat",
+      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat | mybutton",
       content_css: "/vendor/cms/css/wysiwyg.css",
       plugins: "link autolink image code paste searchreplace anchor charmap table imagetools hr contextmenu visualchars visualblocks",
       paste_data_images: true,
@@ -41,8 +42,32 @@ import NProgress from "nprogress";
       paste_webkit_styles: "color font-size",
       paste_retain_style_properties: "color font-size",
       contextmenu: "cut copy paste | bold italic | link image inserttable",
-      convert_urls: false
+      convert_urls: false,
+      setup: function (editor) {
+        editor.addButton('mybutton', {
+          text: 'Insert Media',
+          icon: false,
+          onclick: function () {
+            currentTiny = editor;
+            window.vueApp.media_click(true, [], false);
+          }
+        });
+      }
     });
+    
+  }
+  
+  /**
+   * Insert a media item to the tiny wysiwyg
+   * 
+   * @param  {string} url
+   */
+  window.insertMediaToTiny = function(html) {
+    if (currentTiny) {
+      currentTiny.execCommand("mceInsertContent", false, html);
+    } else {
+      tinymce.activeEditor.execCommand("mceInsertContent", false, html);
+    }
   }
   
   // Insert contet at the current cursor position ("f-body" is the ID of the textarea)
