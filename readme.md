@@ -519,3 +519,10 @@ class User extends Model {
 
 }
 ```
+
+### API
+```
+# General meta data for the section
+meta:
+	api: true
+```
