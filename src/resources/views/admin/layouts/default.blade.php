@@ -6,7 +6,7 @@
 <body class="@yield('body_class')"><div id="app" class="Nav--closed" :class="{'Nav--closed': ! nav_open, 'Nav--open': nav_open}">
     
     <!-- Media dialog popup -->
-    <mediadialog :media_allowed="media_allowed" :open.sync="media_open" src="{{ route('admin.media.index') }}"></mediadialog>
+    <mediadialog :media_allowed="media_allowed" :media_deleted="media_deleted" :open.sync="media_open" src="{{ route('admin.media.index') }}"></mediadialog>
     
     <!-- Header -->
     <header class="Header">

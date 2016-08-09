@@ -9,6 +9,8 @@
     id="{{ $media->id }}"
     icon="{{ CmsImage::getIconByType($media->type) }}"
     type="{{ $media->type }}"
+    :deleted="{{ $deleted }}"
+    :tiny="{{ $tiny }}"
 >
 
     @if ($media->type == "image")

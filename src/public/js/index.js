@@ -45107,7 +45107,8 @@ if (document.getElementById("app")) {
       nav_open: false, // is the nav open or not
       media_open: false, // is the media dialog open or not?
       media_focus: null,
-      media_allowed: null
+      media_allowed: null,
+      media_deleted: true
     },
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
@@ -45137,8 +45138,10 @@ if (document.getElementById("app")) {
       media_click: function media_click() {
         var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
         var allowed = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+        var deleted = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
         this.media_allowed = allowed.join(",");
+        this.media_deleted = deleted;
         this.media_open = state ? state : !this.media_open;
       }
     }
@@ -45344,11 +45347,11 @@ module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window
 
 module.exports = {
 
-  props: ["media_allowed", "open", "src"],
+  props: ["media_allowed", "media_deleted", "open", "src"],
   template: require("./Mediadialog.html"),
   computed: {
     _src: function _src() {
-      return this.open ? this.src + "?allowed=" + this.media_allowed : "about:blank";
+      return this.open ? this.src + "?allowed=" + this.media_allowed + "&deleted=" + this.media_deleted + "&tiny=" + (this.media_deleted ? false : true) : "about:blank";
     }
   },
   methods: {
@@ -45400,13 +45403,14 @@ module.exports = {
     previewUrl: {},
     id: {},
     icon: {},
-    type: {}
+    type: {},
+    deleted: { default: true },
+    tiny: { default: false }
   },
   template: require("./Mediathumb.html"),
   data: function data() {
     return {
-      deleting: false,
-      deleted: true
+      deleting: false
     };
   },
 
@@ -45415,7 +45419,7 @@ module.exports = {
       return this.parentVue.$data.media_focus;
     },
     media: function media() {
-      return this.parentVue.$refs[this.focused];
+      return this.tiny ? null : this.parentVue.$refs[this.focused];
     }
   },
   watch: {
@@ -45425,7 +45429,11 @@ module.exports = {
   },
   methods: {
     select: function select() {
-      this.media.add(this.mediadata);
+      if (this.tiny) {
+        console.log("TINY");
+      } else {
+        this.media.add(this.mediadata);
+      }
     },
     delete: function _delete() {
       var _this = this;
@@ -45445,6 +45453,7 @@ module.exports = {
       });
     },
     update: function update() {
+      if (this.tiny) return false;
       var currentIds = this.media.ids();
       if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }

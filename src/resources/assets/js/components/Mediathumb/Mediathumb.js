@@ -16,13 +16,14 @@ module.exports = {
     previewUrl: {},
     id: {},
     icon: {},
-    type: {}
+    type: {},
+    deleted: { default: true },
+    tiny: { default: false }
   },
   template: require("./Mediathumb.html"),
   data() {
     return {
-      deleting: false,
-      deleted: true
+      deleting: false
     }
   },
   computed: {
@@ -30,7 +31,7 @@ module.exports = {
       return this.parentVue.$data.media_focus;
     },
     media() {
-      return this.parentVue.$refs[this.focused];
+      return this.tiny ? null : this.parentVue.$refs[this.focused];
     }
   },
   watch: {
@@ -40,7 +41,11 @@ module.exports = {
   },
   methods: {
     select() {
-      this.media.add(this.mediadata);
+      if (this.tiny) {
+        console.log("TINY");
+      } else {
+        this.media.add(this.mediadata);
+      }
     },
     delete() {
       if (! confirm("Are you sure you want to permanently delete this media record?")) return false;
@@ -58,6 +63,7 @@ module.exports = {
       });
     },
     update() {
+      if (this.tiny) return false;
       let currentIds = this.media.ids();
       if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }
