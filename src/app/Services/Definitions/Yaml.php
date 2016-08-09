@@ -61,13 +61,13 @@ class Yaml {
      * 
      * @return array
      */
-    function bla ($item, &$key) {
-        
-    }
     public function getListing()
     {
         if (! array_key_exists("listing", $this->yaml)) {
             exit("<strong>" . basename($this->file) . "</strong> is missing the 'listing' array. Check the readme for more information or refer to one of the default .yaml files for an example.");
+        }
+        if (! array_key_exists("searchable", $this->yaml)) {
+            exit("<strong>" . basename($this->file) . "</strong> is missing the 'searchable' array. Check the readme for more information or refer to one of the default .yaml files for an example.");
         }
         $fields = $this->getFields();
         $grid = $this->yaml["listing"];
