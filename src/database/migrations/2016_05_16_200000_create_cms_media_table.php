@@ -17,6 +17,7 @@ class CreateCmsMediaTable extends Migration
             $table->enum('type', ['image', 'video', 'document', 'embed']);
             $table->string('cache_buster', 15)->nullable();
             $table->string('title', 100);
+            $table->string('description', 2000)->nullable();
             $table->boolean('uploaded')->default(0)->comment("Did the file upload successfully");
             $table->string('filename', 20)->nullable();
             $table->string('extension', 6)->nullable();

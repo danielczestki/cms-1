@@ -37,6 +37,12 @@
                 "maxlength" => 100,
                 "info" => $mediakey == 'image' ? "Also serves as the image alt attribute" : null
             ]) }}
+            {{ CmsForm::textarea([
+                "name" => "description",
+                "label" => "Description",
+                "maxlength" => 2000,
+                "info" => "Optional media description"
+            ]) }}
             @if ($formtype == "edit") 
                 {{ CmsForm::content([
                     "label" => "Current media",

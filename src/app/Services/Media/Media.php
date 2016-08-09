@@ -86,6 +86,7 @@ class Media
         $record = new CmsMedium;
         $record->type = $this->input->type;
         $record->title = $this->input->title;
+        $record->description = $this->input->description;
         $record->uploaded = $uploaded;
         $record->save();
         $this->cmsMedium = $record;
@@ -99,6 +100,7 @@ class Media
     protected function updateCmsMedium()
     {
         $this->cmsMedium->title = $this->input->title;
+        $this->cmsMedium->description = $this->input->description;
         $this->cmsMedium->uploaded = $this->uploadedFile->uploaded;
         $this->cmsMedium->filename = $this->uploadedFile->filename;
         $this->cmsMedium->extension = $this->uploadedFile->extension;
