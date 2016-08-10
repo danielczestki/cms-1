@@ -64,7 +64,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Thinma
 
                 // get all records
                 // /api/users
-                // /api/users?page=2
+                // /api/users?page=3&amount=5 (defaults to page 1, amount 10)
                 Route::get(strtolower($filename), [function() use ($singular){
                     return App::make('Thinmartian\Cms\App\Http\Controllers\Core\ApiController')->getAll('Thinmartian\Cms\App\Models\Core\Cms' . ucwords($singular));
                 }]);
