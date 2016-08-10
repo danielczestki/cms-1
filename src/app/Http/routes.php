@@ -50,7 +50,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Thinma
                 $singular = str_singular($filename);
                 // /api/users/{CmsUser}
                 // /api/users/12
-                // does not work unless we can typwe hint with a string :(
+                // does not work unless we can type hint with a string :(
                 //// Route::get(strtolower($filename) . '/{Cms' . ucwords($singular) . '}', function (Thinmartian\Cms\App\Models\Core\CmsAuthor $CmsAuthor) {
                 ////    return $CmsAuthor;
                 //// });
@@ -63,12 +63,11 @@ Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Thinma
                 }]);
 
                 // get all records
-                // /api/users/
+                // /api/users
+                // /api/users?page=2
                 Route::get(strtolower($filename), [function() use ($singular){
                     return App::make('Thinmartian\Cms\App\Http\Controllers\Core\ApiController')->getAll('Thinmartian\Cms\App\Models\Core\Cms' . ucwords($singular));
                 }]);
-
-                // TODO: pagination
             }
         }
     }
