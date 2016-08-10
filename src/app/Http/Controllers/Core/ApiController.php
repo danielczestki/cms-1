@@ -5,7 +5,7 @@ namespace Thinmartian\Cms\App\Http\Controllers\Core;
 use App\User;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Pagination\Paginator
+use Illuminate\Pagination\Paginator;
 
 class ApiController extends Controller
 {
