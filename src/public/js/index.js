@@ -45560,7 +45560,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       paste_webkit_styles: "color font-size",
       paste_retain_style_properties: "color font-size",
       contextmenu: "cut copy paste | bold italic | link image inserttable",
+      image_advtab: true,
       convert_urls: false,
+      style_formats_merge: true,
+      style_formats: [{ title: 'Image Left', selector: 'img', styles: {
+          'float': 'left',
+          'margin': '0 10px 0 10px'
+        } }, { title: 'Image Right', selector: 'img', styles: {
+          'float': 'right',
+          'margin': '0 10px 0 10px'
+        } }],
       setup: function setup(editor) {
         editor.addButton('mybutton', {
           text: 'Insert Media',
