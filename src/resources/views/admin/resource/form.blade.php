@@ -41,7 +41,7 @@
     {{ CmsForm::close() }}
 
     <!-- Article History -->
-    @if (@$resource && $resource->versions && count($resource->versions))
+    @if (@$resource && $resource->versions && count($resource->versions) > 1)
         <div class="Box Utility--clearfix">
             <h1>Revisions</h1>
             <ul>
