@@ -5,10 +5,83 @@ namespace Thinmartian\Cms\App\Http\Controllers\Core;
 use App\User;
 use App\Http\Controllers\Controller;
 
+use Thinmartian\Cms\App\Models\Core\CmsApiKeys;
+
 use Illuminate\Support\Facades\Input;
 
 class ApiController extends Controller
 {
+
+    protected $fields = [
+                            ['type' => 'text', 
+                             'label' => 'Label',
+                             'persist' => 1,
+                             //'value' => '',
+                             'name' => 'label'],
+                            ['type' => 'text', 
+                             'label' => 'Key',
+                             'persist' => 1,
+                             //'value' => '',
+                             'name' => 'key'],
+                        ];
+
+    protected $columns = ['id' => [
+                                    'label' => 'ID',
+                                    'sortable' => 1,
+                                    'name' => 'id',
+                                    'type' => 'number'
+                                  ],
+                          'label' => [
+                                       'label' => 'Label',
+                                       'sortable' => 1,
+                                       'name' => 'label',
+                                       'type' => 'text'
+                                     ],
+                          'key' => [
+                                      'label' => 'Key',
+                                      'sortable' => 1,
+                                      'name' => 'key',
+                                      'type' => 'text'
+                                   ],
+                          'created_at' => [
+                                             'label' => 'Date created',
+                                             'sortable' => 1,
+                                             'name' => 'created_at',
+                                             'type' => 'datetime'
+                                          ],
+                          'created_at' => [
+                                             'label' => 'Date updated',
+                                             'sortable' => 1,
+                                             'name' => 'updated_at',
+                                             'type' => 'datetime'
+                                          ],
+                         ];
+
+    public function index() {
+        return view("cms::admin.api.index", [
+            'title' => 'API Keys',
+            'controller' => 'Core\ApiController',
+            'filters' => [],
+            'listing' => CmsApiKeys::all(),
+            'perpage' => 99,
+            'columns' => $this->columns,
+        ]);
+    }
+
+    public function edit($id) {
+        return view("cms::admin.api.form", [
+            'title' => 'API Keys',
+            'subtitle' => 'Key',
+            'controller' => 'Core\ApiController',
+            'filters' => [],
+            'type' => 'edit',
+            'resource' => CmsApiKeys::find($id),
+            'fields' => $this->fields,
+        ]);
+    }
+
+    public function store() {}
+
     public function get($id = null, $model = null) {
         if (class_exists($model)) {
             $model = $model::find($id);

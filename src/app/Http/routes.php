@@ -9,7 +9,7 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
         Route::auth();
 
         // api route
-        Route::resource('api', 'ApiController');
+        Route::resource('api', 'ApiController', ["except" => "show"]);
     });
     
     // Custom/editable routes (copied over on publish)
