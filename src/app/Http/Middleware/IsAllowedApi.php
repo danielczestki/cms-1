@@ -19,7 +19,7 @@ class IsAllowedApi
     public function handle($request, Closure $next, $type = null)
     {
         // key is in db
-        if (CmsApiKeys::where('key', $request->key)->first()) return $next($request);
+        if (!empty($request->key) && CmsApiKeys::where('key', $request->key)->first()) return $next($request);
 
         // key is not in db
         abort(403, 'Access denied');
