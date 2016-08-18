@@ -41,7 +41,7 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
 });
 
 // some api routes
-Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Thinmartian\Cms\App\Http\Controllers\Core'], function () {
+Route::group(['prefix' => 'api', 'middleware' => 'isAllowedApi', 'namespace' => 'Thinmartian\Cms\App\Http\Controllers\Core'], function () {
     // loop through files
     if (file_exists(app_path('Cms/Definitions/'))) {
         $finder = new Finder();
