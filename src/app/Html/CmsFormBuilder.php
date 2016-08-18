@@ -38,7 +38,7 @@ class CmsFormBuilder {
      */
     public function model($data)
     {
-        $cmsAppAction = isset($data["cmsAppAction"]) ? $data["cmsAppAction"] : false;
+        $cmsAppAction = (isset($data["cmsAppAction"]) && $data["cmsAppAction"]) || !isset($data["cmsAppAction"]) ? true : false;
         $filters = $data["type"] == "edit" ? array_merge(["id" => $data["model"]->id], $data["filters"]) : $data["filters"];
         $data["url"] = cmsaction($data["controller"] . ($data["type"] == "edit" ? "@update" : "@store"), $cmsAppAction, $filters);
         $data["method"] = $data["type"] == "edit" ? "PUT" : "POST";
