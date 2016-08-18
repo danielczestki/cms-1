@@ -4,6 +4,8 @@ namespace Thinmartian\Cms\App\Models\Core;
 
 use Illuminate\Database\Eloquent\Model as Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class CmsApiKeys extends Model
 {
 
