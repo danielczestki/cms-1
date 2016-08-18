@@ -93,10 +93,6 @@ class Destroy extends Command
             $this->destroyAssetsFolder();
             //  Delete the public config folder
             $this->destroyConfigFolder();
-            //  Delete all models
-            $this->destroyModels();
-            //  Delete all controllers
-            $this->destroyControllers();
             //  Delete all migrations
             $this->destroyMigrations();
             //  Drop DB tables and clean migrations table
@@ -146,56 +142,6 @@ class Destroy extends Command
     {
         $this->filesystem->remove(config_path("cms"));
     }
-        
-    /**
-     * Deletes the Package/Models
-     * 
-     * @return void
-     */
-    protected function destroyModels()
-    {
-        $core = $this->srcpath . "/app/Models/Core";
-        $custom = $this->srcpath . "/app/Models/Custom";
-        $coreProtected = $this->cms->getProtectedModels();
-        $customProtected = $this->cms->getProtectedFiles();
-        // core
-        foreach($this->finder->create()->files()->in($core) as $filepath => $file) {
-            if (! $this->ignore($coreProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
-        // custom
-        foreach($this->finder->create()->files()->in($custom) as $filepath => $file) {
-            if (! $this->ignore($customProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
-    }
-    
-    /**
-     * Deletes the Package/Controllers
-     * 
-     * @return void
-     */
-    protected function destroyControllers()
-    {
-        $core = $this->srcpath . "/app/Http/Controllers/Core";
-        $custom = $this->srcpath . "/app/Http/Controllers/Custom";
-        $coreProtected = $this->cms->getProtectedControllers();
-        $customProtected = $this->cms->getProtectedFiles();
-        // core
-        foreach($this->finder->create()->files()->in($core) as $filepath => $file) {
-            if (! $this->ignore($coreProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
-        // custom
-        foreach($this->finder->create()->files()->in($custom) as $filepath => $file) {
-            if (! $this->ignore($customProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
-    }
     
     /**
      * Deletes all migrations files
@@ -204,15 +150,9 @@ class Destroy extends Command
      */
     protected function destroyMigrations()
     {
-        $package = $this->srcpath . "/database/migrations";
+        //$package = $this->srcpath . "/database/migrations";
         $app = database_path("migrations");
         $packageProtected = $this->cms->getProtectedMigrations();
-        // package
-        foreach($this->finder->create()->files()->in($package) as $filepath => $file) {
-            if (! $this->ignore($packageProtected, $file)) {
-                $this->filesystem->remove($filepath);
-            }
-        }
         // app (different as we do a match as we have no idea whats in here)
         foreach($this->finder->create()->files()->in($app) as $filepath => $file) {
             if (str_contains($file->getFilename(), "_cms_")) {

@@ -34,13 +34,8 @@ class Video extends Media
         // Set and check
         if ($cms_medium_id) $this->setCmsMedium($cms_medium_id);
         if ($this->cmsMedium->type != "video") return false;
-        if ($this->getStatus()) {
-            // It's ready
-            return $this->getPublicUrl("cms/media/{$this->cmsMedium->id}/encoded/{$this->cmsMedium->filename}.{$this->cmsMedium->extension}");
-        } else {
-            // Still waiting...
-            return false;
-        }
+        // It's ready
+        return $this->getPublicUrl("cms/media/{$this->cmsMedium->id}/encoded/{$this->cmsMedium->filename}.{$this->cmsMedium->extension}");
     }
     
     /**

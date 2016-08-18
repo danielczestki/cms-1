@@ -12,7 +12,7 @@
 </head>
 <body class="@yield('body_class')">
     
-    <div class="Session-version Utility--muted">Build {{ CMSVERSION }}</div>
+     {{--<div class="Session-version Utility--muted">Build CMSVERSION </div>--}}
     <div class="Background"></div>
     
     @yield("content")

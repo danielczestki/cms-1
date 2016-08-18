@@ -6,7 +6,7 @@
 <body class="@yield('body_class')"><div id="app" class="Nav--closed" :class="{'Nav--closed': ! nav_open, 'Nav--open': nav_open}">
     
     <!-- Media dialog popup -->
-    <mediadialog :media_allowed="media_allowed" :open.sync="media_open" src="{{ route('admin.media.index') }}"></mediadialog>
+    <mediadialog :media_allowed="media_allowed" :media_deleted="media_deleted" :open.sync="media_open" src="{{ route('admin.media.index') }}"></mediadialog>
     
     <!-- Header -->
     <header class="Header">
@@ -21,10 +21,10 @@
             <div class="Header__tools Header__tools--right">
                 <ul class="Header__options">
                     <li class="Header__option Header__option--no-link Header__dropdowner">
-                        <img src="{{ gravatar(Auth::user()->email) }}" alt="{{ Auth::user()->firstname . " " . Auth::user()->surname }}" class="Avatar Avatar--small">
-                        <span class="Header__username">{{ Auth::user()->firstname }}</span>
+                        <img src="{{ gravatar(Auth::guard('cms')->user()->email) }}" alt="{{ Auth::guard("cms")->user()->firstname . " " . Auth::guard("cms")->user()->surname }}" class="Avatar Avatar--small">
+                        <span class="Header__username">{{ Auth::guard("cms")->user()->firstname }}</span>
                         <ul class="Header__dropdown">
-                            <li class="Header__dropdown-option"><a href="{{ route('admin.users.edit', Auth::user()->id) }}" class="Header__link">Edit profile</a></li>
+                            <li class="Header__dropdown-option"><a href="{{ route('admin.users.edit', Auth::guard("cms")->user()->id) }}" class="Header__link">Edit profile</a></li>
                             <li class="Header__dropdown-option"><a href="{{ cmsaction("Core\Auth\AuthController@logout") }}" class="Header__link">Logout</a></li>
                         </ul>
                     </li>
@@ -42,7 +42,7 @@
     </main>
     
     <!-- Build version -->
-    <div class="Build">Build {{ CMSVERSION }}</div>
+    {{-- <div class="Build">Build CMSVERSION</div> --}}
     
     {{-- Output any custom/specific javascripts --}}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>

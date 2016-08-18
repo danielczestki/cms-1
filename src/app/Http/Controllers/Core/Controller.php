@@ -52,10 +52,6 @@ abstract class Controller extends BaseController
         CmsYaml::setFile($this->name);
         $this->setModel();
         $this->input = new ResourceInput;
-        
-        //$record = \App::make("App\Cms\CmsPlayground")->find(1);
-        //de($record->media);
-        
         $this->sharedVars();        
     }
     

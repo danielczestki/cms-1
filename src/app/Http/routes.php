@@ -11,14 +11,17 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     
     // Custom/editable routes (copied over on publish)
     Route::group(["namespace" => "App\Cms\Http\Controllers", "middleware" => ["auth.cms"]], function() {
-                
         // Build routes from the Yaml
         if (file_exists(app_path("Cms/Definitions/"))) {
-            $finder = new Finder();
-            foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
-                $filename = $file->getBasename('.' . $file->getExtension());
-                Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
-            }
+                $finder = new Finder();
+                foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
+                    $filename = CmsYaml::getFilename($file);
+                    Route::group(["middleware" => "permitted.cms:" . $filename], function() use ($filename) {
+                        Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
+                    });
+                }
+            
+            
             // create the special media routes
             Route::get("media/type", ["as" => "admin.media.type", "uses" => "MediaController@type"]); // select the media type (image, document, video or embed)
             Route::get("media/focal/{cms_medium_id}", ["middleware" => "cms.media.is:image", "as" => "admin.media.focal", "uses" => "MediaController@focal"]); // select the focal point for the image (image only)
@@ -31,10 +34,41 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
         }]);
         
     });
-    
+
 });
 
-// Media urls
-Route::group(["prefix" => "cms/media", "namespace" => "Thinmartian\Cms\App\Http\Controllers"], function () {
-    Route::get("{cms_medium_id}/image/{filename}-{width}x{height}-{focal}.{extension}", ["uses" => "CmsController@image"]);
+// some api routes
+Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Thinmartian\Cms\App\Http\Controllers\Core'], function () {
+    // loop through files
+    if (file_exists(app_path('Cms/Definitions/'))) {
+        $finder = new Finder();
+        foreach ($finder->in(app_path('Cms/Definitions/'))->name('*.yaml') as $file) {
+            $filename = CmsYaml::getFilename($file);
+            $yaml = CmsYaml::parseYaml($file);
+            if ($yaml && isset($yaml['meta']) && isset($yaml['meta']['api']) && $yaml['meta']['api']) {
+                // get a single item
+                $singular = str_singular($filename);
+                // /api/users/{CmsUser}
+                // /api/users/12
+                // does not work unless we can type hint with a string :(
+                //// Route::get(strtolower($filename) . '/{Cms' . ucwords($singular) . '}', function (Thinmartian\Cms\App\Models\Core\CmsAuthor $CmsAuthor) {
+                ////    return $CmsAuthor;
+                //// });
+                
+                // get a single ID
+                // /api/users/{CmsUser}
+                // /api/users/12
+                Route::get(strtolower($filename) . '/{id}', [function($id) use ($singular){
+                    return App::make('Thinmartian\Cms\App\Http\Controllers\Core\ApiController')->get($id, 'Thinmartian\Cms\App\Models\Core\Cms' . ucwords($singular));
+                }]);
+
+                // get all records
+                // /api/users
+                // /api/users?page=3&amount=5 (defaults to page 1, amount 10)
+                Route::get(strtolower($filename), [function() use ($singular){
+                    return App::make('Thinmartian\Cms\App\Http\Controllers\Core\ApiController')->getAll('Thinmartian\Cms\App\Models\Core\Cms' . ucwords($singular));
+                }]);
+            }
+        }
+    }
 });

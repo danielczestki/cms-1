@@ -2,19 +2,19 @@
 
 namespace App\Cms\Http\Controllers;
 
-use Thinmartian\Cms\App\Http\Controllers\Core\{classname} as Core{classname};
+use App\Cms\System\Http\Controllers\{classname} as System{classname};
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 
-class {classname} extends Core{classname}
+class {classname} extends System{classname}
 {
     
     /**
-     * This controller extends the core controller within the Thin Martian
-     * CMS package. Your app should use this controller and not the core
+     * This controller extends the system controller within the parent
+     * System folder. Your app should use this controller and not the system
      * controller, allowing you to customise this controller as you please.
      * 
      * The API is set out below as an example, none of the below methods are

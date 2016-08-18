@@ -58,7 +58,8 @@ class Migrations extends Commands
     public function __construct()
     {
         parent::__construct();
-        $this->migrationsPath = realpath(__DIR__ . "/../../../database/migrations/");
+        //$this->migrationsPath = realpath(__DIR__ . "/../../../database/migrations/");
+        $this->migrationsPath = database_path("migrations");
         $this->stubPath = realpath(__DIR__ . "/stubs/migration.stub");
     }
 

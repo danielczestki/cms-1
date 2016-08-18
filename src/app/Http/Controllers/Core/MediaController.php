@@ -1,6 +1,6 @@
 <?php
 
-namespace Thinmartian\Cms\App\Http\Controllers\Core;
+namespace App\Cms\System\Http\Controllers;
 
 use CmsForm, DB;
 use App\Cms\CmsMedium;
@@ -37,8 +37,12 @@ class MediaController extends BaseController
         view()->share("controller", "MediaController");
         view()->share("filters", []);
         view()->share("allowed", $this->getAllowed());
+        view()->share("deleted", $this->getDeleted());
+        view()->share("tiny", $this->getTiny());
         $this->setMedia(); // try to set the media object
         $this->setAllowed();
+        $this->setDeleted();
+        $this->setTiny();
     }
     
     /**
@@ -48,7 +52,11 @@ class MediaController extends BaseController
      */
     public function index()
     {
-        $listing = CmsMedium::whereIn("type", $this->getAllowed())->orderBy("created_at", "desc")->get();
+        $listing = CmsMedium::whereIn("type", $this->getAllowed())->orderBy("created_at", "desc");
+        if ($q = request()->get("q")) {
+            $listing = $listing->where("title", "like", "%{$q}%");
+        }
+        $listing = $listing->get();
         return view("cms::admin.media.index", compact("listing"));
     }
     
@@ -245,6 +253,26 @@ class MediaController extends BaseController
     }
     
     /**
+     * Get the deleted value for this request
+     * 
+     * @return array
+     */
+    public function getDeleted()
+    {
+        return request()->session()->get("deleted", request()->get("deleted", "true"));
+    }
+    
+    /**
+     * Get the tiny value for this request
+     * 
+     * @return array
+     */
+    public function getTiny()
+    {
+        return request()->session()->get("tiny", request()->get("tiny", "false"));
+    }
+    
+    /**
      * Upon load we should have a ?allowed params, store this for ALL pages
      * requests as it needs to travel
      */
@@ -257,6 +285,34 @@ class MediaController extends BaseController
         } else {
             $this->setAllowedSession("image,video,document,embed");
         }
+    }
+    
+    /**
+     * Do we want to hide all the media thumbs on load?
+     */
+    private function setDeleted()
+    {
+        if ($string = request()->get("deleted")) {
+            request()->session()->flash("deleted", $string);
+        } else if (request()->session()->has("deleted")) {
+            request()->session()->keep(["deleted"]);
+        } else {
+            request()->session()->flash("deleted", true);
+        }  
+    }
+    
+    /**
+     * Calling from tinymce?
+     */
+    private function setTiny()
+    {
+        if ($string = request()->get("tiny")) {
+            request()->session()->flash("tiny", $string);
+        } else if (request()->session()->has("tiny")) {
+            request()->session()->keep(["tiny"]);
+        } else {
+            request()->session()->flash("tiny", false);
+        }  
     }
     
     /**

@@ -3,7 +3,7 @@
 namespace Thinmartian\Cms;
 
 use Auth, Request;
-use Thinmartian\Cms\App\Models\Core\CmsUser;
+use App\Cms\System\CmsUser;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
@@ -11,6 +11,7 @@ use Collective\Html\HtmlServiceProvider;
 
 use Thinmartian\Cms\App\Http\Middleware\Authenticate;
 use Thinmartian\Cms\App\Http\Middleware\RedirectIfAuthenticated;
+use Thinmartian\Cms\App\Http\Middleware\RedirectIfNotPermitted;
 use Thinmartian\Cms\App\Http\Middleware\ValidMediaType;
 use Thinmartian\Cms\App\Http\Middleware\AllowedMediaType;
 use Thinmartian\Cms\App\Http\Middleware\IsMediaType;
@@ -29,7 +30,7 @@ class CmsServiceProvider extends ServiceProvider
     /**
      * Version of the Thin Martian CMS
      */
-    const CMSVERSION = "1.0.0";
+    //const CMSVERSION = "1.0.0";
     
     /**
      * Name of the package
@@ -45,7 +46,7 @@ class CmsServiceProvider extends ServiceProvider
         \Thinmartian\Cms\App\Console\Commands\Models::class,
         \Thinmartian\Cms\App\Console\Commands\Controllers::class,
         \Thinmartian\Cms\App\Console\Commands\Destroy::class,
-        \Thinmartian\Cms\App\Console\Commands\Version::class,
+        //\Thinmartian\Cms\App\Console\Commands\Version::class,
     ];
     
     /**
@@ -91,7 +92,7 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        define("CMSVERSION", self::CMSVERSION);
+        //define("CMSVERSION", self::CMSVERSION);
         $this->mergeConfig();
         $this->updateConfig();
         $this->registerYaml();
@@ -131,6 +132,7 @@ class CmsServiceProvider extends ServiceProvider
     {
         $router->middleware("auth.cms", Authenticate::class);
         $router->middleware("guest.cms", RedirectIfAuthenticated::class);
+        $router->middleware("permitted.cms", RedirectIfNotPermitted::class);
         $router->middleware("cms.media.valid", ValidMediaType::class);
         $router->middleware("cms.media.allowed", AllowedMediaType::class);
         $router->middleware("cms.media.is", IsMediaType::class);
@@ -209,7 +211,7 @@ class CmsServiceProvider extends ServiceProvider
     private function publishModels()
     {
         $this->publishes([
-            __DIR__."/app/Models/Custom" => app_path("Cms"),
+            __DIR__."/app/Models/Core" => app_path("Cms/System"),
         ], "models");
     }
     
@@ -221,7 +223,7 @@ class CmsServiceProvider extends ServiceProvider
     private function publishControllers()
     {
         $this->publishes([
-            __DIR__."/app/Http/Controllers/Custom" => app_path("Cms/Http/Controllers"),
+            __DIR__."/app/Http/Controllers/Core" => app_path("Cms/System/Http/Controllers"),
         ], "controllers");
     }
     

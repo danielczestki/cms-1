@@ -2,9 +2,9 @@
 
 namespace App\Cms;
 
-use Thinmartian\Cms\App\Models\Core\{classname} as Core{classname};
+use App\Cms\System\{classname} as System{classname};
 
-class {classname} extends Core{classname}
+class {classname} extends System{classname}
 {
     
     /**

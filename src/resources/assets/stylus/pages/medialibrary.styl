@@ -14,6 +14,19 @@ body.MediaLibrary
         background: $Color__grey--1
         &--sub .Title__buttons
             padding-top: 16px
+    .Search
+        width: 200px
+        height: 35px
+        right: 35px
+        top: 0
+        position: fixed
+        z-index: 100
+        &__field
+            width: 100%
+            height: 100%
+            padding: 0 6px
+            border: 0
+            font-size: 14px
     .MediaMain
         width: 100%
         height: "calc(100% - %s)" % $title_height
@@ -118,10 +131,10 @@ body.MediaLibrary
             &__link
                 line-height: 150px
     +respond(all-phones)
-        $title_height = 155px
+        $title_height = 190px
         .Title 
             height: $title_height
-            padding-top: 12px
+            padding-top: 47px
         .MediaMain
             height: "calc(100% - %s)" % $title_height
         .MediaFocal

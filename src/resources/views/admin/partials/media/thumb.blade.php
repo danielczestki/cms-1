@@ -1,3 +1,22 @@
+<?php 
+    switch ($media->type) {
+        case "image" :
+            $tinyHtml = '<img src="'. CmsImage::get($media->id, 800) .'" width="100%">';
+        break;
+        case "video" :
+            $tinyHtml = '<video src="'. CmsVideo::get($media->id) .'" controls preload></video>';
+        break;
+        case "embed" :
+            $tinyHtml = CmsEmbed::get($media->id);
+        break;
+        case "document" :
+            $tinyHtml = '<a href="'. CmsDocument::get($media->id) .'" target="_blank">Download '. $media->title .'</a>';
+        break;
+        default : 
+            $tinyHtml = "";
+    }
+?>
+
 <mediathumb
     :parent-vue="parentVue"
     mediadata="{{ json_encode(CmsForm::mediaArray($media)) }}"
@@ -6,9 +25,12 @@
     delete-url="{{ $delete_url }}"
     focal-url="{{ $focal_url }}"
     preview-url="{{ $preview_url }}"
+    tiny-html="{{ $tinyHtml }}"
     id="{{ $media->id }}"
     icon="{{ CmsImage::getIconByType($media->type) }}"
     type="{{ $media->type }}"
+    :deleted="{{ $deleted }}"
+    :tiny="{{ $tiny }}"
 >
 
     @if ($media->type == "image")

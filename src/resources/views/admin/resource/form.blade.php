@@ -22,12 +22,20 @@
     <!-- Status messages -->
     {{ CmsForm::error() }}
     {{ CmsForm::success() }}
-    
+        
     <!-- Form -->
     {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters]) }}
         @foreach($fields as $name => $data)
-            <?php $_field = $data["type"]; ?>
-            {{ CmsForm::$_field($data, @$resource) }}
+            @if ($controller == "UsersController" and $data["name"] == "permissions")
+                @if (Auth::guard("cms")->user()->access_level == "Admin")
+                    {{-- Special permissions drop for users --}}
+                    {{ CmsForm::access_level([], @$resource) }}
+                    {{ CmsForm::permissions($data, @$resource) }}
+                @endif
+            @else
+                <?php $_field = $data["type"]; ?>
+                {{ CmsForm::$_field($data, @$resource) }}
+            @endif
         @endforeach
         {{ CmsForm::buttons() }}
     {{ CmsForm::close() }}

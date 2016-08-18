@@ -108,7 +108,7 @@
     <main class="Main Utility--valign-middle"><div>
         @yield("content")
     </div></main>
-    <div class="Build">Build {{ CMSVERSION }}</div>
+    {{--<div class="Build">Build  CMSVERSION </div>--}}
     
 </body>
 </html>

@@ -45107,7 +45107,8 @@ if (document.getElementById("app")) {
       nav_open: false, // is the nav open or not
       media_open: false, // is the media dialog open or not?
       media_focus: null,
-      media_allowed: null
+      media_allowed: null,
+      media_deleted: true
     },
     components: {
       mediadialog: require("./components/Mediadialog/Mediadialog") // media dialog popup (the iframe basically)
@@ -45137,8 +45138,10 @@ if (document.getElementById("app")) {
       media_click: function media_click() {
         var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
         var allowed = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+        var deleted = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
         this.media_allowed = allowed.join(",");
+        this.media_deleted = deleted;
         this.media_open = state ? state : !this.media_open;
       }
     }
@@ -45344,11 +45347,11 @@ module.exports = '<div class="Media" v-if="open">\n    <div class="Media__window
 
 module.exports = {
 
-  props: ["media_allowed", "open", "src"],
+  props: ["media_allowed", "media_deleted", "open", "src"],
   template: require("./Mediadialog.html"),
   computed: {
     _src: function _src() {
-      return this.open ? this.src + "?allowed=" + this.media_allowed : "about:blank";
+      return this.open ? this.src + "?allowed=" + this.media_allowed + "&deleted=" + this.media_deleted + "&tiny=" + (this.media_deleted ? false : true) : "about:blank";
     }
   },
   methods: {
@@ -45398,15 +45401,17 @@ module.exports = {
     deleteUrl: {},
     focalUrl: {},
     previewUrl: {},
+    tinyHtml: {},
     id: {},
     icon: {},
-    type: {}
+    type: {},
+    deleted: { default: true },
+    tiny: { default: false }
   },
   template: require("./Mediathumb.html"),
   data: function data() {
     return {
-      deleting: false,
-      deleted: true
+      deleting: false
     };
   },
 
@@ -45415,7 +45420,7 @@ module.exports = {
       return this.parentVue.$data.media_focus;
     },
     media: function media() {
-      return this.parentVue.$refs[this.focused];
+      return this.tiny ? null : this.parentVue.$refs[this.focused];
     }
   },
   watch: {
@@ -45425,7 +45430,12 @@ module.exports = {
   },
   methods: {
     select: function select() {
-      this.media.add(this.mediadata);
+      if (this.tiny) {
+        parent.insertMediaToTiny("<p>" + this.tinyHtml + "</p>");
+        this.parentVue.$data.media_open = false;
+      } else {
+        this.media.add(this.mediadata);
+      }
     },
     delete: function _delete() {
       var _this = this;
@@ -45445,6 +45455,7 @@ module.exports = {
       });
     },
     update: function update() {
+      if (this.tiny) return false;
       var currentIds = this.media.ids();
       if (currentIds.indexOf(parseInt(this.id)) == -1) this.deleted = false;
     }
@@ -45535,12 +45546,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
    * this work automatically. Also we only call tiny if we have a wysiwyg
    * on the page, if not, chances are tinymce isn't even on this page!
    */
+  var currentTiny;
   if ((0, _jquery2.default)(".Form__wysiwyg").length) {
     tinymce.init({
       selector: ".Form__wysiwyg",
       statusbar: false,
       menubar: "edit insert table view tools",
-      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat",
+      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat | mybutton",
       content_css: "/vendor/cms/css/wysiwyg.css",
       plugins: "link autolink image code paste searchreplace anchor charmap table imagetools hr contextmenu visualchars visualblocks",
       paste_data_images: true,
@@ -45548,9 +45560,41 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       paste_webkit_styles: "color font-size",
       paste_retain_style_properties: "color font-size",
       contextmenu: "cut copy paste | bold italic | link image inserttable",
-      convert_urls: false
+      image_advtab: true,
+      convert_urls: false,
+      style_formats_merge: true,
+      style_formats: [{ title: 'Image Left', selector: 'img', styles: {
+          'float': 'left',
+          'margin': '0 10px 0 10px'
+        } }, { title: 'Image Right', selector: 'img', styles: {
+          'float': 'right',
+          'margin': '0 10px 0 10px'
+        } }],
+      setup: function setup(editor) {
+        editor.addButton('mybutton', {
+          text: 'Insert Media',
+          icon: false,
+          onclick: function onclick() {
+            currentTiny = editor;
+            window.vueApp.media_click(true, [], false);
+          }
+        });
+      }
     });
   }
+
+  /**
+   * Insert a media item to the tiny wysiwyg
+   * 
+   * @param  {string} url
+   */
+  window.insertMediaToTiny = function (html) {
+    if (currentTiny) {
+      currentTiny.execCommand("mceInsertContent", false, html);
+    } else {
+      tinymce.activeEditor.execCommand("mceInsertContent", false, html);
+    }
+  };
 
   // Insert contet at the current cursor position ("f-body" is the ID of the textarea)
   // tinymce.get("f-body").execCommand("mceInsertContent", false, "INSERT ME HERE");

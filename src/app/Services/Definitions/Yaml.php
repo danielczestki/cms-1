@@ -63,21 +63,38 @@ class Yaml {
      */
     public function getListing()
     {
-        if (! array_key_exists("listing", $this->yaml)) return null;
+        if (! array_key_exists("listing", $this->yaml)) {
+            exit("<strong>" . basename($this->file) . "</strong> is missing the 'listing' array. Check the readme for more information or refer to one of the default .yaml files for an example.");
+        }
+        if (! array_key_exists("searchable", $this->yaml)) {
+            exit("<strong>" . basename($this->file) . "</strong> is missing the 'searchable' array. Check the readme for more information or refer to one of the default .yaml files for an example.");
+        }
+        $fields = $this->getFields();
+        $grid = $this->yaml["listing"];
+        array_walk($grid, function($item, $key) use (&$grid, $fields) {
+            $grid[$key]["name"] = $key;
+            $grid[$key]["type"] = array_get($fields, "{$key}.type", "text");
+        });
         // bind ID and dates to it, as they must always show
         $listing = array_merge([
             "id" => [
                 "label" => "ID",
-                "sortable" => true
+                "sortable" => true,
+                "name" => "id",
+                "type" => "number"
             ]
-        ], $this->yaml["listing"], [
+        ], $grid, [
             "created_at" => [
                 "label" => "Date created",
-                "sortable" => true
+                "sortable" => true,
+                "name" => "created_at",
+                "type" => "datetime"
             ],
             "updated_at" => [
                 "label" => "Date updated",
-                "sortable" => true
+                "sortable" => true,
+                "name" => "updated_at",
+                "type" => "datetime"
             ]
         ]);
         return $listing;
@@ -112,10 +129,9 @@ class Yaml {
     public function getNav()
     {
         $arr = [];
-        $parser = new Parser();
-        $files = $this->finder->files()->in($this->path)->name("*.yaml");;
+        $files = $this->getAllYamls();
         foreach($files as $file) {
-            $yaml = $parser->parse(file_get_contents($file->getRealpath()));
+            $yaml = $this->parseYaml($file->getRealpath());
             // do loads of validation to be safe
             if (! is_array($yaml)) continue;
             if (! array_key_exists("meta", $yaml)) continue;
@@ -123,7 +139,11 @@ class Yaml {
             if (! array_key_exists("show_in_nav", $meta)) continue;
             if (! $meta["show_in_nav"]) continue;
             if (! array_key_exists("title", $meta)) continue;
-            $filename = $file->getBasename('.' . $file->getExtension());
+            $filename = $this->getFilename($file);
+            $perms = \Auth::guard("cms")->user()->permissions;
+            if (! empty($perms)) {
+                if (! in_array($filename, $perms)) continue;
+            }
             $arr[$filename] = [
                 "title" => $meta["title"],
                 "icon" => array_get($meta, "icon") ?: "folder",
@@ -157,6 +177,33 @@ class Yaml {
     /**
      * File utils
      */
+    
+    public function getFilename($file)
+    {
+        return $file->getBasename('.' . $file->getExtension());
+    }
+    
+    /**
+     * PArse the YAML
+     * 
+     * @param  string $filepath Full path to file
+     * @return Yaml
+     */
+    public function parseYaml($filepath)
+    {
+        $parser = new Parser();
+        return $parser->parse(file_get_contents($filepath));
+    }
+    
+    /**
+     * Fetch all the yamls defined
+     * 
+     * @return Finder
+     */
+    public function getAllYamls()
+    {
+        return $this->finder->files()->in($this->path)->name("*.yaml");
+    }
     
     /**
      * Fetch the currently set file path

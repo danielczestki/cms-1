@@ -1,9 +1,9 @@
 <?php
 
-namespace Thinmartian\Cms\App\Models\Core;
+namespace App\Cms\System;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Thinmartian\Cms\App\Models\Core\Setter;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class CmsUser extends Authenticatable
 {
@@ -44,6 +44,18 @@ class CmsUser extends Authenticatable
         parent::__construct($attributes);
         $this->setCmsFillable();
         $this->setCmsDates();       
+    }
+    
+    /**
+     * Return the permissions attribute
+     * 
+     * @param  string $value
+     * @return array
+     */
+    public function getPermissionsAttribute($value)
+    {
+        if (empty($value)) return null;
+        return explode(",", $value);
     }
     
     /**

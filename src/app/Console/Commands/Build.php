@@ -5,6 +5,7 @@ namespace Thinmartian\Cms\App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\DatabaseManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Build extends Command
 {
@@ -54,6 +55,10 @@ class Build extends Command
     {
         $bar = $this->setupBar();
         
+        // delete the System folder so we can rebuild it
+        $fs = new Filesystem();
+        $fs->remove(app_path("Cms/System"));
+        
         // build the directories first, to ensure correct perms
         $this->createDirectories();
         
@@ -63,29 +68,36 @@ class Build extends Command
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
             "--tag" => ["definitions"]
         ]);
-        usleep(400000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
+        $bar->setMessage("<comment>Publishing core files...</comment>");
+        $bar->advance();
+        $this->artisan->call("vendor:publish", [
+            "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
+            "--tag" => ["migrations"]
+        ]);
         $bar->advance();
         $this->artisan->call("cms:migrations");
-        usleep(400000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Generating models from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:models");
-        usleep(400000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Generating controllers from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:controllers");
-        usleep(400000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
             "--provider" => "Thinmartian\\Cms\\CmsServiceProvider"
         ]);
-        usleep(400000);
+        $this->deleteUnused();
+        usleep(200000);
         
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
         $bar->advance();
@@ -94,7 +106,7 @@ class Build extends Command
             "--tag" => ["assets"],
             "--force" => true
         ]);
-        usleep(400000);
+        usleep(200000);
         
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
@@ -103,7 +115,7 @@ class Build extends Command
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
         usleep(700000);
-        if (! $this->db->table("cms_users")->count()) {
+        if (! $this->db->table("cms_users")->where("access_level", "Admin")->count()) {
             $this->question("Please enter your CMS admin details");
             $this->requestAdmin();
             $bar->setMessage("<comment>Admin user created successfully</comment>");
@@ -117,7 +129,7 @@ class Build extends Command
         }
         
         $bar->advance();
-        usleep(600000);
+        usleep(400000);
         
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
@@ -128,12 +140,37 @@ class Build extends Command
     }
     
     /**
+     * When laravel does a vendor:publish we just copy all files across
+     * but some of these are not used in the new location, they are called
+     * from the vendor folder, so just delete these copied ones to stop
+     * people getting confused.
+     */
+    private function deleteUnused()
+    {
+        if (file_exists(app_path("Cms/System/Http/Controllers/Controller.php"))) unlink(app_path("Cms/System/Http/Controllers/Controller.php"));
+        if (file_exists(app_path("Cms/System/.gitignore"))) unlink(app_path("Cms/System/.gitignore"));
+        if (file_exists(app_path("Cms/System/Http/Controllers/.gitignore"))) unlink(app_path("Cms/System/Http/Controllers/.gitignore"));
+        if (file_exists(app_path("Cms/System/Http/Controllers/Auth"))) {
+            $fs = new Filesystem();
+            $fs->remove(app_path("Cms/System/Http/Controllers/Auth"));
+        }
+        if (file_exists(app_path("Cms/System/Model.php"))) unlink(app_path("Cms/System/Model.php"));
+        if (file_exists(app_path("Cms/System/Setter.php"))) unlink(app_path("Cms/System/Setter.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumImage.php"))) unlink(app_path("Cms/System/CmsMediumImage.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumVideo.php"))) unlink(app_path("Cms/System/CmsMediumVideo.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumDocument.php"))) unlink(app_path("Cms/System/CmsMediumDocument.php"));
+        if (file_exists(app_path("Cms/System/CmsMediumEmbed.php"))) unlink(app_path("Cms/System/CmsMediumEmbed.php"));
+    }
+    
+    /**
      * Build the directories first, so they get the correct perms
      */
     private function createDirectories()
     {
         if (! file_exists(app_path("Cms"))) mkdir(app_path("Cms"), 0777);
         if (! file_exists(app_path("Cms/Definitions"))) mkdir(app_path("Cms/Definitions"), 0777);
+        if (! file_exists(app_path("Cms/System"))) mkdir(app_path("Cms/System"), 0777);
+        if (! file_exists(app_path("Cms/System/Http/Controllers"))) mkdir(app_path("Cms/System/Http/Controllers"), 0777, true);
         if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
         if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
         
@@ -169,7 +206,7 @@ class Build extends Command
         $this->db->table("cms_users")->insert(
             array_merge(
                 array_except($credentials, ["password_confirmed", "password_confirmation"]),
-                ["created_at" => $this->db->raw("now()"), "updated_at" => $this->db->raw("now()")]
+                ["access_level" => "Admin", "created_at" => $this->db->raw("now()"), "updated_at" => $this->db->raw("now()")]
             )
         );
     }

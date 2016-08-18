@@ -5,7 +5,7 @@ namespace Thinmartian\Cms\App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class Authenticate
+class RedirectIfNotPermitted
 {
     /**
      * Handle an incoming request.
@@ -15,16 +15,12 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $filename = null)
     {
-        if (Auth::guard("cms")->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest('admin/login');
-            }
+        $perms = Auth::guard("cms")->user()->permissions;
+        if (! empty($perms)) {
+            if (! in_array($filename, $perms)) return redirect('/admin')->withError("You do not have permission to view this page");
         }
-
         return $next($request);
     }
 }
