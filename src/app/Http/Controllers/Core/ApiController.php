@@ -9,6 +9,8 @@ use Thinmartian\Cms\App\Models\Core\CmsApiKeys;
 
 use Illuminate\Support\Facades\Input;
 
+use Illuminate\Http\Request;
+
 class ApiController extends Controller
 {
 
@@ -18,11 +20,11 @@ class ApiController extends Controller
                              'persist' => 1,
                              //'value' => '',
                              'name' => 'label'],
-                            ['type' => 'text', 
+                            /*['type' => 'text', 
                              'label' => 'Key',
                              'persist' => 1,
                              //'value' => '',
-                             'name' => 'key'],
+                             'name' => 'key'],*/
                         ];
 
     protected $columns = ['id' => [
@@ -91,7 +93,33 @@ class ApiController extends Controller
         ]);
     }
 
-    public function store() {}
+    public function store(Request $request) {
+        $key = new CmsApiKeys();
+        $key->label = $request->label;
+        $key->key = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 64)), 0, 64);
+        $key->save();
+        return \Redirect::to(url('admin/api'))->with('success','Key created successfully');
+    }
+
+    public function update($id, Request $request) {
+        $key = CmsApiKeys::find($id);
+        $key->label = $request->label;
+        $key->save();
+        return \Redirect::back()->with('success','Key updated successfully');
+    }
+
+    public function destroy(Request $request) {
+        if ($request->_confirmed) {
+            CmsApiKeys::whereIn('id', $request->ids)->delete();
+            return \Redirect::to(url('admin/api'))->with('success','Keys deleted successfully');
+        }
+        return view("cms::admin.api.destroy", [
+            'title' => 'API Keys',
+            'subtitle' => 'Delete',
+            'controller' => 'Core\ApiController',
+            'filters' => [],
+        ]);
+    }
 
     public function get($id = null, $model = null) {
         if (class_exists($model)) {
