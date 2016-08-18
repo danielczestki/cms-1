@@ -7,6 +7,9 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     // Core/uneditable routes (not copied over on publish)
     Route::group(["namespace" => "Thinmartian\Cms\App\Http\Controllers\Core"], function() {
         Route::auth();
+
+        // api route
+        Route::resource('api', 'ApiController', ["except" => "show"]);
     });
     
     // Custom/editable routes (copied over on publish)
@@ -38,7 +41,7 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
 });
 
 // some api routes
-Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Thinmartian\Cms\App\Http\Controllers\Core'], function () {
+Route::group(['prefix' => 'api', 'middleware' => 'isAllowedApi', 'namespace' => 'Thinmartian\Cms\App\Http\Controllers\Core'], function () {
     // loop through files
     if (file_exists(app_path('Cms/Definitions/'))) {
         $finder = new Finder();

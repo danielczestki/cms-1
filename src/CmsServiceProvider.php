@@ -83,6 +83,8 @@ class CmsServiceProvider extends ServiceProvider
         $this->publishModels();
         $this->publishControllers();
         $this->browserActions();
+
+        $router->middleware('isAllowedApi', 'Thinmartian\Cms\App\Http\Middleware\IsAllowedApi');
     }
 
     /**
