@@ -150,6 +150,17 @@ class Yaml {
                 "url" => @route("admin.". strtolower($filename) .".index"),
                 "controller" => $filename . "Controller"
             ];
+            // if api is enabled in yaml, set a var
+            if ($yaml && isset($yaml['meta']) && isset($yaml['meta']['api']) && $yaml['meta']['api'] && !isset($enableApi)) $enableApi = true;
+        }
+        // do we want to add the api link?
+        if (isset($enableApi) && $enableApi) {
+            $arr['apikeys348290'] = [
+                "title" => 'API Keys',
+                "icon" => "key",
+                "url" => @route("admin.api.index"),
+                "controller" => "ApiController"
+            ];
         }
         return $arr;
     }
