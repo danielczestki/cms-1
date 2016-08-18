@@ -7,6 +7,9 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     // Core/uneditable routes (not copied over on publish)
     Route::group(["namespace" => "Thinmartian\Cms\App\Http\Controllers\Core"], function() {
         Route::auth();
+
+        // api route
+        Route::resource('api', 'ApiController');
     });
     
     // Custom/editable routes (copied over on publish)
