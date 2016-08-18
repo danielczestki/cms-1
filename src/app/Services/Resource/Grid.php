@@ -15,7 +15,7 @@ class Grid {
      */
     public function render($record, $column)
     {
-        $value = $record->$column["name"];
+        $value = $record->{$column["name"]};
         $type = $column["type"];
         return $this->$type($value);
     }
