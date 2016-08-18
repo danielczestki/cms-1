@@ -662,6 +662,7 @@ class CmsFormBuilder {
      */
     private function getRulesKey()
     {
+        if (! request()->route()) return "validationOnCreate";
         return str_contains(request()->route()->getAction()["controller"], "@edit") ? "validationOnUpdate" : "validationOnCreate";
     }
     

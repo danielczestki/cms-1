@@ -132,7 +132,7 @@ class Models extends Commands
         $fullpath = $this->getFullYamlPath($filename);
         $yaml = $this->yaml->parse(file_get_contents($fullpath));
         $relations  = $this->buildRelations($yaml, $filename);
-        $versioning = isset($yaml['meta']['version']) && $yaml['meta']['version'] ? 'use Mpociot\Versionable\VersionableTrait;'.PHP_EOL : false;
+        $versioning = isset($yaml['meta']['version']) && $yaml['meta']['version'] ? 'use \Mpociot\Versionable\VersionableTrait;'.PHP_EOL : false;
         
         // we are good to write
         $stub = file_get_contents($stubpath);

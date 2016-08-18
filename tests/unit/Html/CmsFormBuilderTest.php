@@ -20,10 +20,17 @@ class CmsFormBuilderTest extends TestCase
     }
     
     /** @test */
-    public function it_opens_a_form_with_the_correct_path()
+    public function it_opens_a_form()
     {
         $html = (string) $this->form->open(["url" => "/path"])->toHtml();
         $this->assertContains("/path", $html);
+    }
+    
+    /** @test */
+    public function it_closes_a_form()
+    {
+        $html = (string) $this->form->close()->toHtml();
+        $this->assertEquals("</form>", $html);
     }
     
     
