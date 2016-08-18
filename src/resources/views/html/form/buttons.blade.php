@@ -1,3 +1,4 @@
+<?php $cmsAppAction = isset($data["cmsAppAction"]) ? $data["cmsAppAction"] : false; ?>
 </div></div><div class="Box Utility--clearfix">
     <div class="Form__buttons">
         @if (! isset($hide_save))
@@ -16,7 +17,7 @@
     </div>
     @if (! isset($hide_cancel))
         <div class="Form__cancel">
-            {{ CmsForm::cancel(["url" => cmsaction($controller . '@index', true, $filters)]) }}
+            {{ CmsForm::cancel(["url" => cmsaction($controller . '@index', $cmsAppAction, $filters)]) }}
         </div>
     @endif
 </div>

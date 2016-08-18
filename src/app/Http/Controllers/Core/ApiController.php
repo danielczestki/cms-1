@@ -71,11 +71,22 @@ class ApiController extends Controller
     public function edit($id) {
         return view("cms::admin.api.form", [
             'title' => 'API Keys',
-            'subtitle' => 'Key',
+            'subtitle' => 'Edit',
             'controller' => 'Core\ApiController',
             'filters' => [],
             'type' => 'edit',
             'resource' => CmsApiKeys::find($id),
+            'fields' => $this->fields,
+        ]);
+    }
+
+    public function create() {
+        return view("cms::admin.api.form", [
+            'title' => 'API Keys',
+            'subtitle' => 'Create',
+            'controller' => 'Core\ApiController',
+            'filters' => [],
+            'type' => 'create',
             'fields' => $this->fields,
         ]);
     }

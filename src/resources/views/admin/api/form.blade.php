@@ -24,7 +24,7 @@
     {{ CmsForm::success() }}
     
     <!-- Form -->
-    {{ CmsForm::model(["model" => $resource, "controller" => $controller, "type" => $type, "filters" => $filters, "cmsAppAction" => false]) }}
+    {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters, "cmsAppAction" => false]) }}
         @foreach($fields as $name => $data)
             @if ($controller == "UsersController" and $data["name"] == "permissions")
                 @if (Auth::guard("cms")->user()->access_level == "Admin")
@@ -37,7 +37,7 @@
                 {{ CmsForm::$_field($data, @$resource) }}
             @endif
         @endforeach
-        {{--{{ CmsForm::buttons() }}--}}
+        {{ CmsForm::buttons(["model" => @$resource, "controller" => $controller, "type" => $type, "filters" => $filters, "cmsAppAction" => false]) }}
     {{ CmsForm::close() }}
     
 @endsection
