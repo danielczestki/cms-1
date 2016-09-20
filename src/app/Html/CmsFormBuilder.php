@@ -564,7 +564,7 @@ class CmsFormBuilder {
                     $className = $data['className'];
                 }
                 // generate class string
-                $class = '\Thinmartian\Cms\App\Models\Core\Cms' . ucwords($className);
+                $class = '\App\Cms\System\Cms' . ucwords($className);
                 // does class exist?
                 if (class_exists($class)) {
                     // grab options
