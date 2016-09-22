@@ -172,7 +172,7 @@ class Models extends Commands
                 // generate a function name
                 $function = strtolower($relation);
                 // model name
-                $model = 'App\Cms\System\Cms' . ucwords($relation);
+                $model = 'App\Cms\Cms' . ucwords($relation);
                 // table name
                 $table = strtolower($relation) . 'able';
                 // generate string from stub

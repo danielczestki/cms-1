@@ -564,7 +564,7 @@ class CmsFormBuilder {
                     $className = $data['className'];
                 }
                 // generate class string
-                $class = '\App\Cms\System\Cms' . ucwords($className);
+                $class = '\App\Cms\Cms' . ucwords($className);
                 // does class exist?
                 if (class_exists($class)) {
                     // grab options
