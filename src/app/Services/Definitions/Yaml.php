@@ -144,6 +144,9 @@ class Yaml {
             if (! empty($perms)) {
                 if (! in_array($filename, $perms)) continue;
             }
+            if (array_key_exists("order_by", $meta)) {
+                $sortString = "?sort=" . $meta["order_by"] . '&sort_dir=' . (array_key_exists("order", $meta) ? strtolower($meta['order']) : 'asc');
+            }
             $arr[$filename] = [
                 "title" => $meta["title"],
                 "icon" => array_get($meta, "icon") ?: "folder",
