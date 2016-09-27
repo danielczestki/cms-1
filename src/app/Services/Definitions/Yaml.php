@@ -150,7 +150,7 @@ class Yaml {
             $arr[$filename] = [
                 "title" => $meta["title"],
                 "icon" => array_get($meta, "icon") ?: "folder",
-                "url" => @route("admin.". strtolower($filename) .".index"),
+                "url" => @route("admin.". strtolower($filename) .".index") . (isset($sortString) ? $sortString : null),
                 "controller" => $filename . "Controller"
             ];
             // if api is enabled in yaml, set a var
