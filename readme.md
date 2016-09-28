@@ -533,3 +533,9 @@ meta:
 	order_by: "published_at" # optional - what field do we order by?
 	order: "DESC" # only relevant if order_by is set (ASC, DESC)
 ```
+
+### make a model versionable
+```
+use Thinmartian\Cms\App\Models\PublishedTrait; // before class
+use PublishedTrait; // inside the model class
+```
