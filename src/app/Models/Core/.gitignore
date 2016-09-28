@@ -9,3 +9,5 @@
 !CmsMediumDocument.php
 !CmsMediumEmbed.php
 !CmsApiKeys.php
+!PublishedScope.php
+!PublishedTrait.php
