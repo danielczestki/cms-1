@@ -526,3 +526,10 @@ class User extends Model {
 meta:
 	api: true
 ```
+
+### Default order in admin panel
+```
+meta:
+	order_by: "published_at" # optional - what field do we order by?
+	order: "DESC" # only relevant if order_by is set (ASC, DESC)
+```
