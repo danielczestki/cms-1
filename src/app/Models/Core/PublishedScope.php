@@ -5,7 +5,7 @@ namespace Thinmartian\Cms\App\Models\Core;
 use Illuminate\Database\Query\Builder as BaseBuilder;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Database\Eloquent\ScopeInterface;
 
 class PublishedScope implements ScopeInterface {
@@ -17,7 +17,7 @@ class PublishedScope implements ScopeInterface {
 	 * @param \Illuminate\Database\Eloquent\Model  $model
 	 * @return void
 	 */
-	public function apply(Builder $builder, Model $model)
+	public function apply(Builder $builder, BaseModel $model)
 	{
 		$column = $model->getQualifiedPublishedColumn();
 
@@ -33,7 +33,7 @@ class PublishedScope implements ScopeInterface {
 	 * @param \Illuminate\Database\Eloquent\Model  $model
 	 * @return void
 	 */
-	public function remove(Builder $builder, Model $model)
+	public function remove(Builder $builder, BaseModel $model)
 	{
 		$query = $builder->getQuery();
 
