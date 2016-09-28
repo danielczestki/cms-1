@@ -110,7 +110,12 @@ trait Form
     public function getResource($id = null)
     {
         if (! $id) return app()->abort(400, "Invalid ID");
-        if (! $model = $this->model->find($id))  return app()->abort(404, "Resource not found");
+        $result = $this->model;
+        // does this object have the 'published' column enabled?
+        if (method_exists($result, 'withDrafts')) {
+            $result = $result->withDrafts();
+        }
+        if (! $model = $result->find($id))  return app()->abort(404, "Resource not found");
         return $model;
     }
     
