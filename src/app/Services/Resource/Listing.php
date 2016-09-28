@@ -37,8 +37,12 @@ trait Listing
     public function grid()
     {
         $result = $this->model;
+        // does this object have the 'published' column enabled?
+        if (method_exists($result, 'withDrafts')) {
+            $result = $result->withDrafts();
+        }
         $result = $this->gridSelect($result);
-        $result = $this->gridSearch($result);        
+        $result = $this->gridSearch($result);
         return $result->orderBy($this->getSort(), request()->get("sort_dir", config("cms.cms.default_sort_direction")))->paginate($this->getRecordsPerPage());        
     }
     
