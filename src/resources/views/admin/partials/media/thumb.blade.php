@@ -1,7 +1,7 @@
 <?php 
     switch ($media->type) {
         case "image" :
-            $tinyHtml = '<img src="'. CmsImage::get($media->id, 800) .'" width="100%">';
+            $tinyHtml = '<img src="'. CmsImage::get($media->id, 800) .'" style="max-width:100%;" />';
         break;
         case "video" :
             $tinyHtml = '<video src="'. CmsVideo::get($media->id) .'" controls preload></video>';
