@@ -78,24 +78,27 @@ class Image extends Media
      * @param  boolean  $force          Force a regenerationg of the image (ignore the file exist check)
      * @return string
      */
-    public function get($cms_medium_id, $width = null, $height = null, $force = false)
+    public function get($cms_medium_id, $width = null, $height = null, $force = false, $scaleUp = false)
     {
         // Set and check
         $this->setCmsMedium($cms_medium_id);
         if ($this->cmsMedium->type != "image") return false;
 
-        // get the path to the original file
-        $originalFile = $this->getSourcePath();
-        // create image object
-        $originalImage = $image = $this->intervention->make($originalFile);
-        // get width
-        $originalWidth = $originalImage->width();
-        // did we request a width wider than the original?
-        if ($originalWidth < $width) {
-            $originalHeight = $originalImage->width();
-            // reset the width and height to the original images width and height
-            $width = $originalWidth;
-            $height = $originalHeight;
+        // do not scale up unless we have specified
+        if (!$scaleUp) {
+            // get the path to the original file
+            $originalFile = $this->getSourcePath();
+            // create image object
+            $originalImage = $image = $this->intervention->make($originalFile);
+            // get width
+            $originalWidth = $originalImage->width();
+            // did we request a width wider than the original?
+            if ($originalWidth < $width) {
+                $originalHeight = $originalImage->width();
+                // reset the width and height to the original images width and height
+                $width = $originalWidth;
+                $height = $originalHeight;
+            }
         }
 
         // Generate the file name now so we can check for existence first
