@@ -13,11 +13,11 @@ Thin Martian CMS platform built on the Laravel PHP Framework
 ### System Requirements
 
 - PHP 5.6+ (we use variadic functions)
-- Laravel 5.
+- Laravel 5.3
 - Database (Any Laravel supported database)
 - PHP GD library
 
-**NOTE:** This package only works with Laravel 5.2.X. 5.3 has added several breaking changes.
+**NOTE:** This package only works with Laravel 5.3. To use this module with 5.2, please install 1.0.1
 
 ### Install
 
