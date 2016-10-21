@@ -19,7 +19,6 @@ Thin Martian CMS platform built on the Laravel PHP Framework
 
 ### Install
 
-> **TO DO: Package isn't currently on packagist, so use a `repositories: [{ type: 'vcs', url: 'path/to/git' }]` in your `composer.json` for now.**
 
 Firstly, install the latest version of Laravel the usual way you do it, then:
 
