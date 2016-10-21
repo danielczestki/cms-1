@@ -8,34 +8,34 @@ use File, Storage;
 
 class Media
 {
-    
+
     /**
      * @var string
      */
     protected $tempPath;
-    
+
     /**
      * @var Thinmartian\Cms\App\Services\Resource\ResourceInput
      */
     protected $input;
-    
+
     /**
      * When dealing with a cms_medium record, store it for easy access
-     * 
+     *
      * @var App\Cms\CmsMedium
      */
     public $cmsMedium;
-    
+
     /**
      * All the details needed about the uploaded file
-     * 
+     *
      * @var Thinmartian\Cms\App\Services\Media\UploadedFile
      */
     protected $uploadedFile;
-    
+
     /**
      * Declare the valid/allow mediatypes
-     * 
+     *
      * @var array
     */
     protected $mediaTypes = [
@@ -59,7 +59,7 @@ class Media
             "icon" => "youtube"
         ],
     ];
-     
+
     /**
      * Constructor
      */
@@ -71,14 +71,14 @@ class Media
         ini_set("max_execution_time", 9999);
         set_time_limit(0);
     }
-    
+
     //
     // CRUD
-    // 
-    
+    //
+
     /**
      * Create the parent cms_medium record
-     * 
+     *
      * @return void
      */
     protected function storeCmsMedium($uploaded = 0)
@@ -91,10 +91,10 @@ class Media
         $record->save();
         $this->cmsMedium = $record;
     }
-    
+
     /**
      * Update the parent cms_medium record
-     * 
+     *
      * @return void
      */
     protected function updateCmsMedium()
@@ -110,14 +110,14 @@ class Media
         $this->cmsMedium->original_filesize = $this->uploadedFile->originalFilesize;
         $this->cmsMedium->save();
     }
-    
+
     //
     // Uploads
-    // 
-    
+    //
+
     /**
      * Upload the file to the preferred storage
-     * 
+     *
      * @return boolean
      */
     protected function upload()
@@ -137,10 +137,10 @@ class Media
         // update the parent table
         $this->updateCmsMedium();
     }
-    
+
     /**
      * Store a file on the disk
-     * 
+     *
      * @param  string $filepath Full path where the file should be stored
      * @param  string $file     The source file we want to move
      */
@@ -148,14 +148,14 @@ class Media
     {
         return Storage::disk($this->uploadedFile->disk)->put($destination, File::get($source), $this->uploadedFile->visibility);
     }
-    
+
     //
     // Validation
-    // 
-    
+    //
+
     /**
      * Determine if the media type is valid
-     * 
+     *
      * @param  string  $type
      * @return boolean
      */
@@ -166,47 +166,40 @@ class Media
         if (! $this->getMediaTypes("{$type}.enabled")) return false;
         return true;
     }
-    
+
     /**
      * Does a file exist on the storage system
-     * 
+     *
      * @param  string $filepath
      * @return boolean
      */
     public function fileExists($filepath)
     {
-        if ($this->isLocal()) {
-            // Local, so do a sotrage check as its quick
-            return Storage::disk($this->uploadedFile->disk)->exists($filepath);
-        } else {
-            // In the cloud, storage check takes double time, do a simple url check
-            $headers = @get_headers($this->getPublicUrl($filepath));
-            return strpos($headers[0], "200") ? true : false;
-        }
+        return Storage::disk($this->uploadedFile->disk)->exists($filepath);
     }
-    
+
     //
     // Getters
-    // 
-    
+    //
+
     /**
      * Determine the location of the disk and return the URL
-     * 
+     *
      * @param  string $filepath
      * @return string
      */
     public function getPublicUrl($filepath)
     {
         if ($this->isLocal()) {
-            return env("APP_URL") . "/storage/" . $filepath . "?" . $this->cmsMedium->cache_buster; 
+            return env("APP_URL") . "/storage/" . $filepath . "?" . $this->cmsMedium->cache_buster;
         } else {
             return config("cms.cms.media_cloud_url") . "/" . $filepath . "?" . $this->cmsMedium->cache_buster;
         }
     }
-    
+
     /**
      * Return the original path
-     * 
+     *
      * @param  boolean $file Bind the file to the end of the path
      * @return string
      */
@@ -214,10 +207,10 @@ class Media
     {
         return $this->uploadedFile->path . "/original/" . ($file ? $this->uploadedFile->file : null);
     }
-    
+
     /**
      * Return the path to a temp file
-     * 
+     *
      * @param  string $file Leave blank for the path only
      * @return string
      */
@@ -225,10 +218,10 @@ class Media
     {
         return $this->tempPath . "/" . $file;
     }
-    
+
     /**
      * Return the allowed media types
-     * 
+     *
      * @return array
     */
     public function getMediaTypes($medianame = null)
@@ -242,30 +235,30 @@ class Media
         }
         return $medianame ? array_get($this->mediaTypes, $medianame) : $this->mediaTypes;
     }
-    
+
     /**
      * Return the image quality
-     * 
+     *
      * @return integer
      */
     public function getImageQuality()
     {
         return config("cms.cms.media_image_quality", 100);
     }
-    
+
     /**
      * Determine if the disk is local or cloud based
-     * 
+     *
      * @return boolean
      */
     public function isLocal()
     {
         return config("filesystems.disks.{$this->uploadedFile->disk}.driver") == "local";
     }
-    
+
     /**
      * Get the icon by the media type
-     * 
+     *
      * @param  string $type
      * @return string
      */
@@ -273,24 +266,24 @@ class Media
     {
         return $this->mediaTypes[$type]["icon"];
     }
-    
+
     //
     // Setters
-    // 
-    
+    //
+
     /**
      * Set the input
-     * 
+     *
      * @param ResourceInput $input
      */
     public function setInput(ResourceInput $input)
     {
         $this->input = $input;
     }
-    
+
     /**
      * Set cmsMedium prop
-     * 
+     *
      * @param mixed $cms_medium CmsMedium model OR cms_medium_id
      */
     public function setCmsMedium($cms_medium)
@@ -298,7 +291,7 @@ class Media
         $this->cmsMedium = is_object($cms_medium) ? $cms_medium : CmsMedium::findOrFail($cms_medium);
         $this->setUploadedFile();
     }
-    
+
     /**
      * Set the UploadedFile property. This should only be called
      * where the cmsMedium prop is set (above)
@@ -315,13 +308,13 @@ class Media
         $this->uploadedFile->originalFilesize = $this->cmsMedium->original_filesize;
         $this->uploadedFile->uploaded = $this->cmsMedium->uploaded;
     }
-    
+
     /**
      * Set the ACL to public for a file
      */
-    protected function setPublic($file) 
+    protected function setPublic($file)
     {
         Storage::setVisibility($file, "public");
     }
-    
+
 }

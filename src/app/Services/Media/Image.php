@@ -9,33 +9,33 @@ use Thinmartian\Cms\App\Models\Core\CmsMediumImage;
 
 class Image extends Media
 {
-    
+
     /**
      * Width of the source image we create
-     * 
+     *
      * @see  $this->uploadSource()
      * @var integer
      */
     protected $sourceWidth = 1400;
-    
+
     /**
      * Path where we store the source image
-     * 
+     *
      * @see  $this->uploadSource()
      * @var string
      */
     protected $sourcePath;
-    
+
     /**
      * Set the generated image filename format
-     * 
+     *
      * @var string
      */
     protected $imageFile = "{filename}-{width}x{height}-{focal}.{extension}";
-    
+
     /**
      * Allowed focal points
-     * 
+     *
      * @var array
      */
     public $allowedFocals = [
@@ -49,12 +49,12 @@ class Image extends Media
         "bottom",
         "bottom-right"
     ];
-    
+
     /**
      * @var Intervention\Image\ImageManager
     */
     protected $intervention;
-    
+
     /**
      * constructor
     */
@@ -63,15 +63,15 @@ class Image extends Media
         parent::__construct();
         $this->intervention = new ImageManager(["driver" => config("cms.cms.intervention_driver", "gd")]);
         $this->sourcePath = config("filesystems.disks.local.root", storage_path("app")) . "/cms/media"; // use their local disk if they have one
-    }  
-    
+    }
+
     //
     // Output
-    //  
-    
+    //
+
     /**
      * Fetch the URL to the image
-     * 
+     *
      * @param  integer  $cms_medium_id  The cms_medium_id we are generating
      * @param  mixed    $width          Set to null for auto
      * @param  mixed    $height         Set to null for auto
@@ -84,42 +84,38 @@ class Image extends Media
         $this->setCmsMedium($cms_medium_id);
         if ($this->cmsMedium->type != "image") return false;
 
-        // do not scale up unless we have specified
-        if (!$scaleUp) {
-            // get the path to the original file
-            $originalFile = $this->getSourcePath();
-            // create image object
-            $originalImage = $image = $this->intervention->make($originalFile);
-            // get width
-            $originalWidth = $originalImage->width();
-            // did we request a width wider than the original?
-            if ($originalWidth < $width) {
-                $originalHeight = $originalImage->width();
-                // reset the width and height to the original images width and height
-                $width = $originalWidth;
-                $height = $originalHeight;
-            }
-        }
-
         // Generate the file name now so we can check for existence first
         $imagepath = $this->getImagePath($this->getImageFile($width, $height));
 
         // Already there?
         if (! $force and $this->fileExists($imagepath)) return $this->getPublicUrl($imagepath);
         // Generate the image and store
-        $this->generate($width, $height);
+        $this->generate($width, $height, $scaleUp);
         return $this->getPublicUrl($imagepath);
     }
-    
+
     /**
      * Generate the image and store int
-     * 
+     *
      * @param  mixed $width  Set to null for auto
      * @param  mixed $height Set to null for auto
      */
-    private function generate($width = null, $height = null)
+    private function generate($width = null, $height = null, $scaleUp = false)
     {
         $image = $this->intervention->make($this->getSourcePath());
+        // do not scale up unless we have specified
+        if (!$scaleUp) {
+            // get width
+            $originalWidth = $image->width();
+            // did we request a width wider than the original?
+            if ($originalWidth < $width) {
+                $originalHeight = $image->height();
+                // reset the width and height to the original images width and height
+                $width = $originalWidth;
+                $height = $originalHeight;
+            }
+        }
+
         $imagefile = $this->getImageFile($width, $height);
         $imagepath = $this->getImagePath($imagefile);
         $temppath = $this->getTempPath($imagefile);
@@ -137,24 +133,24 @@ class Image extends Media
         $this->storeFile($imagepath, $temppath);
         unlink($temppath);
     }
-    
+
     /**
      * Return a preview of the item for listing across the place
-     * 
+     *
      * @return string
      */
     public function preview()
     {
         return '<img src="'. $this->get($this->cmsMedium->id, 200, 200) .'" >';
     }
-    
+
     //
     // CRUD
-    // 
-    
+    //
+
     /**
      * Store the image
-     * 
+     *
      * @return App\Cms\CmsMedium
      */
     public function store()
@@ -175,12 +171,12 @@ class Image extends Media
             $this->uploadSource();
         }
         // Return the model back to the controller
-        return $this->cmsMedium;     
+        return $this->cmsMedium;
     }
-    
+
     /**
      * Update the image
-     * 
+     *
      * @return App\Cms\CmsMedium
      */
     public function update()
@@ -202,21 +198,21 @@ class Image extends Media
             }
         }
         // Return the model back to the controller
-        return $this->cmsMedium; 
+        return $this->cmsMedium;
     }
-    
+
     /**
      * We create a small image locally that will be used as the base image
      * for all future resize variations. Otherwise, we may have to collected
      * from s3 on every new image which could get crazy
-     * 
+     *
      * @return void
      */
     public function uploadSource()
     {
         // move the file first
         $this->input->file->move($this->getSourcePath(false), $this->uploadedFile->file);
-        // now resize it 
+        // now resize it
         $image = $this->intervention->make($this->getSourcePath());
         // only if its width is wider than 'sourceWidth'
         if ($image->width() > $this->sourceWidth) {
@@ -227,14 +223,14 @@ class Image extends Media
             $image->save(null, 100);
         }
     }
-    
+
     //
     // Validation
-    // 
-    
+    //
+
     /**
      * Get the form validation rules on create
-     * 
+     *
      * @return array
     */
     public function validationOnCreate()
@@ -245,10 +241,10 @@ class Image extends Media
             "file" => "required|file|image|mimes:". implode(",", $this->getMediaTypes("image.accepted"))
         ];
     }
-    
+
     /**
      * Get the form validation rules on update
-     * 
+     *
      * @return array
     */
     public function validationOnUpdate()
@@ -258,38 +254,38 @@ class Image extends Media
             "file" => "file|image|mimes:". implode(",", $this->getMediaTypes("image.accepted"))
         ];
     }
-    
+
     //
     // Redirects
-    // 
+    //
 
     /**
      * Redirect the user after store
-     * 
+     *
      * @return  Illuminate\Routing\Redirector
     */
-    public function redirectOnStore($cms_medium_id) 
+    public function redirectOnStore($cms_medium_id)
     {
         return redirect()->route("admin.media.focal", ["cms_medium_id" => $cms_medium_id]);
     }
-    
+
     /**
      * Redirect the user after update
-     * 
+     *
      * @return  Illuminate\Routing\Redirector
     */
-    public function redirectOnUpdate($cms_medium_id) 
+    public function redirectOnUpdate($cms_medium_id)
     {
         return redirect()->route("admin.media.focal", ["cms_medium_id" => $cms_medium_id]);
     }
-    
+
     //
     // Getters
     //
-    
+
     /**
      * Return the image path
-     * 
+     *
      * @param  string   $filename   Omit for the path only
      * @return string
      */
@@ -297,10 +293,10 @@ class Image extends Media
     {
         return $this->uploadedFile->path . "/image/" . $filename;
     }
-    
+
     /**
      * Build and return the generatred filename
-     * 
+     *
      * @param  mixed $width
      * @param  mixed $height
      * @return string
@@ -309,10 +305,10 @@ class Image extends Media
     {
         return str_ireplace(["{filename}", "{width}", "{height}", "{focal}", "{extension}"], [$this->uploadedFile->filename, $width ?: 0, $height ?: 0, $this->cmsMedium->image->focal, $this->uploadedFile->extension], $this->imageFile);
     }
-    
+
     /**
      * Get the source path (optionally with the file)
-     * 
+     *
      * @param  boolean $file Bind the file to the end of the path
      * @return string
      */
@@ -320,10 +316,10 @@ class Image extends Media
     {
         return $this->sourcePath . "/" . $this->cmsMedium->id . "/source/" . ($file ? $this->uploadedFile->file : null);
     }
-    
+
     /**
      * Return the aspect ratio of the image
-     * 
+     *
      * @param  Intervention\Image\Image $image
      * @return string
      */
@@ -337,10 +333,10 @@ class Image extends Media
             return "square";
         }
     }
-    
+
     //
     // Magic
-    // 
+    //
 
     /**
      * Dynamically call the method on the ImageManger instance.
@@ -352,6 +348,6 @@ class Image extends Media
     public function __call($method, $parameters)
     {
         return call_user_func_array([$this->intervention, $method], $parameters);
-    } 
-    
+    }
+
 }
