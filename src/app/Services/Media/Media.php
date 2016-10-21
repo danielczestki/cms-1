@@ -4,7 +4,7 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 use App\Cms\CmsMedium;
-use File, Storage;
+use File, Storage, Cache;
 
 class Media
 {
@@ -175,7 +175,22 @@ class Media
      */
     public function fileExists($filepath)
     {
-        return Storage::disk($this->uploadedFile->disk)->exists($filepath);
+        if ($this->isLocal()) {
+            // Local, so do a sotrage check as its quick
+            return Storage::disk($this->uploadedFile->disk)->exists($filepath);
+        } else {
+            $location = $this->getPublicUrl($filepath);
+            $key = 'thumbnail_exists_' . $location;
+            if (Cache::get($key)) {
+                return true;
+            }
+            $headers = @get_headers($location);
+            $exists = strpos($headers[0], "200") !== false;
+            if ($exists) {
+                Cache::put($key, true, 20160); // Remember for 2 weeks
+            }
+            return $exists;
+        }
     }
 
     //
