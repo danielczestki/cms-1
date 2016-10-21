@@ -22,17 +22,17 @@ class Build extends Command
      * @var string
      */
     protected $description = 'Compile all YAML definitions and build the CMS.';
-    
+
     /**
      * @var Illuminate\Contracts\Console\Kernel
      */
     protected $artisan;
-    
+
     /**
      * @var Illuminate\Database\DatabaseManager
      */
     protected $db;
-    
+
     /**
      * Create a new command instance.
      *
@@ -54,14 +54,14 @@ class Build extends Command
     public function handle()
     {
         $bar = $this->setupBar();
-        
+
         // delete the System folder so we can rebuild it
         $fs = new Filesystem();
         $fs->remove(app_path("Cms/System"));
-        
+
         // build the directories first, to ensure correct perms
         $this->createDirectories();
-        
+
         $bar->setMessage("<comment>Copying YAML definitions to app...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
@@ -69,7 +69,7 @@ class Build extends Command
             "--tag" => ["definitions"]
         ]);
         usleep(200000);
-        
+
         $bar->setMessage("<comment>Generating database migrations from YAML definitions...</comment>");
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
@@ -80,17 +80,17 @@ class Build extends Command
         $bar->advance();
         $this->artisan->call("cms:migrations");
         usleep(200000);
-        
+
         $bar->setMessage("<comment>Generating models from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:models");
         usleep(200000);
-        
+
         $bar->setMessage("<comment>Generating controllers from YAML definitions...</comment>");
         $bar->advance();
         $this->artisan->call("cms:controllers");
         usleep(200000);
-        
+
         $bar->setMessage("<comment>Publishing core files...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
@@ -98,7 +98,7 @@ class Build extends Command
         ]);
         $this->deleteUnused();
         usleep(200000);
-        
+
         $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
         $bar->advance();
         $this->artisan->call("vendor:publish", [
@@ -107,11 +107,11 @@ class Build extends Command
             "--force" => true
         ]);
         usleep(200000);
-        
+
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
         $this->artisan->call("migrate");
-        
+
         $bar->setMessage("<comment>Checking for an admin user...</comment>");
         $bar->advance();
         usleep(700000);
@@ -122,23 +122,23 @@ class Build extends Command
         } else {
             $bar->setMessage("<comment>Admin user already exists</comment>");
         }
-        
+
         // Remove the .gitignore in the app/Cms folder
         if (file_exists(app_path("Cms/.gitignore"))) {
             unlink(app_path("Cms/.gitignore"));
         }
-        
+
         $bar->advance();
         usleep(400000);
-        
+
         $bar->setMessage("<info>CMS build complete</info>");
         $bar->finish();
-        
+
         $this->comment("Optimising application...");
         exec("composer dump");
         $this->artisan->call("optimize");
     }
-    
+
     /**
      * When laravel does a vendor:publish we just copy all files across
      * but some of these are not used in the new location, they are called
@@ -161,7 +161,7 @@ class Build extends Command
         if (file_exists(app_path("Cms/System/CmsMediumDocument.php"))) unlink(app_path("Cms/System/CmsMediumDocument.php"));
         if (file_exists(app_path("Cms/System/CmsMediumEmbed.php"))) unlink(app_path("Cms/System/CmsMediumEmbed.php"));
     }
-    
+
     /**
      * Build the directories first, so they get the correct perms
      */
@@ -173,15 +173,15 @@ class Build extends Command
         if (! file_exists(app_path("Cms/System/Http/Controllers"))) mkdir(app_path("Cms/System/Http/Controllers"), 0777, true);
         if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
         if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
-        
+
         if (! file_exists(storage_path("app/cms"))) mkdir(storage_path("app/cms"), 0777, true);
         if (! file_exists(storage_path("app/cms/temp"))) mkdir(storage_path("app/cms/temp"), 0777, true);
         if (! file_exists(storage_path("app/cms/media"))) mkdir(storage_path("app/cms/media"), 0777, true);
     }
-    
+
     /**
      * Create the admin account
-     * 
+     *
      * @return void
      */
     private function requestAdmin()
@@ -200,7 +200,7 @@ class Build extends Command
         $this->createAdmin($credentials);
         return $credentials;
     }
-    
+
     private function createAdmin($credentials)
     {
         $this->db->table("cms_users")->insert(
@@ -210,10 +210,10 @@ class Build extends Command
             )
         );
     }
-    
+
     /**
      * Confirm the passwords match
-     * 
+     *
      * @param  array $credentials
      * @return array
      */
@@ -228,10 +228,10 @@ class Build extends Command
         }
         return $credentials;
     }
-    
+
     /**
      * Return a progress bar
-     * 
+     *
      * @return Symfony\Component\Console\Helper\ProgressBar
      */
     private function setupBar($count = 9)
@@ -241,5 +241,5 @@ class Build extends Command
         $bar->setBarWidth(50);
         return $bar;
     }
-    
+
 }

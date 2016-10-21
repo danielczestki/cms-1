@@ -20,40 +20,40 @@ class Models extends Commands
      * @var string
      */
     protected $description = 'Build models from installed YAML config files. <comment>(does not copy to the app/Cms directory)</comment>';
-    
+
     /**
      * Path to the core folder
      *
      * @var string
      */
     protected $corePath;
-    
+
     /**
      * Path to the custom folder
      *
      * @var string
      */
     protected $customPath;
-    
+
     /**
      * Path to the core stub file
      *
      * @var string
      */
     protected $stubCorePath;
-    
+
     /**
      * Path to the custom stub file
      *
      * @var string
      */
     protected $stubCustomPath;
-    
+
     /**
      * Prefix for the models
      */
     const MODELPREFIX = "Cms";
-    
+
     /**
      * Create a new command instance.
      *
@@ -88,7 +88,7 @@ class Models extends Commands
         }
         $this->info("Models generated from YAML definitions successfully!");
     }
-    
+
     /**
      * Build the core model
      *
@@ -99,7 +99,7 @@ class Models extends Commands
     {
         $this->buildModel("core", $filename, $this->stubCorePath, $this->corePath);
     }
-    
+
     /**
      * Build the custom model
      *
@@ -110,7 +110,7 @@ class Models extends Commands
     {
         $this->buildModel("custom", $filename, $this->stubCustomPath, $this->customPath);
     }
-    
+
     /**
      * Build the model
      *
@@ -133,14 +133,20 @@ class Models extends Commands
         $yaml = $this->yaml->parse(file_get_contents($fullpath));
         $relations  = $this->buildRelations($yaml, $filename);
         $versioning = isset($yaml['meta']['version']) && $yaml['meta']['version'] ? 'use \Mpociot\Versionable\VersionableTrait;'.PHP_EOL : false;
-        
+
         // we are good to write
         $stub = file_get_contents($stubpath);
         $model = str_ireplace(["{classname}", "{yaml}", "{tablename}", "{relations}", "{versionable}"], [$classname, $yamlFileName, $tablename, $relations, $versioning], $stub);
+
+        $saveTo = $savepath . "/" . $modelname;
+        if ($type === "custom" && file_exists($saveTo)) {
+            $this->comment("$classname already exists, skipping");
+            return;
+        }
         // save the file
-        file_put_contents($savepath . "/" . $modelname, $model);
+        file_put_contents($saveTo, $model);
     }
-    
+
     /**
      * Get the model name
      *
@@ -223,5 +229,5 @@ class Models extends Commands
         }
         return count($result) ? implode($result, PHP_EOL) : null;
     }
-    
+
 }
