@@ -1,14 +1,19 @@
 <?php
 
-define("CMSNAMESPACE", "\Thinmartian\Cms\App\Http\Controllers\\");
-define("APPNAMESPACE", "\App\Cms\Http\Controllers\\");
+if (!defined("CMSNAMESPACE")) {
+    define("CMSNAMESPACE", "\Thinmartian\Cms\App\Http\Controllers\\");
+}
+
+if (!defined("APPNAMESPACE")) {
+    define("APPNAMESPACE", "\App\Cms\Http\Controllers\\");
+}
 
 
 
 if (! function_exists("in_nav")) {
     /**
      * Determine if we are in this nav item and set it to on
-     * 
+     *
      * @param  string $controller The controller name
      * @param  string $action     The action we are in
      * @return string
@@ -61,7 +66,7 @@ if (! function_exists("cmsaction")) {
 if (! function_exists("de")) {
     /**
      * Like dd() but will utilist xdebug (if you have it)
-     * 
+     *
      * @param  mixed
      * @return void
      */
