@@ -5,36 +5,30 @@ namespace Thinmartian\Cms\App\Http\Controllers\Core\Auth;
 use Thinmartian\Cms\App\Models\Core\CmsUser;
 use App\Http\Controllers\Controller;
 use Validator;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller {
-    
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
-    
+
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
+
     /**
      * Ensure ther guard is cms, it should be default within admin/ anyway
-     * 
+     *
      * @var string
      */
     protected $guard = "cms";
-    
+
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
     protected $redirectTo = '/admin';
-    protected $redirectAfterLogout = '/admin/login';
-    
-    /**
-     * Define the custom views for the auth layer in the CMS
-     * 
-     * @var string
-     */
-    protected $registerView = "cms::admin.auth.register";
-    protected $loginView = "cms::admin.auth.login";
-    
+
+
     /**
      * Create a new authentication controller instance.
      *
@@ -44,7 +38,19 @@ class AuthController extends Controller {
     {
         $this->middleware("guest.cms", ["except" => "logout"]);
     }
-    
+
+    public function showLoginForm()
+    {
+        return view('cms::admin.auth.login');
+    }
+
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect('admin/login');
+    }
+
+
     /**
      * Get a validator for an incoming registration request.
      *

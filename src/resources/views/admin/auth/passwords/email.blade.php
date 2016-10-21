@@ -4,13 +4,13 @@
 @section("title", "Reset Password")
 
 @section("content")
-    
-    {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\PasswordController@sendResetLinkEmail"), "class" => "Session-form Utility--valign-middle"]) }}<div>
-        
+
+    {{ Form::open(["method" => "POST", "url" => cmsaction("Core\Auth\ForgotPasswordController@sendResetLinkEmail"), "class" => "Session-form Utility--valign-middle"]) }}<div>
+
         @if (session('status'))
             <p class="Session-status">{{ session('status') }}</p>
         @endif
-        
+
         <i class="Logo Logo--grey Logo--background Logo--flex">Thin Martian CMS</i>
         <fieldset>
             <div class="Session-field">
@@ -28,5 +28,5 @@
             &copy; {{ date("Y") }} <a href="http://www.thinmartian.com" target="_blank">Thin Martian</a> CMS. All Rights Reserved.
         </footer>
     </div>{{ Form::close() }}
-    
+
 @endsection
