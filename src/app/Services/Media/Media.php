@@ -184,8 +184,7 @@ class Media
             if (Cache::get($key)) {
                 return true;
             }
-            $headers = @get_headers($location);
-            $exists = strpos($headers[0], "200") !== false;
+            $exists = Storage::disk($this->uploadedFile->disk)->exists($filepath);
             if ($exists) {
                 Cache::put($key, true, 20160); // Remember for 2 weeks
             }
