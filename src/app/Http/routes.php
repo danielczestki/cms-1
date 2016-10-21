@@ -10,8 +10,9 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
         Route::post('login', 'Auth\AuthController@login');
         Route::get('logout', 'Auth\AuthController@logout');
         // Password Reset Routes...
-        Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
-        Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
+        Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+        Route::get('password/reset/{token}', 'Auth\PasswordController@showResetForm');
+        Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
         Route::post('password/reset', 'Auth\PasswordController@reset');
 
         // api route

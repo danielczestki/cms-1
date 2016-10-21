@@ -2,28 +2,31 @@
 
 namespace App\Cms\System;
 
+use Illuminate\Notifications\Notifiable;
 use Thinmartian\Cms\App\Models\Core\Setter;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Thinmartian\Cms\App\Notifications\ResetPassword;
 
 class CmsUser extends Authenticatable
 {
-    
+
     use Setter;
-    
+    use Notifiable;
+
     /**
      * Set the YAML config filename
-     * 
+     *
      * @var string
      */
     protected $yaml = "Users";
-    
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = "cms_users";
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -32,23 +35,34 @@ class CmsUser extends Authenticatable
     protected $hidden = [
        "password", "remember_token",
     ];
-    
+
     /**
      * Construct the CMS model
      *
      * @param  array  $attributes
      * @return void
-     */   
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
         $this->setCmsFillable();
-        $this->setCmsDates();       
+        $this->setCmsDates();
     }
-    
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
+    }
+
     /**
      * Return the permissions attribute
-     * 
+     *
      * @param  string $value
      * @return array
      */
@@ -57,10 +71,10 @@ class CmsUser extends Authenticatable
         if (empty($value)) return null;
         return explode(",", $value);
     }
-    
+
     /**
      * Boot methods
-     * 
+     *
      * @return void
      */
     public static function boot()
@@ -77,5 +91,5 @@ class CmsUser extends Authenticatable
             }
         });
     }
-    
+
 }
