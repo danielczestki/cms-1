@@ -12,7 +12,7 @@ class Models extends Commands
      *
      * @var string
      */
-    protected $signature = 'cms:models';
+    protected $signature = 'cms:models {--overwrite}';
 
     /**
      * The console command description.
@@ -139,7 +139,7 @@ class Models extends Commands
         $model = str_ireplace(["{classname}", "{yaml}", "{tablename}", "{relations}", "{versionable}"], [$classname, $yamlFileName, $tablename, $relations, $versioning], $stub);
 
         $saveTo = $savepath . "/" . $modelname;
-        if ($type === "custom" && file_exists($saveTo)) {
+        if (!$this->option('overwrite') && $type === "custom" && file_exists($saveTo)) {
             $this->comment("$classname already exists, skipping");
             return;
         }

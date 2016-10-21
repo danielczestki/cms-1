@@ -14,7 +14,7 @@ class Build extends Command
      *
      * @var string
      */
-    protected $signature = 'cms:build';
+    protected $signature = 'cms:build {--overwrite}';
 
     /**
      * The console command description.
@@ -83,7 +83,9 @@ class Build extends Command
 
         $bar->setMessage("<comment>Generating models from YAML definitions...</comment>");
         $bar->advance();
-        $this->artisan->call("cms:models");
+        $this->artisan->call("cms:models", [
+            '--overwrite' => $this->option('overwrite')
+        ]);
         usleep(200000);
 
         $bar->setMessage("<comment>Generating controllers from YAML definitions...</comment>");
