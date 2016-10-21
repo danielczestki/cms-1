@@ -12,8 +12,8 @@
     ],
     "require": {
         "php": ">=5.6",
-        "laravel/framework": "^5.2",
-        "laravelcollective/html": "^5.2",
+        "laravel/framework": "^5.3",
+        "laravelcollective/html": "^5.3",
         "symfony/filesystem": "^3.1",
         "intervention/image": "^2.3",
         "mpociot/versionable": "~2.0"
