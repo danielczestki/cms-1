@@ -13,7 +13,9 @@ trait Setter
      */
     protected function setCmsFillable()
     {
-        if (property_exists($this, "fillable") and $this->fillable) return false;
+        if (property_exists($this, "fillable") and $this->fillable) {
+            return false;
+        }
         $arr = [];
         $fields = $this->getYamlFields();
         foreach ($fields as $idx => $data) {
@@ -26,16 +28,22 @@ trait Setter
     
     /**
      * Is this column allowed in the fillable
-     * 
+     *
      * @param  array $data Array of data from yaml
      * @return boolean
      */
     private function allowedColumn($data)
     {
         $cms = new Cms;
-        if (array_key_exists("persist", $data) and ! $data["persist"]) return false;
-        if (! array_key_exists("type", $data)) return true;
-        if (in_array($data["type"], $cms->getIgnoredFieldTypes())) return false;
+        if (array_key_exists("persist", $data) and ! $data["persist"]) {
+            return false;
+        }
+        if (! array_key_exists("type", $data)) {
+            return true;
+        }
+        if (in_array($data["type"], $cms->getIgnoredFieldTypes())) {
+            return false;
+        }
         return true;
     }
     
@@ -44,7 +52,9 @@ trait Setter
      */
     protected function setCmsDates()
     {
-        if (property_exists($this, "dates") and $this->dates) return false;
+        if (property_exists($this, "dates") and $this->dates) {
+            return false;
+        }
         $arr = [];
         $fields = $this->getYamlFields();
         foreach ($fields as $idx => $data) {
@@ -57,7 +67,7 @@ trait Setter
     
     /**
      * Return the fields array from the YAML
-     * 
+     *
      * @return array
      */
     private function getYamlFields()
@@ -66,5 +76,4 @@ trait Setter
         $yaml = $parser->parse(file_get_contents(app_path("Cms/Definitions/{$this->yaml}.yaml")));
         return $yaml["fields"];
     }
-    
 }

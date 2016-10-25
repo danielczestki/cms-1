@@ -2,7 +2,8 @@
 
 namespace Thinmartian\Cms\App\Services\Resource;
 
-class ResourceInput {
+class ResourceInput
+{
     
     /**
      * @var array
@@ -11,7 +12,7 @@ class ResourceInput {
     
     /**
      * Ignore this params in submit of the form
-     * 
+     *
      * @var array
      */
     protected $ignore = ["_token", "_name", "_method"];
@@ -26,7 +27,7 @@ class ResourceInput {
     
     /**
      * Add a new field to the input
-     * 
+     *
      * @param string $name  The name of the input field
      * @param mixed  $value The value of the input field
      * @return void
@@ -38,7 +39,7 @@ class ResourceInput {
     
     /**
      * Edit a field in the input
-     * 
+     *
      * @param string $name  The name of the input field to edit
      * @param mixed  $value The new value of the input field
      * @return void
@@ -50,7 +51,7 @@ class ResourceInput {
     
     /**
      * Remove a field from the input
-     * 
+     *
      * @param  string $name The name of the field to remove
      * @return void
      */
@@ -61,7 +62,7 @@ class ResourceInput {
     
     /**
      * Get the input fields
-     * 
+     *
      * @return array
      */
     public function getInput()
@@ -71,7 +72,7 @@ class ResourceInput {
     
     /**
      * Clean the input by removing fields we don't need to send to resources
-     * 
+     *
      * @return array
      */
     private function cleanInput()
@@ -81,7 +82,7 @@ class ResourceInput {
     
     /**
      * Pull the param from the input if there is no prop
-     * 
+     *
      * @param  string $name
      * @return mixed
      */
@@ -91,5 +92,4 @@ class ResourceInput {
             return $this->input[$name];
         }
     }
-    
 }

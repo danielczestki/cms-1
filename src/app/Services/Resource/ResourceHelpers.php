@@ -1,7 +1,7 @@
 <?php 
 
 namespace Thinmartian\Cms\App\Services\Resource;
-    
+
 /*
 |--------------------------------------------------------------------------
 | Resource Helpers
@@ -16,12 +16,11 @@ use CmsYaml;
 
 trait ResourceHelpers
 {
-    
     use Redirects;
     
     /**
      * Fetch the meta from the Yaml file
-     * 
+     *
      * @return array
      */
     public function getMeta()
@@ -31,7 +30,7 @@ trait ResourceHelpers
     
     /**
      * Return the array of filters for numerous links/redirects across the resource
-     * 
+     *
      * @return array
      */
     public function getFilters()
@@ -41,7 +40,7 @@ trait ResourceHelpers
     
     /**
      * Get the record per page value
-     * 
+     *
      * @return integer
      */
     public function getRecordsPerPage()
@@ -52,7 +51,7 @@ trait ResourceHelpers
     
     /**
      * Get the search query (if any)
-     * 
+     *
      * @return string
      */
     public function getSearch()
@@ -62,7 +61,7 @@ trait ResourceHelpers
     
     /**
      * Get the model name
-     * 
+     *
      * @return string
      */
     private function getModel()
@@ -72,7 +71,7 @@ trait ResourceHelpers
     
     /**
      * Return the resolved model and also set the property
-     * 
+     *
      * @return void
      */
     private function setModel()

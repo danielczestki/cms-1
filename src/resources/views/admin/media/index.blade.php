@@ -35,9 +35,9 @@
                     <li class="MediaListing__item">
                         <?php
                             if ($record->type == "document") {
-                                $preview = CmsDocument::get($record->id);        
-                            } else if ($record->type == "embed") {
-                                $preview = CmsEmbed::url($record);       
+                                $preview = CmsDocument::get($record->id);
+                            } elseif ($record->type == "embed") {
+                                $preview = CmsEmbed::url($record);
                             } else {
                                 $preview = null;
                             }

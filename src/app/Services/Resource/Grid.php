@@ -4,11 +4,12 @@ namespace Thinmartian\Cms\App\Services\Resource;
 
 use Illuminate\Support\HtmlString;
 
-class Grid {
+class Grid
+{
     
     /**
      * Top level rneder method that delegates to the correct column type
-     * 
+     *
      * @param  Model $record The record contaion the data
      * @param  array $column The array column data
      * @return string
@@ -22,7 +23,7 @@ class Grid {
     
     /**
      * Output a number type
-     * 
+     *
      * @param  string $value
      * @return string
      */
@@ -33,7 +34,7 @@ class Grid {
     
     /**
      * Output a boolean type
-     * 
+     *
      * @param  string $value
      * @return string
      */
@@ -44,7 +45,7 @@ class Grid {
     
     /**
      * Output a date type
-     * 
+     *
      * @param  string $value
      * @return string
      */
@@ -55,7 +56,7 @@ class Grid {
     
     /**
      * Output a datetime type
-     * 
+     *
      * @param  string $value
      * @return string
      */
@@ -66,8 +67,8 @@ class Grid {
     
     /**
      * Render a data/datetime type
-     * 
-     * @param  string $value 
+     *
+     * @param  string $value
      * @param  string $format The date format we want
      * @return string
      */
@@ -83,7 +84,7 @@ class Grid {
     
     /**
      * Output a text type (capture all)
-     * 
+     *
      * @param  string $value
      * @return string
      */
@@ -91,5 +92,4 @@ class Grid {
     {
         return new HtmlString('<div class="List__column"><span class="List__type List__type--'. $name .'">'. head($args) .'</span></div>');
     }
-    
 }

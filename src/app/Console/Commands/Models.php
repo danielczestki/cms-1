@@ -125,7 +125,9 @@ class Models extends Commands
         $classname = $this->getModelName($filename);
         $modelname = $classname . ".php";
         // if the model is protected do not add/edit/overwrite/delete... don't touch it hear me!
-        if ($type == "core" and in_array($modelname, $this->cms->getProtectedModels(false))) return;
+        if ($type == "core" and in_array($modelname, $this->cms->getProtectedModels(false))) {
+            return;
+        }
         // deal with relations
         $yamlFileName = $this->getFilename($filename);
         $tablename = $this->getTablename($yamlFileName);
@@ -229,5 +231,4 @@ class Models extends Commands
         }
         return count($result) ? implode($result, PHP_EOL) : null;
     }
-
 }

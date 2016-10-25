@@ -9,7 +9,6 @@ use Thinmartian\Cms\App\Notifications\ResetPassword;
 
 class CmsUser extends Authenticatable
 {
-
     use Setter;
     use Notifiable;
 
@@ -68,7 +67,9 @@ class CmsUser extends Authenticatable
      */
     public function getPermissionsAttribute($value)
     {
-        if (empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
         return explode(",", $value);
     }
 
@@ -81,7 +82,7 @@ class CmsUser extends Authenticatable
     {
         parent::boot();
 
-        self::saving(function($record) {
+        self::saving(function ($record) {
             // look for password in request, not $record as logout sends this and works differently
             // from our update/edit form and we end up hashing null when logging out :)
             if (request()->get("password")) {
@@ -91,5 +92,4 @@ class CmsUser extends Authenticatable
             }
         });
     }
-
 }

@@ -62,7 +62,7 @@ return [
     | configuration. Examples are 'public', 's3' etc.
     |
     | IMPORTANT: As per the Laravel documentation, if using a 'public' disk, be
-    | sure to create a symbolic link between your storage and public, e.g. 
+    | sure to create a symbolic link between your storage and public, e.g.
     | public/storage which points to the storage/app/public directory.
     |
     */

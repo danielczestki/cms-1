@@ -2,7 +2,8 @@
 
 namespace App\Cms\System;
 
-use DB, Storage;
+use DB;
+use Storage;
 use Thinmartian\Cms\App\Models\Core\Model;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -11,7 +12,7 @@ class CmsMedium extends Model
     
     /**
      * Set the YAML config filename
-     * 
+     *
      * @var string
      */
     protected $yaml = "Media";
@@ -73,7 +74,7 @@ class CmsMedium extends Model
     
     /**
      * Boot methods
-     * 
+     *
      * @return void
      */
     public static function boot()
@@ -81,11 +82,11 @@ class CmsMedium extends Model
         parent::boot();
         $filesystem = new Filesystem;
 
-        self::saving(function($record) {
+        self::saving(function ($record) {
             $record->cache_buster = str_random(15);
         });
         
-        self::deleting(function($record) use ($filesystem) {
+        self::deleting(function ($record) use ($filesystem) {
             // remove the assets first, source first
             $sourcePath = config("filesystems.disks.local.root", storage_path("app")) . ("/cms/media/" . $record->id);
             $filesystem->remove($sourcePath);
@@ -93,10 +94,15 @@ class CmsMedium extends Model
             Storage::disk(config("cms.cms.media_disk"))->deleteDirectory(config("cms.cms.media_path") . "/media/" . $record->id);
             // now kill the DB records
             DB::table("cms_mediables")->where("media_id", $record->id)->delete();
-            if ($mapping = $record->image) $mapping->delete();
-            if ($mapping = $record->document) $mapping->delete();
-            if ($mapping = $record->embed) $mapping->delete();
+            if ($mapping = $record->image) {
+                $mapping->delete();
+            }
+            if ($mapping = $record->document) {
+                $mapping->delete();
+            }
+            if ($mapping = $record->embed) {
+                $mapping->delete();
+            }
         });
     }
-    
 }

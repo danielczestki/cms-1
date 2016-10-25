@@ -14,7 +14,7 @@ class CreateCmsMediaDocumentsTable extends Migration
     {
         Schema::create('cms_media_documents', function (Blueprint $table) {
             $table->integer('cms_medium_id')->unsigned();
-            // nothing yet, but we need this table and will want it for 
+            // nothing yet, but we need this table and will want it for
             // future columns specific to document... cos there will be!
             $table->primary('cms_medium_id');
         });

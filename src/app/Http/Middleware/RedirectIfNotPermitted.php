@@ -19,7 +19,9 @@ class RedirectIfNotPermitted
     {
         $perms = Auth::guard("cms")->user()->permissions;
         if (! empty($perms)) {
-            if (! in_array($filename, $perms)) return redirect('/admin')->withError("You do not have permission to view this page");
+            if (! in_array($filename, $perms)) {
+                return redirect('/admin')->withError("You do not have permission to view this page");
+            }
         }
         return $next($request);
     }

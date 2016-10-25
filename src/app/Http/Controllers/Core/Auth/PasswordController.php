@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class PasswordController extends Controller
 {
-
     use ResetsPasswords;
 
     public function showResetForm(Request $request, $token = null)

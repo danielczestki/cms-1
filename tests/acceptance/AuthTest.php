@@ -6,7 +6,6 @@ use App\Cms\CmsUser;
 
 class AuthTest extends TestCase
 {
-    
     use MailTracking;
     
     /**
@@ -16,8 +15,8 @@ class AuthTest extends TestCase
     
     //
     // Login
-    // 
-    
+    //
+
     /** @test */
     public function it_checks_the_login_route_loads()
     {
@@ -74,7 +73,7 @@ class AuthTest extends TestCase
     //
     // Logout
     //
-    
+
     /** @test */
     public function it_checks_members_can_logout()
     {
@@ -94,8 +93,8 @@ class AuthTest extends TestCase
     
     //
     // Forgot password
-    // 
-    
+    //
+
     /** @test */
     public function it_checks_the_forgot_password_link_works()
     {
@@ -177,11 +176,11 @@ class AuthTest extends TestCase
     
     //
     // Utils
-    // 
-    
+    //
+
     /**
      * Generate a user for testing
-     * 
+     *
      * @return Illuminate\Database\Eloquent\Model
      */
     private function create_new_user()
@@ -199,7 +198,7 @@ class AuthTest extends TestCase
     
     /**
      * Generate a fake password reset record
-     * 
+     *
      * @param  CmsUser $user
      * @return void
      */
@@ -211,5 +210,4 @@ class AuthTest extends TestCase
             "created_at" => new \Carbon\Carbon
         ]);
     }
-    
 }

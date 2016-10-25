@@ -13,14 +13,13 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-
     protected $fields = [
-                            ['type' => 'text', 
+                            ['type' => 'text',
                              'label' => 'Label',
                              'persist' => 1,
                              //'value' => '',
                              'name' => 'label'],
-                            /*['type' => 'text', 
+                            /*['type' => 'text',
                              'label' => 'Key',
                              'persist' => 1,
                              //'value' => '',
@@ -59,7 +58,8 @@ class ApiController extends Controller
                                           ],
                          ];
 
-    public function index() {
+    public function index()
+    {
         return view("cms::admin.api.index", [
             'title' => 'API Keys',
             'controller' => 'Core\ApiController',
@@ -70,7 +70,8 @@ class ApiController extends Controller
         ]);
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         return view("cms::admin.api.form", [
             'title' => 'API Keys',
             'subtitle' => 'Edit',
@@ -82,7 +83,8 @@ class ApiController extends Controller
         ]);
     }
 
-    public function create() {
+    public function create()
+    {
         return view("cms::admin.api.form", [
             'title' => 'API Keys',
             'subtitle' => 'Create',
@@ -93,25 +95,28 @@ class ApiController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $key = new CmsApiKeys();
         $key->label = $request->label;
         $key->key = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 64)), 0, 64);
         $key->save();
-        return \Redirect::to(url('admin/api'))->with('success','Key created successfully');
+        return \Redirect::to(url('admin/api'))->with('success', 'Key created successfully');
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         $key = CmsApiKeys::find($id);
         $key->label = $request->label;
         $key->save();
-        return \Redirect::back()->with('success','Key updated successfully');
+        return \Redirect::back()->with('success', 'Key updated successfully');
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
         if ($request->_confirmed) {
             CmsApiKeys::whereIn('id', $request->ids)->delete();
-            return \Redirect::to(url('admin/api'))->with('success','Keys deleted successfully');
+            return \Redirect::to(url('admin/api'))->with('success', 'Keys deleted successfully');
         }
         return view("cms::admin.api.destroy", [
             'title' => 'API Keys',
@@ -121,7 +126,8 @@ class ApiController extends Controller
         ]);
     }
 
-    public function get($id = null, $model = null) {
+    public function get($id = null, $model = null)
+    {
         if (class_exists($model)) {
             $model = $model::find($id);
             return $model;
@@ -129,7 +135,8 @@ class ApiController extends Controller
         return [];
     }
 
-    public function getAll($model = null) {
+    public function getAll($model = null)
+    {
         // does the model exist?
         if (class_exists($model)) {
             // Get all items you want

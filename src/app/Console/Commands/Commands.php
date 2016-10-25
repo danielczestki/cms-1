@@ -10,7 +10,7 @@ class Commands extends Command
     
     /**
      * Simple flag to know if a model was generated for the console response
-     * 
+     *
      * @var boolean
      */
     protected $created = false;
@@ -27,7 +27,7 @@ class Commands extends Command
         
     /**
      * Path to the YAML config files
-     * 
+     *
      * @var string
      */
     protected $yamlPath;
@@ -52,7 +52,7 @@ class Commands extends Command
     
     /**
      * Get the filename from the yaml config to be used for the table
-     * 
+     *
      * @param  string $filename
      * @return string
      */
@@ -62,8 +62,8 @@ class Commands extends Command
     }
     
     /**
-     * Get the db table name 
-     * 
+     * Get the db table name
+     *
      * @param  string $name The yaml config filename
      * @return string
      */
@@ -74,7 +74,7 @@ class Commands extends Command
     
     /**
      * Get the full path to the yaml file
-     * 
+     *
      * @param  string $filename
      * @return string
      */
@@ -85,16 +85,17 @@ class Commands extends Command
     
     /**
      * Return all the yaml config files in the definitions directory
-     * 
+     *
      * @return array
      */
     protected function getYamlFiles()
     {
         $arr = [];
         foreach (scandir($this->yamlPath) as $filename) {
-            if (ends_with($filename, ".yaml")) $arr[] = $filename;
+            if (ends_with($filename, ".yaml")) {
+                $arr[] = $filename;
+            }
         }
         return $arr;
     }
-    
 }

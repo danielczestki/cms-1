@@ -4,7 +4,9 @@ namespace Thinmartian\Cms\App\Services\Media;
 
 use Thinmartian\Cms\App\Services\Resource\ResourceInput;
 use App\Cms\CmsMedium;
-use File, Storage, Cache;
+use File;
+use Storage;
+use Cache;
 
 class Media
 {
@@ -161,9 +163,15 @@ class Media
      */
     public function isValidMediaType($type = null)
     {
-        if (! $type) return false;
-        if (! array_key_exists($type, $this->getMediaTypes())) return false;
-        if (! $this->getMediaTypes("{$type}.enabled")) return false;
+        if (! $type) {
+            return false;
+        }
+        if (! array_key_exists($type, $this->getMediaTypes())) {
+            return false;
+        }
+        if (! $this->getMediaTypes("{$type}.enabled")) {
+            return false;
+        }
         return true;
     }
 
@@ -330,5 +338,4 @@ class Media
     {
         Storage::setVisibility($file, "public");
     }
-
 }

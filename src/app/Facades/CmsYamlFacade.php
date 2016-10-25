@@ -7,13 +7,16 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Thinmartian\Cms\App\Services\Definitions\Yaml
  */
-class CmsYamlFacade extends Facade {
+class CmsYamlFacade extends Facade
+{
 
     /**
      * Get the registered name of the component.
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return "cmsyaml"; }
-
+    protected static function getFacadeAccessor()
+    {
+        return "cmsyaml";
+    }
 }

@@ -15,7 +15,7 @@ class ValidMediaType
      */
     public function handle($request, Closure $next)
     {
-        if (! $request->get("type"))  {
+        if (! $request->get("type")) {
             return redirect()->route("admin.media.type")->withError("Please select the media type you wish to upload");
         }
         return $next($request);

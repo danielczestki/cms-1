@@ -5,7 +5,7 @@ use Symfony\Component\Finder\Finder;
 Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
 
     // Core/uneditable routes (not copied over on publish)
-    Route::group(["namespace" => "Thinmartian\Cms\App\Http\Controllers\Core"], function() {
+    Route::group(["namespace" => "Thinmartian\Cms\App\Http\Controllers\Core"], function () {
         Route::get('login', 'Auth\AuthController@showLoginForm');
         Route::post('login', 'Auth\AuthController@login');
         Route::get('logout', 'Auth\AuthController@logout');
@@ -20,17 +20,17 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
     });
 
     // Custom/editable routes (copied over on publish)
-    Route::group(["namespace" => "App\Cms\Http\Controllers", "middleware" => ["auth.cms", "web"]], function() {
-        Route::group(["as" => "admin."], function() {
+    Route::group(["namespace" => "App\Cms\Http\Controllers", "middleware" => ["auth.cms", "web"]], function () {
+        Route::group(["as" => "admin."], function () {
             // Build routes from the Yaml
             if (file_exists(app_path("Cms/Definitions/"))) {
-                    $finder = new Finder();
-                    foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
-                        $filename = CmsYaml::getFilename($file);
-                        Route::group(["middleware" => ["permitted.cms:" . $filename, "web"]], function() use ($filename) {
-                            Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
-                        });
-                    }
+                $finder = new Finder();
+                foreach ($finder->in(app_path("Cms/Definitions/"))->name("*.yaml") as $file) {
+                    $filename = CmsYaml::getFilename($file);
+                    Route::group(["middleware" => ["permitted.cms:" . $filename, "web"]], function () use ($filename) {
+                        Route::resource(strtolower($filename), $filename . "Controller", ["except" => "show", "parameters" => [strtolower($filename) => "id"]]);
+                    });
+                }
 
 
                 // create the special media routes
@@ -41,13 +41,10 @@ Route::group(["prefix" => "admin", "middleware" => ["web"]], function () {
         });
 
         // Predefined routes
-        Route::get("/", ["uses" => function() {
+        Route::get("/", ["uses" => function () {
             return view("cms::admin.dashboard.index");
         }])->name("cms-dashboard");
-
-
     });
-
 });
 
 // some api routes
@@ -72,18 +69,17 @@ Route::group(['prefix' => 'api', 'middleware' => 'isAllowedApi', 'namespace' => 
                 // get a single ID
                 // /api/users/{CmsUser}
                 // /api/users/12
-                Route::get(strtolower($filename) . '/{id}', [function($id) use ($singular){
+                Route::get(strtolower($filename) . '/{id}', [function ($id) use ($singular) {
                     return App::make('Thinmartian\Cms\App\Http\Controllers\Core\ApiController')->get($id, 'Thinmartian\Cms\App\Models\Core\Cms' . ucwords($singular));
                 }]);
 
                 // get all records
                 // /api/users
                 // /api/users?page=3&amount=5 (defaults to page 1, amount 10)
-                Route::get(strtolower($filename), [function() use ($singular){
+                Route::get(strtolower($filename), [function () use ($singular) {
                     return App::make('Thinmartian\Cms\App\Http\Controllers\Core\ApiController')->getAll('Thinmartian\Cms\App\Models\Core\Cms' . ucwords($singular));
                 }]);
             }
         }
     }
-
 });

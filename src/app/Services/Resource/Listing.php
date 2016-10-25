@@ -21,7 +21,7 @@ trait Listing
     
     /**
      * Get the listing columns used on the grid
-     * 
+     *
      * @return  array
      */
     public function getListColumns()
@@ -31,7 +31,7 @@ trait Listing
     
     /**
      * Output the list of resources for the index page
-     * 
+     *
      * @return Illuminate\Pagination\LengthAwarePaginator
      */
     public function grid()
@@ -43,12 +43,12 @@ trait Listing
         }
         $result = $this->gridSelect($result);
         $result = $this->gridSearch($result);
-        return $result->orderBy($this->getSort(), request()->get("sort_dir", config("cms.cms.default_sort_direction")))->paginate($this->getRecordsPerPage());        
+        return $result->orderBy($this->getSort(), request()->get("sort_dir", config("cms.cms.default_sort_direction")))->paginate($this->getRecordsPerPage());
     }
     
     /**
      * Return the sort value and ensure its valid
-     * 
+     *
      * @return string
      */
     private function getSort()
@@ -64,7 +64,7 @@ trait Listing
     
     /**
      * Return the select list
-     * 
+     *
      * @param  Illuminate\Database\Collection $result
      * @return Illuminate\Database\Collection
      */
@@ -80,23 +80,21 @@ trait Listing
     
     /**
      * Build the search query for the grid
-     * 
+     *
      * @param  Illuminate\Database\Collection $result
      * @return Illuminate\Database\Collection
      */
     private function gridSearch($result)
     {
-        if (! $search = $this->getSearch()) return $result;
+        if (! $search = $this->getSearch()) {
+            return $result;
+        }
         
         $searchable = CmsYaml::getSearchable();
-        return $result->where(function($q) use ($searchable, $search) {
+        return $result->where(function ($q) use ($searchable, $search) {
             foreach ($searchable as $column) {
                 $q->orWhere(DB::raw($column), "like", "%". $search ."%");
             }
         });
     }
-   
-   
-   
-    
 }

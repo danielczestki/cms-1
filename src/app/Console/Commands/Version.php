@@ -31,5 +31,4 @@ class Version extends Commands
     {
         $this->line("<info>Thin Martian CMS</info> version <comment>". CMSVERSION ."</comment>");
     }
-    
 }

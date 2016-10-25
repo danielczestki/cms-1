@@ -3,36 +3,41 @@
 namespace Thinmartian\Cms\App\Html;
 
 use Illuminate\Support\HtmlString;
-use CmsImage, CmsVideo, CmsDocument, CmsEmbed, CmsYaml;
+use CmsImage;
+use CmsVideo;
+use CmsDocument;
+use CmsEmbed;
+use CmsYaml;
 
-class CmsFormBuilder {
+class CmsFormBuilder
+{
     
     /**
      * The $data keys we want REMOVED from the FormBuilder attributes array.
      * This will allow for custom data-* for example
-     * 
+     *
      * @var array
      */
     protected $attributeSchema = ["name", "type", "label", "persist", "value", "validationOnCreate", "validationOnUpdate", "info", "infoUpdate", "options", "prefix", "suffix", "limit", "allowed"];
     
     //
     // FORM
-    // 
-    
+    //
+
     /**
      * Render a <form>
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
-     */ 
+     */
     public function open($data = [])
     {
-       return $this->render(view("cms::html.form.open", $data));         
+        return $this->render(view("cms::html.form.open", $data));
     }
     
     /**
      * Render a model form
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -42,27 +47,27 @@ class CmsFormBuilder {
         $filters = $data["type"] == "edit" ? array_merge(["id" => $data["model"]->id], $data["filters"]) : $data["filters"];
         $data["url"] = cmsaction($data["controller"] . ($data["type"] == "edit" ? "@update" : "@store"), $cmsAppAction, $filters);
         $data["method"] = $data["type"] == "edit" ? "PUT" : "POST";
-        return $this->render(view("cms::html.form.model", $data)); 
+        return $this->render(view("cms::html.form.model", $data));
     }
     
     /**
      * Render a </form>
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function close()
     {
-        return $this->render(view("cms::html.form.close")); 
+        return $this->render(view("cms::html.form.close"));
     }
     
     //
     // INPUT
-    // 
-    
+    //
+
     /**
      * Render a input[type=text]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -74,7 +79,7 @@ class CmsFormBuilder {
     
     /**
      * Render a input[type=email]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -86,7 +91,7 @@ class CmsFormBuilder {
     
     /**
      * Render a input[type=number]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -99,7 +104,7 @@ class CmsFormBuilder {
     
     /**
      * Render a input[type=password]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -112,18 +117,18 @@ class CmsFormBuilder {
     
     /**
      * Render a input[type=hidden]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function hidden($data = [])
     {
-       return $this->render(view("cms::html.form.hidden", $data)); 
+        return $this->render(view("cms::html.form.hidden", $data));
     }
     
     /**
      * Render a input[type=file]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -132,7 +137,7 @@ class CmsFormBuilder {
         $data["type"] = "file";
         if (isset($data["mediatype"])) {
             if ($accepted = CmsImage::getMediaTypes($data["mediatype"] . ".accepted")) {
-                array_walk($accepted, function(&$item, $key) {
+                array_walk($accepted, function (&$item, $key) {
                     $item = "." . $item;
                 });
                 $data["accept"] = implode(",", $accepted);
@@ -143,7 +148,7 @@ class CmsFormBuilder {
     
     /**
      * Renders most input[type=$type]
-     * 
+     *
      * @param  array  $data The element attributes
      * @param  string $type the elemnt type to be sent down (optional)
      * @return string
@@ -151,16 +156,16 @@ class CmsFormBuilder {
     private function input($data, $type = null)
     {
         $data["class"] = @$data["class"] . " Form__input";
-        return $this->render(view("cms::html.form.input", $this->buildData($data, $type))); 
+        return $this->render(view("cms::html.form.input", $this->buildData($data, $type)));
     }
     
     //
     // SELECT
-    // 
-    
+    //
+
     /**
      * Render a select
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -168,12 +173,12 @@ class CmsFormBuilder {
     {
         $data["class"] = @$data["class"] . " Form__select";
         $data["options"] = ["" => "Please Select..."] + $data["options"];
-        return $this->render(view("cms::html.form.select", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.select", $this->buildData($data)));
     }
     
     /**
      * Render a access level select
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -186,12 +191,12 @@ class CmsFormBuilder {
         $data["options"] = ["Admin" => "Administrator", "Standard" => "Standard user"];
         $data["info"] = "Only administrators can change access levels and permissions.";
         
-        return $this->render(view("cms::html.form.select", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.select", $this->buildData($data)));
     }
     
     /**
      * Render a permissions select
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -218,16 +223,16 @@ class CmsFormBuilder {
         $data["multiple"] = true;
         $data["size"] = min(6, $size);
         $data["style"] = "height:auto;" . (isset($data["style"]) ? $data["style"] : null);
-        return $this->render(view("cms::html.form.select", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.select", $this->buildData($data)));
     }
     
     //
     // TEXTAREA AND WYSIWYG
-    // 
-    
+    //
+
     /**
      * Render a textarea
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -235,12 +240,12 @@ class CmsFormBuilder {
     {
         $data["class"] = @$data["class"] . " Form__textarea";
         $data["rows"] = isset($data["rows"]) ? $data["rows"] : 3;
-       return $this->render(view("cms::html.form.textarea", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.textarea", $this->buildData($data)));
     }
     
     /**
      * Render a wysiwyg
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -248,56 +253,56 @@ class CmsFormBuilder {
     {
         $data["class"] = @$data["class"] . " Form__textarea Form__wysiwyg";
         $data["rows"] = isset($data["rows"]) ? $data["rows"] : 27;
-       return $this->render(view("cms::html.form.wysiwyg", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.wysiwyg", $this->buildData($data)));
     }
     
     //
     // CHECKBOX AND RADIOS
-    // 
-    
+    //
+
     /**
      * Render a boolean (radios)
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function boolean($data = [])
     {
         $data["class"] = @$data["class"] . " Form__radio";
-        return $this->render(view("cms::html.form.boolean", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.boolean", $this->buildData($data)));
     }
     
     /**
      * Render a input[type=checkbox]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function checkbox($data = [])
     {
         $data["class"] = @$data["class"] . " Form__checkbox";
-        return $this->render(view("cms::html.form.checkbox", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.checkbox", $this->buildData($data)));
     }
     
     /**
      * Render a input[type=radio]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function radio($data = [])
     {
         $data["class"] = @$data["class"] . " Form__radio";
-        return $this->render(view("cms::html.form.radio", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.radio", $this->buildData($data)));
     }
     
     //
     // DATES
-    // 
-    
+    //
+
     /**
      * Render a datetime picker
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -308,7 +313,7 @@ class CmsFormBuilder {
     
     /**
      * Render a date picker
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -326,16 +331,16 @@ class CmsFormBuilder {
         $data["readonly"] = "readonly";
         $data["prefix"] = "<i class='fa fa-calendar-o'></i>";
         $data["class"] = @$data["class"] . " Form__input Form__input--date";
-        return $this->render(view("cms::html.form.datetime", $this->buildData($data))); 
+        return $this->render(view("cms::html.form.datetime", $this->buildData($data)));
     }
     
     //
     // MEDIA
-    // 
-    
+    //
+
     /**
      * Render a media picker field
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
@@ -361,9 +366,9 @@ class CmsFormBuilder {
     
     /**
      * Builds a clean array of all thedata needed for the vue component
-     * 
+     *
      * @param  array  $data
-     * @param  model  $resource 
+     * @param  model  $resource
      * @return array
      */
     private function existingMedia($data, $resource = null)
@@ -375,15 +380,17 @@ class CmsFormBuilder {
         if ($old = request()->old("cmsmedia.{$data['name']}")) {
             // Any in the old input?
             $collection = \App\Cms\CmsMedium::whereIn("id", $old)->get();
-        } else if ($resource) {
+        } elseif ($resource) {
             // Any saved to it already?
-            $collection = $resource->media($data["name"])->get(); 
+            $collection = $resource->media($data["name"])->get();
         } else {
             // None, just return empty
             return $result;
         }
-        if (! $collection->count()) return $result;
-        // Loop the media and build the array      
+        if (! $collection->count()) {
+            return $result;
+        }
+        // Loop the media and build the array
         foreach ($collection as $media) {
             $result[] = $this->mediaArray($media);
         }
@@ -398,7 +405,7 @@ class CmsFormBuilder {
             "cms_medium_id" => $media->id,
             "type" => $media->type,
             "title" => $media->title,
-            "icon" => CmsImage::getMediaTypes($media->type . ".icon"), 
+            "icon" => CmsImage::getMediaTypes($media->type . ".icon"),
             "filename" => $media->filename,
             "extension" => $media->extension,
             "original_name" => $media->original_name,
@@ -426,59 +433,59 @@ class CmsFormBuilder {
     
     //
     // BUTTONS
-    // 
-    
+    //
+
     /**
      * Render the surround for the generic button collection
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function buttons($data = [])
     {
-       return $this->render(view("cms::html.form.buttons", $data)); 
+        return $this->render(view("cms::html.form.buttons", $data));
     }
     
     /**
      * Render a button[type=submit]
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function submit($data = [])
     {
-       return $this->render(view("cms::html.form.submit", $data)); 
+        return $this->render(view("cms::html.form.submit", $data));
     }
     
     /**
      * Render a cancel button
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function cancel($data = [])
     {
-        return $this->render(view("cms::html.form.cancel", $data)); 
+        return $this->render(view("cms::html.form.cancel", $data));
     }
     
     //
     // TITLES AND STRINGS
-    // 
-    
+    //
+
     /**
      * Static field (no inputs)
-     * 
+     *
      * @param  array  $data The element attributes
      * @return string
      */
     public function content($data)
     {
-        return $this->render(view("cms::html.form.content", $data)); 
+        return $this->render(view("cms::html.form.content", $data));
     }
     
     /**
      * Return the subtitle for the page
-     * 
+     *
      * @param  string $type create or edit
      * @param  string $name the name of the resource or record
      * @return string
@@ -491,27 +498,27 @@ class CmsFormBuilder {
     
     /**
      * Return the success message
-     * 
+     *
      * @return string
      */
     public function success()
     {
-        return $this->render(view("cms::html.form.success")); 
+        return $this->render(view("cms::html.form.success"));
     }
     
     /**
      * Return the global error message
-     * 
+     *
      * @return string
      */
     public function error()
     {
-        return $this->render(view("cms::html.form.error")); 
+        return $this->render(view("cms::html.form.error"));
     }
     
     /**
      * Return the array to build the sort query string
-     * 
+     *
      * @param  string $idx The column we want to sort
      * @return array
      */
@@ -523,7 +530,7 @@ class CmsFormBuilder {
     
     /**
      * Show the correct icon on listing to declare if this field is sorted by or not
-     * 
+     *
      * @param  string $idx
      * @return string
      */
@@ -538,14 +545,15 @@ class CmsFormBuilder {
     //
     // RELATIONSHIPS
     //
-    
+
     /**
      * Show a form field for the relation
      *
      * @param  array  $data The element attributes
      * @return string
      */
-    public function relation($data = []) {
+    public function relation($data = [])
+    {
         $relations = [
             'belongsTo' => 'select',
             'belongsToMany' => 'selectMultiple',
@@ -579,11 +587,11 @@ class CmsFormBuilder {
     
     //
     // UTILS AND PRIVATE
-    // 
-    
+    //
+
     /**
      * Build the data array so they can add custom attrs (e.g. data-*)
-     * 
+     *
      * @param  array  $data The element attributes
      * @param  string $type the elemnt type to be sent down (optional)
      * @return array
@@ -604,14 +612,16 @@ class CmsFormBuilder {
     
     /**
      * Traverse the validation rules and determine if this field is required or not
-     * 
+     *
      * @param  array   $data Array of form data
      * @return boolean
      */
     private function isRequired($data = [])
     {
         $rules = $this->getRulesKey();
-        if (! array_key_exists($rules, $data)) return false;
+        if (! array_key_exists($rules, $data)) {
+            return false;
+        }
         return in_array("required", explode("|", $data[$rules]));
     }
     
@@ -619,14 +629,16 @@ class CmsFormBuilder {
     /**
      * Traverse the validation rules and determine if this field has a
      * maxlength and if so, return it so we can add to the field
-     * 
+     *
      * @param  array   $data Array of form data
      * @return mixed
      */
     private function getMaxLength($data = [])
     {
         $rules = $this->getRulesKey();
-        if (! array_key_exists($rules, $data)) return null;
+        if (! array_key_exists($rules, $data)) {
+            return null;
+        }
         foreach (explode("|", $data[$rules]) as $rule) {
             if (starts_with($rule, "max")) {
                 return intval(str_ireplace("max:", "", $rule));
@@ -637,7 +649,7 @@ class CmsFormBuilder {
     
     /**
      * Get the sorted value
-     * 
+     *
      * @return string
      */
     private function getSort()
@@ -647,7 +659,7 @@ class CmsFormBuilder {
     
     /**
      * Get the sorted direction value
-     * 
+     *
      * @return string
      */
     private function getSortDirection()
@@ -657,18 +669,20 @@ class CmsFormBuilder {
     
     /**
      * Get the rules key based on the method
-     * 
+     *
      * @return string
      */
     private function getRulesKey()
     {
-        if (! request()->route()) return "validationOnCreate";
+        if (! request()->route()) {
+            return "validationOnCreate";
+        }
         return str_contains(request()->route()->getAction()["controller"], "@edit") ? "validationOnUpdate" : "validationOnCreate";
     }
     
     /**
      * Render the HTML back to the view, this allows for {{}} or {!!!!}
-     * 
+     *
      * @param  View     $view   The viewe instance, it will be render()'d'
      * @return string
      */
@@ -676,5 +690,4 @@ class CmsFormBuilder {
     {
         return new HtmlString($view);
     }
-    
 }

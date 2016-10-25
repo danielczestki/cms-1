@@ -32,6 +32,4 @@ class CmsFormBuilderTest extends TestCase
         $html = (string) $this->form->close()->toHtml();
         $this->assertEquals("</form>", $html);
     }
-    
-    
 }

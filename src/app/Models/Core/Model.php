@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
 
 class Model extends BaseModel
 {
-    
     use Setter;
     
     /**
@@ -14,7 +13,7 @@ class Model extends BaseModel
      *
      * @param  array  $attributes
      * @return void
-     */   
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -31,6 +30,5 @@ class Model extends BaseModel
             ->withPivot(["mediable_type", "mediable_category", "position"])
             ->wherePivot("mediable_category", $type)
             ->orderBy($orderColumn, $orderDir);
-    }    
-    
+    }
 }

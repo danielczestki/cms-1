@@ -8,8 +8,8 @@ use Validator;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
-class AuthController extends Controller {
-
+class AuthController extends Controller
+{
     use AuthenticatesUsers {
         logout as performLogout;
     }
@@ -82,5 +82,4 @@ class AuthController extends Controller {
             'password' => bcrypt($data['password']),
         ]);
     }
-
 }

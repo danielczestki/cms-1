@@ -6,7 +6,8 @@ use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Finder\Finder;
 
-class Yaml {
+class Yaml
+{
     
     /**
      * @var string
@@ -48,7 +49,7 @@ class Yaml {
     
     /**
      * Get the meta from the Yaml
-     * 
+     *
      * @return array
      */
     public function getMeta()
@@ -58,7 +59,7 @@ class Yaml {
     
     /**
      * Get the listing for the index grid listing page for a resource
-     * 
+     *
      * @return array
      */
     public function getListing()
@@ -71,7 +72,7 @@ class Yaml {
         }
         $fields = $this->getFields();
         $grid = $this->yaml["listing"];
-        array_walk($grid, function($item, $key) use (&$grid, $fields) {
+        array_walk($grid, function ($item, $key) use (&$grid, $fields) {
             $grid[$key]["name"] = $key;
             $grid[$key]["type"] = array_get($fields, "{$key}.type", "text");
         });
@@ -102,7 +103,7 @@ class Yaml {
     
     /**
      * Get the form fields for the resource
-     * 
+     *
      * @return array
      */
     public function getFields()
@@ -112,37 +113,50 @@ class Yaml {
     
     /**
      * Get the searchable fields for the resource
-     * 
+     *
      * @return array
      */
     public function getSearchable()
     {
-        return array_key_exists("searchable", $this->yaml) ? $this->yaml["searchable"] : [];;
+        return array_key_exists("searchable", $this->yaml) ? $this->yaml["searchable"] : [];
+        ;
     }
     
     /**
      * Go through all the YAML config files and return the nav
-     * based on what we have 
-     * 
+     * based on what we have
+     *
      * @return array
      */
     public function getNav()
     {
         $arr = [];
         $files = $this->getAllYamls();
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $yaml = $this->parseYaml($file->getRealpath());
             // do loads of validation to be safe
-            if (! is_array($yaml)) continue;
-            if (! array_key_exists("meta", $yaml)) continue;
+            if (! is_array($yaml)) {
+                continue;
+            }
+            if (! array_key_exists("meta", $yaml)) {
+                continue;
+            }
             $meta = $yaml["meta"];
-            if (! array_key_exists("show_in_nav", $meta)) continue;
-            if (! $meta["show_in_nav"]) continue;
-            if (! array_key_exists("title", $meta)) continue;
+            if (! array_key_exists("show_in_nav", $meta)) {
+                continue;
+            }
+            if (! $meta["show_in_nav"]) {
+                continue;
+            }
+            if (! array_key_exists("title", $meta)) {
+                continue;
+            }
             $filename = $this->getFilename($file);
             $perms = \Auth::guard("cms")->user()->permissions;
             if (! empty($perms)) {
-                if (! in_array($filename, $perms)) continue;
+                if (! in_array($filename, $perms)) {
+                    continue;
+                }
             }
             if (array_key_exists("order_by", $meta)) {
                 $sortString = "?sort=" . $meta["order_by"] . '&sort_dir=' . (array_key_exists("order", $meta) ? strtolower($meta['order']) : 'asc');
@@ -154,7 +168,9 @@ class Yaml {
                 "controller" => $filename . "Controller"
             ];
             // if api is enabled in yaml, set a var
-            if ($yaml && isset($yaml['meta']) && isset($yaml['meta']['api']) && $yaml['meta']['api'] && !isset($enableApi)) $enableApi = true;
+            if ($yaml && isset($yaml['meta']) && isset($yaml['meta']['api']) && $yaml['meta']['api'] && !isset($enableApi)) {
+                $enableApi = true;
+            }
         }
         // do we want to add the api link?
         if (isset($enableApi) && $enableApi) {
@@ -174,7 +190,7 @@ class Yaml {
     
     /**
      * Set the name and filename we are currently using to the property
-     * 
+     *
      * @param string $name The $modelName from the controller, will match the .yaml filename
      */
     public function setFile($name)
@@ -199,7 +215,7 @@ class Yaml {
     
     /**
      * PArse the YAML
-     * 
+     *
      * @param  string $filepath Full path to file
      * @return Yaml
      */
@@ -211,7 +227,7 @@ class Yaml {
     
     /**
      * Fetch all the yamls defined
-     * 
+     *
      * @return Finder
      */
     public function getAllYamls()
@@ -221,7 +237,7 @@ class Yaml {
     
     /**
      * Fetch the currently set file path
-     * 
+     *
      * @return string
      */
     public function getFile()
@@ -231,12 +247,11 @@ class Yaml {
     
     /**
      * Fetch the currently set yaml object
-     * 
+     *
      * @return string
      */
     public function getYaml()
     {
         return $this->yaml;
     }
-    
 }

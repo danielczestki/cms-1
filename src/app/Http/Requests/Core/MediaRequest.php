@@ -2,7 +2,10 @@
 
 namespace Thinmartian\Cms\App\Http\Requests\Core;
 
-use CmsImage, CmsVideo, CmsDocument, CmsEmbed;
+use CmsImage;
+use CmsVideo;
+use CmsDocument;
+use CmsEmbed;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MediaRequest extends FormRequest
@@ -27,19 +30,18 @@ class MediaRequest extends FormRequest
     {
         $method = in_array($this->method, ["PUT", "PATCH"]) ? "validationOnUpdate" : "validationOnCreate";
         switch (request()->get("type")) {
-            case "image" :
+            case "image":
                 return CmsImage::$method();
             break;
-            case "video" :
+            case "video":
                 return CmsVideo::$method();
             break;
-            case "document" :
+            case "document":
                 return CmsDocument::$method();
             break;
-            case "embed" :
+            case "embed":
                 return CmsEmbed::$method();
             break;
         }
     }
-    
 }

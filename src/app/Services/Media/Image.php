@@ -82,13 +82,17 @@ class Image extends Media
     {
         // Set and check
         $this->setCmsMedium($cms_medium_id);
-        if ($this->cmsMedium->type != "image") return false;
+        if ($this->cmsMedium->type != "image") {
+            return false;
+        }
 
         // Generate the file name now so we can check for existence first
         $imagepath = $this->getImagePath($this->getImageFile($width, $height));
 
         // Already there?
-        if (! $force and $this->fileExists($imagepath)) return $this->getPublicUrl($imagepath);
+        if (! $force and $this->fileExists($imagepath)) {
+            return $this->getPublicUrl($imagepath);
+        }
         // Generate the image and store
         $this->generate($width, $height, $scaleUp);
         return $this->getPublicUrl($imagepath);
@@ -349,5 +353,4 @@ class Image extends Media
     {
         return call_user_func_array([$this->intervention, $method], $parameters);
     }
-
 }

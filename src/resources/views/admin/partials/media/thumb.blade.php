@@ -1,18 +1,18 @@
 <?php 
     switch ($media->type) {
-        case "image" :
+        case "image":
             $tinyHtml = '<img src="'. CmsImage::get($media->id, 800) .'" style="max-width:100%;" />';
         break;
-        case "video" :
+        case "video":
             $tinyHtml = '<video src="'. CmsVideo::get($media->id) .'" controls preload></video>';
         break;
-        case "embed" :
+        case "embed":
             $tinyHtml = CmsEmbed::get($media->id);
         break;
-        case "document" :
+        case "document":
             $tinyHtml = '<a href="'. CmsDocument::get($media->id) .'" target="_blank">Download '. $media->title .'</a>';
         break;
-        default : 
+        default:
             $tinyHtml = "";
     }
 ?>

@@ -23,28 +23,28 @@ class Controllers extends Commands
     
     /**
      * Path to the core folder
-     * 
+     *
      * @var string
      */
     protected $corePath;
     
     /**
      * Path to the custom folder
-     * 
+     *
      * @var string
      */
     protected $customPath;
     
     /**
      * Path to the core stub file
-     * 
+     *
      * @var string
      */
     protected $stubCorePath;
     
     /**
      * Path to the custom stub file
-     * 
+     *
      * @var string
      */
     protected $stubCustomPath;
@@ -79,7 +79,7 @@ class Controllers extends Commands
     
     /**
      * Build the core controller
-     * 
+     *
      * @param  string $filename
      * @return void
      */
@@ -90,18 +90,18 @@ class Controllers extends Commands
     
     /**
      * Build the custom controller
-     * 
+     *
      * @param  string $filename
      * @return void
      */
     private function custom($filename)
     {
-        $this->buildController("custom", $filename, $this->stubCustomPath, $this->customPath);        
+        $this->buildController("custom", $filename, $this->stubCustomPath, $this->customPath);
     }
     
     /**
      * Build the controller
-     * 
+     *
      * @param  string $type
      * @param  string $filename
      * @param  string $stubpath
@@ -113,7 +113,9 @@ class Controllers extends Commands
         $classname = $this->getControllerName($filename);
         $controllername = $classname . ".php";
         // if the controller is protected do not add/edit/overwrite/delete... don't touch it hear me!
-        if ($type == "core" and in_array($controllername, $this->cms->getProtectedControllers(false))) return;
+        if ($type == "core" and in_array($controllername, $this->cms->getProtectedControllers(false))) {
+            return;
+        }
         // we are good to write
         $name = $this->getFileName($filename);
         $stub = file_get_contents($stubpath);
@@ -124,7 +126,7 @@ class Controllers extends Commands
     
     /**
      * Return the class name
-     * 
+     *
      * @param  string $filename
      * @return string
      */
@@ -132,6 +134,4 @@ class Controllers extends Commands
     {
         return $this->getFileName($filename) . "Controller";
     }
-    
-    
 }

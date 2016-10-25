@@ -149,19 +149,37 @@ class Build extends Command
      */
     private function deleteUnused()
     {
-        if (file_exists(app_path("Cms/System/Http/Controllers/Controller.php"))) unlink(app_path("Cms/System/Http/Controllers/Controller.php"));
-        if (file_exists(app_path("Cms/System/.gitignore"))) unlink(app_path("Cms/System/.gitignore"));
-        if (file_exists(app_path("Cms/System/Http/Controllers/.gitignore"))) unlink(app_path("Cms/System/Http/Controllers/.gitignore"));
+        if (file_exists(app_path("Cms/System/Http/Controllers/Controller.php"))) {
+            unlink(app_path("Cms/System/Http/Controllers/Controller.php"));
+        }
+        if (file_exists(app_path("Cms/System/.gitignore"))) {
+            unlink(app_path("Cms/System/.gitignore"));
+        }
+        if (file_exists(app_path("Cms/System/Http/Controllers/.gitignore"))) {
+            unlink(app_path("Cms/System/Http/Controllers/.gitignore"));
+        }
         if (file_exists(app_path("Cms/System/Http/Controllers/Auth"))) {
             $fs = new Filesystem();
             $fs->remove(app_path("Cms/System/Http/Controllers/Auth"));
         }
-        if (file_exists(app_path("Cms/System/Model.php"))) unlink(app_path("Cms/System/Model.php"));
-        if (file_exists(app_path("Cms/System/Setter.php"))) unlink(app_path("Cms/System/Setter.php"));
-        if (file_exists(app_path("Cms/System/CmsMediumImage.php"))) unlink(app_path("Cms/System/CmsMediumImage.php"));
-        if (file_exists(app_path("Cms/System/CmsMediumVideo.php"))) unlink(app_path("Cms/System/CmsMediumVideo.php"));
-        if (file_exists(app_path("Cms/System/CmsMediumDocument.php"))) unlink(app_path("Cms/System/CmsMediumDocument.php"));
-        if (file_exists(app_path("Cms/System/CmsMediumEmbed.php"))) unlink(app_path("Cms/System/CmsMediumEmbed.php"));
+        if (file_exists(app_path("Cms/System/Model.php"))) {
+            unlink(app_path("Cms/System/Model.php"));
+        }
+        if (file_exists(app_path("Cms/System/Setter.php"))) {
+            unlink(app_path("Cms/System/Setter.php"));
+        }
+        if (file_exists(app_path("Cms/System/CmsMediumImage.php"))) {
+            unlink(app_path("Cms/System/CmsMediumImage.php"));
+        }
+        if (file_exists(app_path("Cms/System/CmsMediumVideo.php"))) {
+            unlink(app_path("Cms/System/CmsMediumVideo.php"));
+        }
+        if (file_exists(app_path("Cms/System/CmsMediumDocument.php"))) {
+            unlink(app_path("Cms/System/CmsMediumDocument.php"));
+        }
+        if (file_exists(app_path("Cms/System/CmsMediumEmbed.php"))) {
+            unlink(app_path("Cms/System/CmsMediumEmbed.php"));
+        }
     }
 
     /**
@@ -169,16 +187,34 @@ class Build extends Command
      */
     private function createDirectories()
     {
-        if (! file_exists(app_path("Cms"))) mkdir(app_path("Cms"), 0777);
-        if (! file_exists(app_path("Cms/Definitions"))) mkdir(app_path("Cms/Definitions"), 0777);
-        if (! file_exists(app_path("Cms/System"))) mkdir(app_path("Cms/System"), 0777);
-        if (! file_exists(app_path("Cms/System/Http/Controllers"))) mkdir(app_path("Cms/System/Http/Controllers"), 0777, true);
-        if (! file_exists(app_path("Cms/Http"))) mkdir(app_path("Cms/Http"), 0777);
-        if (! file_exists(app_path("Cms/Http/Controllers"))) mkdir(app_path("Cms/Http/Controllers"), 0777);
+        if (! file_exists(app_path("Cms"))) {
+            mkdir(app_path("Cms"), 0777);
+        }
+        if (! file_exists(app_path("Cms/Definitions"))) {
+            mkdir(app_path("Cms/Definitions"), 0777);
+        }
+        if (! file_exists(app_path("Cms/System"))) {
+            mkdir(app_path("Cms/System"), 0777);
+        }
+        if (! file_exists(app_path("Cms/System/Http/Controllers"))) {
+            mkdir(app_path("Cms/System/Http/Controllers"), 0777, true);
+        }
+        if (! file_exists(app_path("Cms/Http"))) {
+            mkdir(app_path("Cms/Http"), 0777);
+        }
+        if (! file_exists(app_path("Cms/Http/Controllers"))) {
+            mkdir(app_path("Cms/Http/Controllers"), 0777);
+        }
 
-        if (! file_exists(storage_path("app/cms"))) mkdir(storage_path("app/cms"), 0777, true);
-        if (! file_exists(storage_path("app/cms/temp"))) mkdir(storage_path("app/cms/temp"), 0777, true);
-        if (! file_exists(storage_path("app/cms/media"))) mkdir(storage_path("app/cms/media"), 0777, true);
+        if (! file_exists(storage_path("app/cms"))) {
+            mkdir(storage_path("app/cms"), 0777, true);
+        }
+        if (! file_exists(storage_path("app/cms/temp"))) {
+            mkdir(storage_path("app/cms/temp"), 0777, true);
+        }
+        if (! file_exists(storage_path("app/cms/media"))) {
+            mkdir(storage_path("app/cms/media"), 0777, true);
+        }
     }
 
     /**
@@ -243,5 +279,4 @@ class Build extends Command
         $bar->setBarWidth(50);
         return $bar;
     }
-
 }

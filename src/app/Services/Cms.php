@@ -1,21 +1,23 @@
 <?php
 
 namespace Thinmartian\Cms\App\Services;
+
 /*
 |--------------------------------------------------------------------------
 | Global service for the Thin Martian CMS
 |--------------------------------------------------------------------------
 |
 | This service is a global service for the entire Thin Martian CMS sharing
-| properties and methods to be used in many places across the CMS. 
+| properties and methods to be used in many places across the CMS.
 |
 */
 
-class Cms {
+class Cms
+{
     
     /**
      * Protected files that we never delete/touch
-     * 
+     *
      * @var array
      */
     protected $protectedFiles = [
@@ -27,7 +29,7 @@ class Cms {
     /**
      * Protected controllers (we do not alter or delete these in code)
      * Only within Core/. Custom/ is never protected
-     * 
+     *
      * @var array
      */
     protected $protectedControllers = [
@@ -40,7 +42,7 @@ class Cms {
     /**
      * Protected models (we do not alter or delete these in code)
      * Only within Core/. Custom/ is never protected
-     * 
+     *
      * @var array
      */
     protected $protectedModels = [
@@ -51,13 +53,13 @@ class Cms {
         "CmsMediumDocument.php",
         "CmsMediumEmbed.php",
         "Model.php",
-        "Setter.php" 
+        "Setter.php"
     ];
 
     /**
      * Protected migrations (we do not alter or delete these in code)
      * Only within the Package
-     * 
+     *
      * @var array
      */
     protected $protectedMigrations = [
@@ -72,9 +74,9 @@ class Cms {
     ];
     
     /**
-     * The following field types (YAML fields.type) will be ignored from 
+     * The following field types (YAML fields.type) will be ignored from
      * persistence layers. E.g. 'media' type
-     * 
+     *
      * @var array
      */
     protected $ignoredFieldTypes = [
@@ -83,7 +85,7 @@ class Cms {
     
     /**
      * Return the protected files
-     * 
+     *
      * @return array
      */
     public function getProtectedFiles()
@@ -93,7 +95,7 @@ class Cms {
     
     /**
      * Return the protected controllers
-     * 
+     *
      * @param  boolean  $includeFiles  prefix with the protectedFiles array
      * @return array
      */
@@ -104,7 +106,7 @@ class Cms {
     
     /**
      * Return the protected models
-     * 
+     *
      * @param  boolean  $includeFiles  prefix with the protectedFiles array
      * @return array
      */
@@ -115,7 +117,7 @@ class Cms {
     
     /**
      * Return the protected migrations
-     * 
+     *
      * @param  boolean  $includeFiles  prefix with the protectedFiles array
      * @return array
      */
@@ -126,12 +128,11 @@ class Cms {
     
     /**
      * Return the ignore field types
-     * 
+     *
      * @return array
      */
     public function getIgnoredFieldTypes()
     {
         return $this->ignoredFieldTypes;
     }
-    
 }

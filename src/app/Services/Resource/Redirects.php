@@ -1,7 +1,7 @@
 <?php 
 
 namespace Thinmartian\Cms\App\Services\Resource;
-    
+
 /*
 |--------------------------------------------------------------------------
 | Resource Redirects
@@ -17,7 +17,7 @@ trait Redirects
     
     /**
      * Parent redirect, determines what redirect and fires it back
-     * 
+     *
      * @param  string                       $type     The type of request being made
      * @param  Illuminate\Database\Eloquent $resource The saved resource (if any)
      * @return Illuminate\Routing\Redirector
@@ -39,7 +39,7 @@ trait Redirects
     
     /**
      * Redirect after a store/create/edit/update
-     * 
+     *
      * @param  Illuminate\Database\Eloquent $resource The saved resource
      * @param  string                       $success  Success mesage
      * @return Illuminate\Routing\Redirector
@@ -58,7 +58,7 @@ trait Redirects
     
     /**
      * Redirect after a delete
-     * 
+     *
      * @return Illuminate\Routing\Redirector
      */
     protected function redirectDestroy()
@@ -68,12 +68,11 @@ trait Redirects
     
     /**
      * Does the user want to "exit" after saving?
-     * 
+     *
      * @return boolean
      */
     private function exiting()
     {
         return array_key_exists("saveexit", request()->all());
     }
-    
 }

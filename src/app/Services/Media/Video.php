@@ -21,34 +21,42 @@ class Video extends Media
     
     //
     // Output
-    //  
-    
+    //
+
     /**
      * Fetch the URL to the video or false if still encoding
-     * 
+     *
      * @param  integer  $cms_medium_id  The cms_medium_id we are getting
      * @return mixed
      */
     public function get($cms_medium_id = null)
     {
         // Set and check
-        if ($cms_medium_id) $this->setCmsMedium($cms_medium_id);
-        if ($this->cmsMedium->type != "video") return false;
+        if ($cms_medium_id) {
+            $this->setCmsMedium($cms_medium_id);
+        }
+        if ($this->cmsMedium->type != "video") {
+            return false;
+        }
         // It's ready
         return $this->getPublicUrl("cms/media/{$this->cmsMedium->id}/encoded/{$this->cmsMedium->filename}.{$this->cmsMedium->extension}");
     }
     
     /**
      * Fetch the URL to the video thumb or false if still encoding
-     * 
+     *
      * @param  integer  $cms_medium_id  The cms_medium_id we are getting
      * @return mixed
      */
     public function thumbnail($cms_medium_id = null)
     {
         // Set and check
-        if ($cms_medium_id) $this->setCmsMedium($cms_medium_id);
-        if ($this->cmsMedium->type != "video") return false;
+        if ($cms_medium_id) {
+            $this->setCmsMedium($cms_medium_id);
+        }
+        if ($this->cmsMedium->type != "video") {
+            return false;
+        }
         if ($this->getStatus()) {
             // It's ready
             return $this->getPublicUrl("cms/media/{$this->cmsMedium->id}/encoded/{$this->cmsMedium->filename}-00001.png");
@@ -81,7 +89,7 @@ class Video extends Media
     
     /**
      * Return a preview of the item for listing across the place
-     * 
+     *
      * @return string
      */
     public function preview()
@@ -92,11 +100,11 @@ class Video extends Media
     
     //
     // CRUD
-    // 
-    
+    //
+
     /**
      * Store the image
-     * 
+     *
      * @return App\Cms\CmsMedium
      */
     public function store()
@@ -106,7 +114,7 @@ class Video extends Media
         // lets upload the raw file
         $this->upload();
         // encode the video
-        $job = $this->encode();        
+        $job = $this->encode();
         // now persist the video
         if ($this->uploadedFile->uploaded) {
             $resource = new CmsMediumVideo;
@@ -117,12 +125,12 @@ class Video extends Media
             $this->cmsMedium->video()->save($resource);
         }
         // Return the model back to the controller
-        return $this->cmsMedium;    
+        return $this->cmsMedium;
     }
     
     /**
      * Update the embed
-     * 
+     *
      * @return App\Cms\CmsMedium
      */
     public function update()
@@ -143,17 +151,17 @@ class Video extends Media
             $this->cmsMedium->video->save();
         }
         // Return the model back to the controller
-        return $this->cmsMedium; 
+        return $this->cmsMedium;
     }
     
     
     //
     // Encode
-    // 
-    
+    //
+
     /**
      * Send to transcoder to encoding (wrapper to create pipeline and job)
-     * 
+     *
      * @return array
      */
     public function encode()
@@ -209,11 +217,11 @@ class Video extends Media
     
     //
     // Validation
-    // 
-    
+    //
+
     /**
      * Get the form validation rules on create
-     * 
+     *
      * @return array
     */
     public function validationOnCreate()
@@ -227,7 +235,7 @@ class Video extends Media
     
     /**
      * Get the form validation rules on update
-     * 
+     *
      * @return array
     */
     public function validationOnUpdate()
@@ -240,26 +248,25 @@ class Video extends Media
     
     //
     // Redirects
-    // 
+    //
 
     /**
      * Redirect the user after store
-     * 
+     *
      * @return  Illuminate\Routing\Redirector
     */
-    public function redirectOnStore($cms_medium_id) 
+    public function redirectOnStore($cms_medium_id)
     {
         return redirect()->route("admin.media.index")->withSuccess("Video successfully saved!");
     }
     
     /**
      * Redirect the user after update
-     * 
+     *
      * @return  Illuminate\Routing\Redirector
     */
-    public function redirectOnUpdate($cms_medium_id) 
+    public function redirectOnUpdate($cms_medium_id)
     {
         return redirect()->route("admin.media.index")->withSuccess("Video successfully saved!");
     }
-    
 }

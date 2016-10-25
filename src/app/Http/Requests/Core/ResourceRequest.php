@@ -61,7 +61,7 @@ class ResourceRequest extends FormRequest
     
     /**
      * Build the validation
-     * 
+     *
      * @return array
      */
     private function buildRules()
@@ -71,7 +71,7 @@ class ResourceRequest extends FormRequest
         foreach (CmsYaml::getFields() as $key => $data) {
             if (array_key_exists($type, $data)) {
                 $string = $data[$type];
-                foreach ($this->route->current()->parameters() as $idx => $value){
+                foreach ($this->route->current()->parameters() as $idx => $value) {
                     $string = str_replace('{'.$idx.'}', $value, $string);
                 }
                 $arr[$key] = $string;
@@ -82,7 +82,7 @@ class ResourceRequest extends FormRequest
     
     /**
      * Determine what rules we want based on create, edit and delete
-     * 
+     *
      * @return string
      */
     private function getRuleType()
@@ -100,7 +100,7 @@ class ResourceRequest extends FormRequest
     
     /**
      * Build the attributes
-     * 
+     *
      * @return array
      */
     private function buildAttributes()
@@ -111,5 +111,4 @@ class ResourceRequest extends FormRequest
         }
         return $arr;
     }
-    
 }

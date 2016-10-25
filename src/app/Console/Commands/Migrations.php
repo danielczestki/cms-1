@@ -23,14 +23,14 @@ class Migrations extends Commands
     
     /**
      * Path to the migrations files
-     * 
+     *
      * @var string
      */
     protected $migrationsPath;
     
     /**
      * Path to the stub file
-     * 
+     *
      * @var string
      */
     protected $stubPath;
@@ -82,17 +82,17 @@ class Migrations extends Commands
         if ($this->created) {
             $this->info("Migrations generated from YAML definitions successfully!");
         } else {
-            $this->comment("No migrations to generate");            
+            $this->comment("No migrations to generate");
         }
     }
     
     //
     // MIGRATION
-    // 
-    
+    //
+
     /**
      * Build the migration file
-     * 
+     *
      * @param  string  $filename
      * @param  integer $number
      * @return void
@@ -121,7 +121,7 @@ class Migrations extends Commands
     
     /**
      * Build the schema for the migration file
-     * 
+     *
      * @param  Symfony\Component\Yaml\Parser $yaml
      * @return string
      */
@@ -130,14 +130,16 @@ class Migrations extends Commands
         $result = "";
         $fields = $yaml["fields"];
         foreach ($fields as $column => $data) {
-            if ($this->allowedColumn($data)) $result .= $this->buildColumn($column, $data);
+            if ($this->allowedColumn($data)) {
+                $result .= $this->buildColumn($column, $data);
+            }
         }
         return $result;
     }
 
     /**
      * Build the relations for the migration file
-     * 
+     *
      * @param  Symfony\Component\Yaml\Parser $yaml
      * @return string
      */
@@ -172,14 +174,18 @@ class Migrations extends Commands
     
     /**
      * Is this column allowed in the migration
-     * 
+     *
      * @param  array $data Array of data from yaml
      * @return boolean
      */
     private function allowedColumn($data)
     {
-        if (array_key_exists("persist", $data) and ! $data["persist"]) return false;
-        if (in_array($data["type"], $this->cms->getIgnoredFieldTypes())) return false;
+        if (array_key_exists("persist", $data) and ! $data["persist"]) {
+            return false;
+        }
+        if (in_array($data["type"], $this->cms->getIgnoredFieldTypes())) {
+            return false;
+        }
         return true;
     }
     
@@ -193,45 +199,45 @@ class Migrations extends Commands
     {
         $str = '$table->';
         switch ($data["type"]) {
-            case "text" :
-            case "select" :
-            case "email" :
-            case "password" :
+            case "text":
+            case "select":
+            case "email":
+            case "password":
                 $str .= $this->buildText($column, $data);
             break;
-            case "textarea" :
+            case "textarea":
                 $str .= $this->buildTextarea($column, $data);
             break;
-            case "wysiwyg" :
+            case "wysiwyg":
                 $str .= $this->buildWysiwyg($column, $data);
             break;
-            case "checkbox" :
-            case "radio" :
-            case "boolean" :
+            case "checkbox":
+            case "radio":
+            case "boolean":
                 $str .= $this->buildCheckbox($column, $data, "options");
             break;
-            case "datetime" :
+            case "datetime":
                 $str .= $this->buildDatetime($column, $data);
             break;
-            case "date" :
+            case "date":
                 $str .= $this->buildDate($column, $data);
             break;
-            case "number" :
+            case "number":
                 $str .= $this->buildNumber($column, $data);
             break;
-            case "relation" :
+            case "relation":
                 $str .= $this->buildNumber($column, $data);
             break;
-            default :
+            default:
                 $str .= $this->buildText($column, $data);
-            break;                
+            break;
         }
         return "            " . $str . $this->buildNullable($data) . $this->buildUnique($data) . ";\n";
     }
     
     /**
      * Return a "text" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -243,7 +249,7 @@ class Migrations extends Commands
     
     /**
      * Return a "textarea" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -255,7 +261,7 @@ class Migrations extends Commands
     
     /**
      * Return a "wysiwyg" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -267,7 +273,7 @@ class Migrations extends Commands
     
     /**
      * Return a "checkbox" migration
-     * 
+     *
      * @param  string  $column      The column name
      * @param  array   $data        The data from the yaml
      * @param  string  $checkfor    Check for this key to determine if we are boo or string
@@ -286,7 +292,7 @@ class Migrations extends Commands
     
     /**
      * Return a "boolean" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -298,7 +304,7 @@ class Migrations extends Commands
     
     /**
      * Return a "datetime" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -310,7 +316,7 @@ class Migrations extends Commands
     
     /**
      * Return a "date" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -322,7 +328,7 @@ class Migrations extends Commands
     
     /**
      * Return a "number" migration
-     * 
+     *
      * @param  string $column The column name
      * @param  array  $data   The data from the yaml
      * @return string
@@ -334,38 +340,44 @@ class Migrations extends Commands
     
     /**
      * Is this field required or not?
-     * 
+     *
      * @param  array $data The data from the yaml
      * @return string
      */
     private function buildNullable($data)
     {
-        if (! array_key_exists("validationOnCreate", $data)) return '->nullable()';
+        if (! array_key_exists("validationOnCreate", $data)) {
+            return '->nullable()';
+        }
         return in_array("required", explode("|", $data["validationOnCreate"])) ? null : '->nullable()';
     }
     
     /**
      * Is this field unique?
-     * 
+     *
      * @param  array $data The data from the yaml
      * @return string
      */
     private function buildUnique($data)
     {
-        if (! array_key_exists("validationOnCreate", $data)) return null;
+        if (! array_key_exists("validationOnCreate", $data)) {
+            return null;
+        }
         return str_contains($data["validationOnCreate"], "unique") ? '->unique()' : null;
     }
     
     /**
      * Return a max length based on the validation rules
-     * 
+     *
      * @param  array $data      The data from the yaml
      * @param  integer $default The default length if one don't exist
      * @return integer
      */
     private function buildLength($data, $default = 255)
     {
-        if (! array_key_exists("validationOnCreate", $data)) return $default;
+        if (! array_key_exists("validationOnCreate", $data)) {
+            return $default;
+        }
         $rules = $data["validationOnCreate"];
         
         foreach (explode("|", $rules) as $rule) {
@@ -379,7 +391,7 @@ class Migrations extends Commands
     
     /**
      * Return the class name for the migration file
-     * 
+     *
      * @param  string $filename
      * @return string
      */
@@ -390,11 +402,11 @@ class Migrations extends Commands
     
     //
     // GETTERS
-    // 
-    
+    //
+
     /**
      * Get the date part for the migration file
-     * 
+     *
      * @return string
      */
     private function getFileDate()
@@ -404,7 +416,7 @@ class Migrations extends Commands
     
     /**
      * Get the number part for the migration file
-     * 
+     *
      * @param integer $number
      * @return integer
      */
@@ -415,7 +427,7 @@ class Migrations extends Commands
     
     /**
      * Return the prefix part of the migration file
-     * 
+     *
      * @return string
      */
     private function getFilePrefix()
@@ -425,7 +437,7 @@ class Migrations extends Commands
     
     /**
      * Return the suffix part of the migration file
-     * 
+     *
      * @return string
      */
     private function getFileSuffix()
@@ -435,11 +447,11 @@ class Migrations extends Commands
     
     //
     // UTILS
-    // 
-    
+    //
+
     /**
      * Check if the migration file is already there
-     * 
+     *
      * @param  string $filename
      * @return string
      */
@@ -447,9 +459,10 @@ class Migrations extends Commands
     {
         $file = $this->getFilePrefix() . $this->getTablename($this->getFilename($filename)) . $this->getFileSuffix();
         foreach (scandir($this->migrationsPath) as $filename) {
-            if (str_contains($filename, $file)) return true;
+            if (str_contains($filename, $file)) {
+                return true;
+            }
         }
         return false;
     }
-    
 }

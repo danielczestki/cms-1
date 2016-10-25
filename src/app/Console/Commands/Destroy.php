@@ -29,7 +29,7 @@ class Destroy extends Command
     
     /**
      * The src/ path to the installed package
-     * 
+     *
      * @var string
      */
     protected $srcpath;
@@ -98,12 +98,14 @@ class Destroy extends Command
             //  Drop DB tables and clean migrations table
             $this->destroyDatabase();
             $this->comment("CMS data reset. Run <question>php artisan cms:build</question> to rebuild.");
-        } else { $this->comment("Phew! That was close!"); }
+        } else {
+            $this->comment("Phew! That was close!");
+        }
     }
     
     /**
      * Deletes the App/Cms folder
-     * 
+     *
      * @return void
      */
     protected function destroyCmsFolder()
@@ -113,7 +115,7 @@ class Destroy extends Command
     
     /**
      * Deletes the media folder
-     * 
+     *
      * @return void
      */
     protected function destroyMediaFolder()
@@ -125,7 +127,7 @@ class Destroy extends Command
     
     /**
      * Deletes the public assets folder
-     * 
+     *
      * @return void
      */
     protected function destroyAssetsFolder()
@@ -135,7 +137,7 @@ class Destroy extends Command
     
     /**
      * Deletes the public config folder
-     * 
+     *
      * @return void
      */
     protected function destroyConfigFolder()
@@ -145,7 +147,7 @@ class Destroy extends Command
     
     /**
      * Deletes all migrations files
-     * 
+     *
      * @return void
      */
     protected function destroyMigrations()
@@ -154,16 +156,16 @@ class Destroy extends Command
         $app = database_path("migrations");
         $packageProtected = $this->cms->getProtectedMigrations();
         // app (different as we do a match as we have no idea whats in here)
-        foreach($this->finder->create()->files()->in($app) as $filepath => $file) {
+        foreach ($this->finder->create()->files()->in($app) as $filepath => $file) {
             if (str_contains($file->getFilename(), "_cms_")) {
-               $this->filesystem->remove($filepath);
+                $this->filesystem->remove($filepath);
             }
         }
     }
     
     /**
      * Drop DB table and cleans the migration table
-     * 
+     *
      * @return void
      */
     protected function destroyDatabase()
@@ -184,7 +186,7 @@ class Destroy extends Command
     
     /**
      * Ignore these files
-     * 
+     *
      * @param  array  $files
      * @param  string $file
      * @return boolean
@@ -193,5 +195,4 @@ class Destroy extends Command
     {
         return in_array($file->getFilename(), $files);
     }
-    
 }

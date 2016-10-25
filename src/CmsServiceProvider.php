@@ -2,7 +2,8 @@
 
 namespace Thinmartian\Cms;
 
-use Auth, Request;
+use Auth;
+use Request;
 use App\Cms\System\CmsUser;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -23,15 +24,14 @@ use Thinmartian\Cms\App\Services\Media\Video as CmsVideoService;
 use Thinmartian\Cms\App\Services\Media\Document as CmsDocumentService;
 use Thinmartian\Cms\App\Services\Media\Embed as CmsEmbedService;
 
-
 class CmsServiceProvider extends ServiceProvider
-{   
+{
     
     /**
      * Version of the Thin Martian CMS
      */
     //const CMSVERSION = "1.0.0";
-    
+
     /**
      * Name of the package
      */
@@ -105,7 +105,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Boot the routes
-     * 
+     *
      * @return void
      */
     private function bootRoutes()
@@ -117,7 +117,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Boot the views
-     * 
+     *
      * @return void
      */
     private function bootViews()
@@ -127,7 +127,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Register middleware with the Kernal
-     * 
+     *
      * @return void
      */
     private function bootMiddleware(Router $router)
@@ -142,12 +142,14 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Run stuff when in a browser only, and NOT in console/artisan
-     * 
+     *
      * @return void
      */
     private function browserActions()
-    {if (! app()->runningInConsole()) { if (request()->is("admin*")) {
-        // Tell the user to run build cos they haven"t done it yet
+    {
+        if (! app()->runningInConsole()) {
+            if (request()->is("admin*")) {
+                // Tell the user to run build cos they haven"t done it yet
         if (! file_exists(app_path("Cms"))) {
             exit(view("cms::admin.install.runcommand")->render());
         }
@@ -155,11 +157,13 @@ class CmsServiceProvider extends ServiceProvider
         if (! \DB::table("cms_users")->count()) {
             exit(view("cms::admin.install.missingadmin")->render());
         }
-    }}}
+            }
+        }
+    }
     
     /**
      * Publish the stock definitions
-     * 
+     *
      * @return void
      */
     private function publishDefinitions()
@@ -171,7 +175,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Publish the configs
-     * 
+     *
      * @return void
      */
     private function publishConfig()
@@ -183,7 +187,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Publish the public assets
-     * 
+     *
      * @return void
      */
     private function publishAssets()
@@ -195,7 +199,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Publish the database migrations
-     * 
+     *
      * @return void
      */
     private function publishMigrations()
@@ -207,7 +211,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Publish the models
-     * 
+     *
      * @return void
      */
     private function publishModels()
@@ -219,7 +223,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Publish the controllers
-     * 
+     *
      * @return void
      */
     private function publishControllers()
@@ -231,17 +235,17 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Register artisan commands
-     * 
+     *
      * @return void
      */
     private function registerCommands()
-    {        
+    {
         $this->commands($this->commands);
     }
     
     /**
      * Merge the config files in vendor with the ones published
-     * 
+     *
      * @return void
      */
     private function mergeConfig()
@@ -253,7 +257,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Update config values (including default laravel config)
-     * 
+     *
      * @return void
      */
     private function updateConfig()
@@ -263,7 +267,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Update the default auth config to add the Thin Martian CMS guard
-     * 
+     *
      * @return void
      */
     private function updateConfigAuth()
@@ -294,7 +298,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Register the CMS Yaml
-     * 
+     *
      * @return void
      */
     private function registerYaml()
@@ -308,7 +312,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Register the CMS form builder
-     * 
+     *
      * @return void
      */
     private function registerFormBuilder()
@@ -324,7 +328,7 @@ class CmsServiceProvider extends ServiceProvider
     
     /**
      * Register the CMS Media
-     * 
+     *
      * @return void
      */
     private function registerMedia()
@@ -354,5 +358,4 @@ class CmsServiceProvider extends ServiceProvider
         $this->app->alias("cmsembed", CmsEmbedService::class);
         $this->loader->alias("CmsEmbed", "Thinmartian\Cms\App\Facades\CmsEmbedFacade");
     }
-    
 }

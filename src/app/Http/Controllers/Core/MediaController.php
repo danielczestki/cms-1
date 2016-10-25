@@ -2,7 +2,8 @@
 
 namespace App\Cms\System\Http\Controllers;
 
-use CmsForm, DB;
+use CmsForm;
+use DB;
 use App\Cms\CmsMedium;
 use App\Http\Controllers\Controller as BaseController;
 use Thinmartian\Cms\App\Http\Requests\Core\MediaRequest;
@@ -16,7 +17,7 @@ class MediaController extends BaseController
     
     /**
      * The media type service we are using
-     * 
+     *
      * @var Thinmartian\Cms\App\Services\Media\Image|Video|Document|Embed
      */
     protected $media;
@@ -117,7 +118,9 @@ class MediaController extends BaseController
      */
     public function edit($cms_medium_id)
     {
-        if (! $resource = CmsMedium::find($cms_medium_id)) return app()->abort(404);
+        if (! $resource = CmsMedium::find($cms_medium_id)) {
+            return app()->abort(404);
+        }
         $mediakey = $resource->type;
         $this->setMedia($resource);
         $mediatype = $this->media->getMediaTypes($mediakey);
@@ -157,7 +160,7 @@ class MediaController extends BaseController
     
     /**
      * Select the focal point of the image (images only use this)
-     * 
+     *
      * @param  integer $cms_medium_id
      * @return \Illuminate\Http\Response
      */
@@ -170,7 +173,7 @@ class MediaController extends BaseController
     
     /**
      * Set the focal point of the image (images only use this)
-     * 
+     *
      * @param  integer $cms_medium_id
      * @return \Illuminate\Http\Response
      */
@@ -191,7 +194,9 @@ class MediaController extends BaseController
     public function destroy($cms_medium_id)
     {
         // Find it first
-        if (! $resource = CmsMedium::find($cms_medium_id)) return $this->destroyResponse("Sorry, we couldn't find this media item");
+        if (! $resource = CmsMedium::find($cms_medium_id)) {
+            return $this->destroyResponse("Sorry, we couldn't find this media item");
+        }
         // We got it, proceed
         $resource->delete();
         // All done
@@ -200,7 +205,7 @@ class MediaController extends BaseController
     
     /**
      * Return the array for the destroy method, that the AJAX can hook on to
-     * 
+     *
      * @param  string  $message
      * @param  boolean $success
      * @return array
@@ -212,7 +217,7 @@ class MediaController extends BaseController
     
     /**
      * Delegate a method to one of the services based on the type
-     * 
+     *
      * @param  string $method The method to call on the service
      * @param  mixed  $params
      * @return App\Cms\CmsMedium
@@ -225,7 +230,7 @@ class MediaController extends BaseController
     /**
      * Set the media prop, we can send the $type or default to what's
      * in the request()
-     * 
+     *
      * @param App\Cms\CmsMedium $cms_medium
      */
     private function setMedia($cms_medium = null)
@@ -236,7 +241,9 @@ class MediaController extends BaseController
         if ($service->isValidMediaType($type)) {
             $this->media = app()->make("Thinmartian\Cms\App\Services\Media\\" . ucfirst($type));
             $this->media->setInput($this->input);
-            if ($cms_medium) $this->media->setCmsMedium($cms_medium);
+            if ($cms_medium) {
+                $this->media->setCmsMedium($cms_medium);
+            }
             return $this->media;
         }
         return null;
@@ -244,7 +251,7 @@ class MediaController extends BaseController
     
     /**
      * Get the allowed types for this request
-     * 
+     *
      * @return array
      */
     public function getAllowed()
@@ -254,7 +261,7 @@ class MediaController extends BaseController
     
     /**
      * Get the deleted value for this request
-     * 
+     *
      * @return array
      */
     public function getDeleted()
@@ -264,7 +271,7 @@ class MediaController extends BaseController
     
     /**
      * Get the tiny value for this request
-     * 
+     *
      * @return array
      */
     public function getTiny()
@@ -280,7 +287,7 @@ class MediaController extends BaseController
     {
         if ($string = request()->get("allowed")) {
             $this->setAllowedSession($string);
-        } else if (request()->session()->has("allowed")) {
+        } elseif (request()->session()->has("allowed")) {
             request()->session()->keep(["allowed"]);
         } else {
             $this->setAllowedSession("image,video,document,embed");
@@ -294,11 +301,11 @@ class MediaController extends BaseController
     {
         if ($string = request()->get("deleted")) {
             request()->session()->flash("deleted", $string);
-        } else if (request()->session()->has("deleted")) {
+        } elseif (request()->session()->has("deleted")) {
             request()->session()->keep(["deleted"]);
         } else {
             request()->session()->flash("deleted", true);
-        }  
+        }
     }
     
     /**
@@ -308,16 +315,16 @@ class MediaController extends BaseController
     {
         if ($string = request()->get("tiny")) {
             request()->session()->flash("tiny", $string);
-        } else if (request()->session()->has("tiny")) {
+        } elseif (request()->session()->has("tiny")) {
             request()->session()->keep(["tiny"]);
         } else {
             request()->session()->flash("tiny", false);
-        }  
+        }
     }
     
     /**
      * Set the session for the allowed array
-     * 
+     *
      * @param string $string
      */
     private function setAllowedSession($string)
@@ -325,5 +332,4 @@ class MediaController extends BaseController
         $allowed = explode(",", $string);
         request()->session()->flash("allowed", $allowed);
     }
-    
 }

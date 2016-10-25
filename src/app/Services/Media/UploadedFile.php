@@ -7,7 +7,7 @@ class UploadedFile
     
     /**
      * Base path for all media uploads
-     * 
+     *
      * @var string
      * @example cms/media
      */
@@ -15,14 +15,14 @@ class UploadedFile
     
     /**
      * Storage disk to use (fetched from the config)
-     * 
+     *
      * @var string
      */
     public $disk;
     
     /**
      * Set the visibility of the uploaded files
-     * 
+     *
      * @var string
     */
     public $visibility;
@@ -81,5 +81,4 @@ class UploadedFile
         $this->visibility = config("cms.cms.media_visibility");
         $this->basePath = config("cms.cms.media_path") . "/" . "media";
     }
-    
 }

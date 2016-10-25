@@ -7,13 +7,16 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Thinmartian\Cms\App\Services\Media\Image
  */
-class CmsImageFacade extends Facade {
+class CmsImageFacade extends Facade
+{
 
     /**
      * Get the registered name of the component.
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return "cmsimage"; }
-
+    protected static function getFacadeAccessor()
+    {
+        return "cmsimage";
+    }
 }
