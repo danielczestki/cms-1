@@ -101,14 +101,16 @@ class Build extends Command
         $this->deleteUnused();
         usleep(200000);
 
-        $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
-        $bar->advance();
-        $this->artisan->call("vendor:publish", [
-            "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
-            "--tag" => ["assets"],
-            "--force" => true
-        ]);
-        usleep(200000);
+        if ($this->option('overwrite')) {
+            $bar->setMessage("<comment>Ensuring public assets are up-to-date...</comment>");
+            $bar->advance();
+            $this->artisan->call("vendor:publish", [
+                "--provider" => "Thinmartian\\Cms\\CmsServiceProvider",
+                "--tag" => ["assets"],
+                "--force" => true
+            ]);
+            usleep(200000);
+        }
 
         $bar->setMessage("<comment>Migrating database...</comment>");
         $bar->advance();
