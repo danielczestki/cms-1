@@ -8,17 +8,17 @@ use CmsYaml;
 
 class ResourceRequest extends FormRequest
 {
-    
+
     /**
      * @var string
      */
     protected $name;
-    
+
     /**
      * @var Illuminate\Routing\Router
      */
     protected $route;
-    
+
     /**
      * constructor, set the name using the request, we KNOW it's there!
      */
@@ -28,7 +28,7 @@ class ResourceRequest extends FormRequest
         $this->name = request()->get("_name");
         CmsYaml::setFile($this->name);
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -48,7 +48,7 @@ class ResourceRequest extends FormRequest
     {
         return $this->buildRules();
     }
-    
+
     /**
      * Set custom attributes for validator errors.
      *
@@ -58,7 +58,7 @@ class ResourceRequest extends FormRequest
     {
         return $this->buildAttributes();
     }
-    
+
     /**
      * Build the validation
      *
@@ -79,7 +79,7 @@ class ResourceRequest extends FormRequest
         }
         return $arr;
     }
-    
+
     /**
      * Determine what rules we want based on create, edit and delete
      *
@@ -87,7 +87,7 @@ class ResourceRequest extends FormRequest
      */
     private function getRuleType()
     {
-        switch ($this->method) {
+        switch ($this->method()) {
             case "POST":
                 return "validationOnCreate";
             break;
@@ -97,7 +97,7 @@ class ResourceRequest extends FormRequest
             break;
         }
     }
-    
+
     /**
      * Build the attributes
      *
