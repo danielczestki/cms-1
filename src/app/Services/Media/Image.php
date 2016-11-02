@@ -94,8 +94,7 @@ class Image extends Media
             return $this->getPublicUrl($imagepath);
         }
         // Generate the image and store
-        $this->generate($width, $height, $scaleUp);
-        return $this->getPublicUrl($imagepath);
+        return $this->generate($width, $height, $scaleUp);
     }
 
     /**
@@ -136,6 +135,8 @@ class Image extends Media
         $image->save($temppath, $this->getImageQuality());
         $this->storeFile($imagepath, $temppath);
         unlink($temppath);
+        $imagepath = $this->getImagePath($this->getImageFile($width, $height));
+        return $this->getPublicUrl($imagepath);
     }
 
     /**
