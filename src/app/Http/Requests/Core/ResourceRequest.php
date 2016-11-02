@@ -8,17 +8,17 @@ use CmsYaml;
 
 class ResourceRequest extends FormRequest
 {
-    
+
     /**
      * @var string
      */
     protected $name;
-    
+
     /**
      * @var Illuminate\Routing\Router
      */
     protected $route;
-    
+
     /**
      * constructor, set the name using the request, we KNOW it's there!
      */
@@ -28,7 +28,7 @@ class ResourceRequest extends FormRequest
         $this->name = request()->get("_name");
         CmsYaml::setFile($this->name);
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -48,7 +48,7 @@ class ResourceRequest extends FormRequest
     {
         return $this->buildRules();
     }
-    
+
     /**
      * Set custom attributes for validator errors.
      *
@@ -58,10 +58,10 @@ class ResourceRequest extends FormRequest
     {
         return $this->buildAttributes();
     }
-    
+
     /**
      * Build the validation
-     * 
+     *
      * @return array
      */
     private function buildRules()
@@ -71,7 +71,7 @@ class ResourceRequest extends FormRequest
         foreach (CmsYaml::getFields() as $key => $data) {
             if (array_key_exists($type, $data)) {
                 $string = $data[$type];
-                foreach ($this->route->current()->parameters() as $idx => $value){
+                foreach ($this->route->current()->parameters() as $idx => $value) {
                     $string = str_replace('{'.$idx.'}', $value, $string);
                 }
                 $arr[$key] = $string;
@@ -79,15 +79,15 @@ class ResourceRequest extends FormRequest
         }
         return $arr;
     }
-    
+
     /**
      * Determine what rules we want based on create, edit and delete
-     * 
+     *
      * @return string
      */
     private function getRuleType()
     {
-        switch ($this->method) {
+        switch ($this->method()) {
             case "POST":
                 return "validationOnCreate";
             break;
@@ -97,10 +97,10 @@ class ResourceRequest extends FormRequest
             break;
         }
     }
-    
+
     /**
      * Build the attributes
-     * 
+     *
      * @return array
      */
     private function buildAttributes()
@@ -111,5 +111,4 @@ class ResourceRequest extends FormRequest
         }
         return $arr;
     }
-    
 }
