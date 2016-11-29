@@ -8,32 +8,32 @@ use Symfony\Component\Finder\Finder;
 
 class Yaml
 {
-    
+
     /**
      * @var string
      */
     protected $prefix = "Cms";
-        
+
     /**
      * @var string
      */
     protected $path;
-    
+
     /**
      * @var string
      */
     protected $file;
-    
+
     /**
      * @var Symfony\Component\Finder\Finder
      */
     protected $finder;
-    
+
     /**
      * @var object
      */
     protected $yaml;
-    
+
     /**
      * constructor
      */
@@ -42,11 +42,11 @@ class Yaml
         $this->path = app_path("Cms/Definitions/");
         $this->finder = new Finder;
     }
-    
+
     /**
      * Getters
      */
-    
+
     /**
      * Get the meta from the Yaml
      *
@@ -56,7 +56,7 @@ class Yaml
     {
         return array_key_exists("meta", $this->yaml) ? $this->yaml["meta"] : null;
     }
-    
+
     /**
      * Get the listing for the index grid listing page for a resource
      *
@@ -100,7 +100,7 @@ class Yaml
         ]);
         return $listing;
     }
-    
+
     /**
      * Get the form fields for the resource
      *
@@ -110,7 +110,7 @@ class Yaml
     {
         return array_key_exists("fields", $this->yaml) ? $this->yaml["fields"] : null;
     }
-    
+
     /**
      * Get the searchable fields for the resource
      *
@@ -121,7 +121,7 @@ class Yaml
         return array_key_exists("searchable", $this->yaml) ? $this->yaml["searchable"] : [];
         ;
     }
-    
+
     /**
      * Go through all the YAML config files and return the nav
      * based on what we have
@@ -151,8 +151,13 @@ class Yaml
             if (! array_key_exists("title", $meta)) {
                 continue;
             }
+            $user = \Auth::guard("cms")->user();
             $filename = $this->getFilename($file);
-            $perms = \Auth::guard("cms")->user()->permissions;
+            $perms = $user->permissions;
+            if ($filename === "Users" && $user->access_level !== "Admin") {
+                continue;
+            }
+
             if (! empty($perms)) {
                 if (! in_array($filename, $perms)) {
                     continue;
@@ -183,11 +188,11 @@ class Yaml
         }
         return $arr;
     }
-    
+
     /**
      * Setters
      */
-    
+
     /**
      * Set the name and filename we are currently using to the property
      *
@@ -203,16 +208,16 @@ class Yaml
             throw new ParseException("{$this->file} doesn't exist");
         }
     }
-    
+
     /**
      * File utils
      */
-    
+
     public function getFilename($file)
     {
         return $file->getBasename('.' . $file->getExtension());
     }
-    
+
     /**
      * PArse the YAML
      *
@@ -224,7 +229,7 @@ class Yaml
         $parser = new Parser();
         return $parser->parse(file_get_contents($filepath));
     }
-    
+
     /**
      * Fetch all the yamls defined
      *
@@ -234,7 +239,7 @@ class Yaml
     {
         return $this->finder->files()->in($this->path)->name("*.yaml");
     }
-    
+
     /**
      * Fetch the currently set file path
      *
@@ -244,7 +249,7 @@ class Yaml
     {
         return $this->file;
     }
-    
+
     /**
      * Fetch the currently set yaml object
      *

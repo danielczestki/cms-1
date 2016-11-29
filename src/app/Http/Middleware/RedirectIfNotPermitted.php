@@ -17,12 +17,19 @@ class RedirectIfNotPermitted
      */
     public function handle($request, Closure $next, $filename = null)
     {
-        $perms = Auth::guard("cms")->user()->permissions;
+        $user = Auth::guard("cms")->user();
+        $perms = $user->permissions;
+        if ($filename === 'Users' && $user->access_level !== "Admin") {
+            return redirect('/admin')->withError("You do not have permission to view this page");
+        }
         if (! empty($perms)) {
             if (! in_array($filename, $perms)) {
                 return redirect('/admin')->withError("You do not have permission to view this page");
             }
         }
+
+
+
         return $next($request);
     }
 }
