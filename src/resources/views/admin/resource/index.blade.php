@@ -6,7 +6,7 @@
 @inject("grid", "Thinmartian\Cms\App\Services\Resource\Grid")
 
 @section("content")
-    
+
     <!-- Title -->
     <div class="Title Utility--clearfix">
         <div class="Title__titles">
@@ -19,13 +19,13 @@
             </a>
         </div>
     </div>
-    
+
     <!-- Filters -->
     @unless (! $listing->total() and ! request()->has("search"))
         <aside class="Filters Box Utility--clearfix">
             <div class="Filters__filter Filters__filter--totals">
                 @if ($listing->total())
-                    Showing results <strong>{{ intval($listing->firstItem()) }}</strong> to <strong>{{ intval($listing->lastItem()) }}</strong> of <strong>{{ $listing->total() }}</strong> | 
+                    Showing results <strong>{{ intval($listing->firstItem()) }}</strong> to <strong>{{ intval($listing->lastItem()) }}</strong> of <strong>{{ $listing->total() }}</strong> |
                 @endif
                 @unless (! $listing->total() and ! request()->has("search"))
                     <a href="{{ cmsaction($controller . "@index", true) }}">Reset</a>
@@ -48,14 +48,14 @@
             @endunless
         </aside>
     @endunless
-    
+
     <!-- Status messages -->
     {{ CmsForm::error() }}
     {{ CmsForm::success() }}
-    
+
     <!-- Listing -->
     <div class="Box">
-                
+
         @if ($listing->total())
             {{ Form::open(["method" => "DELETE", "url" => url()->current() . "/destroy?" . http_build_query($filters)]) }}
                 <table class="List">
@@ -112,20 +112,20 @@
             {{ Form::close() }}
         @else
             <div class="Noresults">
-                <p class="Noresults__title">Sorry, I got nothing to show you!</p>
+                <p class="Noresults__title">No results found</p>
                 @if (request()->has("search"))
                     <p class="Noresults__link"><a href="{{ cmsaction($controller . "@index", true) }}">Show me all results</a></p>
                 @endif
             </div>
         @endif
-        
+
     </div>
-    
+
     <!-- Paging -->
     @if ($listing->hasPages())
         <div class="Box Paging">
             {!! $listing->appends($filters)->links() !!}
         </div>
     @endif
-    
+
 @endsection

@@ -9,7 +9,7 @@ import Pikaday from "pikaday-time";
 import NProgress from "nprogress";
 
 (function(){
-  
+
   /**
    * Hook up some NProgress bars to the forms that want it
    */
@@ -21,7 +21,7 @@ import NProgress from "nprogress";
       }, 500);
     }
   });
-  
+
   /**
    * Init the tinymce editors. We don't use a Vuejs component here as we
    * want to utlise the form model binding without any config, this way
@@ -34,7 +34,7 @@ import NProgress from "nprogress";
       selector: ".Form__wysiwyg",
       statusbar: false,
       menubar: "edit insert table view tools",
-      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent | image | removeformat | mybutton",
+      toolbar: "styleselect | bold italic | link | alignleft aligncenter alignright | bullist numlist | indent outdent  | removeformat | mybutton",
       content_css: "/vendor/cms/css/wysiwyg.css",
       plugins: "link autolink image code paste searchreplace anchor charmap table imagetools hr contextmenu visualchars visualblocks",
       paste_data_images: true,
@@ -66,12 +66,12 @@ import NProgress from "nprogress";
         });
       }
     });
-    
+
   }
-  
+
   /**
    * Insert a media item to the tiny wysiwyg
-   * 
+   *
    * @param  {string} url
    */
   window.insertMediaToTiny = function(html) {
@@ -81,12 +81,12 @@ import NProgress from "nprogress";
       tinymce.activeEditor.execCommand("mceInsertContent", false, html);
     }
   }
-  
+
   // Insert contet at the current cursor position ("f-body" is the ID of the textarea)
   // tinymce.get("f-body").execCommand("mceInsertContent", false, "INSERT ME HERE");
-  
-  
-  
+
+
+
   /**
    * Hook up a pikaday time plugin to all the date fields
    */
@@ -97,7 +97,7 @@ import NProgress from "nprogress";
       incrementMinuteBy: 5
     });
   });
-  
+
   /**
    * Hook up the slimScroll jQuery plugin to the primary nav.
    * This add a slimscroll to the nav if it goes below the
@@ -108,5 +108,5 @@ import NProgress from "nprogress";
     size: "5px",
     opacity: 1
   });
-  
+
 })();
