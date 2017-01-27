@@ -68,7 +68,7 @@ class Media
     public function __construct()
     {
         $this->uploadedFile = new UploadedFile;
-        $this->tempPath = storage_path("app/cms/temp");
+        $this->tempPath = env("CMS_TEMP_PATH", storage_path("app/cms/temp"));
         ini_set("default_socket_timeout", 9999);
         ini_set("max_execution_time", 9999);
         set_time_limit(0);

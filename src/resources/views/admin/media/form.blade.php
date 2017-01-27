@@ -4,7 +4,7 @@
 @section("title", "Media Library")
 
 @section("content")
-    
+
     <!-- Title -->
     <div class="Title Title--sub Utility--clearfix">
         <div class="Title__titles">
@@ -20,16 +20,17 @@
             @endif
         </div>
     </div>
-    
+
     <!-- Status messages -->
     {{ CmsForm::error() }}
     {{ CmsForm::success() }}
-    
+
     <!-- Form -->
     <main class="MediaMain MediaMain--pad">
         {{ CmsForm::model(["model" => @$resource, "controller" => $controller, "type" => $formtype, "filters" => [], "files" => true, "progress" => true]) }}
             {{ CmsForm::hidden(["name" => "type", "value" => $mediakey]) }}
-            
+            <input type="hidden" name="MAX_FILE_SIZE" value="4194304" />
+
             {{ CmsForm::text([
                 "name" => "title",
                 "label" => "Title",
@@ -43,7 +44,7 @@
                 "maxlength" => 2000,
                 "info" => "Optional media description"
             ]) }}
-            @if ($formtype == "edit") 
+            @if ($formtype == "edit")
                 {{ CmsForm::content([
                     "label" => "Current media",
                     "value" => $preview
@@ -68,8 +69,8 @@
                     "value" => $formtype == "edit" ? $resource->embed->embed_code : null
                 ]) }}
             @endif
-            
-            @if ($formtype == "edit") 
+
+            @if ($formtype == "edit")
                 {{ CmsForm::buttons([
                     "save_label" => $mediakey == "image" ? "Next Step" : "Finish",
                     "save_icon" => "arrow-right",
@@ -87,5 +88,5 @@
             @endif
         {{ CmsForm::close() }}
     </main>
-    
+
 @endsection
